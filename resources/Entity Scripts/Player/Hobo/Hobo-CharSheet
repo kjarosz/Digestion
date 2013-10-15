@@ -1,0 +1,13 @@
+PixelSteps = 32;
+
+Standing = "Entity Models/Player/Hobo/SmellyPeteStandingRight.gif";
+WalkFrm1 = "Entity Models/Player/Hobo/SmellyPeteStandingRight1.gif";
+WalkFrm2 = "Entity Models/Player/Hobo/SmellyPeteStandingRight2.gif";
+WalkFrm3 = "Entity Models/Player/Hobo/SmellyPeteStandingRight3.gif";
+WalkFrm4 = "Entity Models/Player/Hobo/SmellyPeteStandingRight4.gif";
+Jumping = "Entity Models/Player/Hobo/SmellyPeteJumpingRight.gif";
+
+setStandingImage(Standing);
+setWalkingSequence(WalkFrm1, WalkFrm2, WalkFrm3, WalkFrm4);
+setJumpingImg(Jumping);
+setFallingImg(Jumping);

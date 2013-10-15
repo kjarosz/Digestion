@@ -1,0 +1,12 @@
+PixelSteps = 32;
+
+standingImg = "Entity Models/Player/Clown/ClownStending.gif";
+walkImg1 = "Entity Models/Player/Clown/1.gif";
+walkImg2 = "Entity Models/Player/Clown/2.gif";
+walkImg3 = "Entity Models/Player/Clown/3.gif";
+walkImg4 = "Entity Models/Player/Clown/4.gif";
+
+setStandingImage(standingImg);
+setWalkingSequence(walkImg1, walkImg2, walkImg3, walkImg4);
+setJumpingImage(walkImg3);
+setFallingImage(walkImg3);

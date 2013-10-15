@@ -1,0 +1,12 @@
+PixelSteps = 32; // Every 15 pixels the image frame changes
+
+Standing = "Entity Models/Player/MegaMan/stand_frame.gif";
+WalkFrm1 = "Entity Models/Player/MegaMan/leftWalkFrm.gif";
+WalkFrm2 = "Entity Models/Player/MegaMan/midWalkFrm.gif";
+WalkFrm3 = "Entity Models/Player/MegaMan/rightWalkFrm.gif";
+Jump = "Entity Models/Player/MegaMan/jumpFrm.gif";
+
+setStandingImage(Standing);
+setWalkingSequence(WalkFrm2, WalkFrm3, WalkFrm2, WalkFrm1);
+setJumpingImg(Jump);
+setFallingImg(Jump);

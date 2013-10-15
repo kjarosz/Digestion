@@ -1,0 +1,4 @@
+Gordon = "Entity Models/Player/Gordon/Gordon-CharSheet";
+SmellyPete = "Entity Models/Player/Hobo/Hobo-CharSheet";
+Clown = "Entity Models/Player/Clown/Clown-CharSheet";
+MegaMan = "Entity Models/Player/MegaMan/MegaMan - CharSheet";

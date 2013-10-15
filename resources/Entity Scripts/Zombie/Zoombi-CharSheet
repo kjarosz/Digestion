@@ -1,0 +1,10 @@
+pixelSteps =32;
+
+Walking1 = "SlowZombie.gif";
+Walking2 = "SlowZombie2.gif";
+
+setStandingImage(Walking1);
+setWalkingSequence(Walking1, Walking2);
+
+setJumpingImg(Walking1);
+setFallingImg(Walking1);
