@@ -16,6 +16,7 @@ import Level.World;
 import Menu.MenuStack;
 import Util.GameTimer;
 import java.awt.Color;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
 public class Game {
@@ -34,6 +35,7 @@ public class Game {
 
 	public Game() {
 		mWindow = new GameWindow("Digestion");
+      KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyManager());
       mEntityFactory = new EntityFactory();
 		mFrameTimer = new GameTimer();
 		mFrameTimer.setTimeInterval( (1/30)*1000 /* 33 millisecond */ );
@@ -47,7 +49,6 @@ public class Game {
       mMenuStack = new MenuStack();
       mWindow.switchTo(mMenuStack);
       MainMenu mainMenu = new MainMenu(this, mMenuStack);
-      mainMenu.addKeyListener(new GameWindowListener());
       mainMenu.setBackground(Color.BLACK);
       mMenuStack.pushScreen(mainMenu);
    }
@@ -59,7 +60,6 @@ public class Game {
       mQuit = false;
       
       GameCanvas canvas = new GameCanvas();
-      canvas.addKeyListener(new GameWindowListener());
       mWindow.switchTo(canvas);
       execute(canvas);
    }
