@@ -1,24 +1,36 @@
 package Input;
 
+import java.awt.KeyEventDispatcher;
 import java.awt.event.KeyEvent;
-import java.util.BitSet;
 
-public class KeyManager {
-   private static BitSet mKeyStates = new BitSet(KeyEvent.KEY_LAST);
+public class KeyManager implements KeyEventDispatcher {
+   private static boolean mKeyStates[] = new boolean[KeyEvent.KEY_LAST];
 
    public synchronized static void clearKeys() {
-      mKeyStates.clear();
+      for(int i = 0; i < mKeyStates.length; i++)
+         mKeyStates[i] = false;
    }
 
    public synchronized static boolean isKeyPressed(int key) {
-      return mKeyStates.get(key);
+      return mKeyStates[key];
    }
 
    public synchronized static void pressKey(int key) {
-      mKeyStates.set(key, true);
+      mKeyStates[key] = true;
    }
 
    public synchronized static void releaseKey(int key) {
-      mKeyStates.set(key, false);
+      mKeyStates[key] = false;
+   }
+
+   @Override
+   public boolean dispatchKeyEvent(KeyEvent e) {
+      int id = e.getID();
+      if(id == KeyEvent.KEY_PRESSED) {
+         pressKey(e.getKeyCode());
+      } else if(id == KeyEvent.KEY_RELEASED) {
+         releaseKey(e.getKeyCode());
+      }
+      return true;
    }
 }
