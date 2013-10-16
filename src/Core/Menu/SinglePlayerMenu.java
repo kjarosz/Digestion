@@ -66,7 +66,14 @@ public class SinglePlayerMenu extends MenuScreen implements ActionListener {
          // Return stack to the Main Menu
          mStack.popScreen();
          
-         mGame.startLevel(mLevelMenu.getSelectedLevel());
+         Thread thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                               mGame.startLevel(mLevelMenu.getSelectedLevel());
+                            }
+                         });
+         thread.start();
+         
       } else if(action.compareTo(ACTION_CHOOSE_LEVEL) == 0) {
          mStack.pushScreen(mLevelMenu);
       } else if(action.compareTo(ACTION_CHOOSE_CHARACTER) == 0) {

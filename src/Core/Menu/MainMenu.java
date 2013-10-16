@@ -83,13 +83,4 @@ public class MainMenu extends MenuScreen implements ActionListener {
       LevelEditor editor = new LevelEditor(mStack); 
       mStack.pushScreen(editor);
    }
-   
-   private void handleLackOfEntityScripts(Exception e) {
-      ErrorLog logger = ErrorLog.getInstance();
-      logger.writeError(e.getMessage());
-      JOptionPane.showMessageDialog(this, 
-              "The Level Editor could not load any entity scrips and cannot be opened.",
-              "Entity Scripts could not be loaded",
-              JOptionPane.ERROR_MESSAGE);
-   }
 }
