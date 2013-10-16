@@ -22,7 +22,7 @@ public class GameTimer {
 	public boolean hasTimeIntervalPassed() {
 		mIntervalCounter += getElapsedTime();
 		
-		return mIntervalCounter >= mTimeInterval;
+		return mIntervalCounter >= milliToNano(mTimeInterval);
 	}
 	
 	public void reset() {
