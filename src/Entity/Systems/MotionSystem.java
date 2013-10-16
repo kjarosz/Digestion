@@ -26,7 +26,12 @@ public class MotionSystem {
    }
    
    private static void moveEntityWithCollision(EntityComponents components, World world) {
-      
+      long deltaTime = getDeltaTime(components.movable);
+      Vector2D posShift = integrateVelocity(components.movable, deltaTime);
+      if(Math.abs(posShift.x) != 0.0)
+         System.out.println("Done");
+      components.position.x += posShift.x;
+      components.position.y += posShift.y;
    }
    
    private static void moveEntityWithoutCollision(EntityComponents components) {
@@ -50,8 +55,8 @@ public class MotionSystem {
    private static Vector2D integrateVelocity(Movable movable, long deltaTime) {
 		// Using Runge Kutta 4 (I hope)		
 		Vector2D positionShift = new Vector2D(0.0, 0.0);
-      Vector2D acceleration = movable.acceleration;
-		Vector2D velocity = movable.velocity;
+      Vector2D acceleration = new Vector2D(movable.acceleration);
+		Vector2D velocity = new Vector2D(movable.velocity);
 		
 		positionShift.add(velocity);
 		

@@ -23,6 +23,9 @@ public class ControlSystem {
    private static void manipulateEntity(EntityComponents entity) {
       Controllable controlComp = entity.controllable;
       for(KeyMapping keyMapping: controlComp.keyMappings) {
+         boolean keyPressed = KeyManager.isKeyPressed(keyMapping.keyCode);
+         if(keyPressed)
+            System.out.println("KeyPressed");
          if(KeyManager.isKeyPressed(keyMapping.keyCode) && !keyMapping.pressProcessed) {
             keyMapping.keyFunction.keyPressed(entity);
             keyMapping.pressProcessed = true;

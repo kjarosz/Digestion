@@ -35,7 +35,6 @@ public class Game {
 
 	public Game() {
 		mWindow = new GameWindow("Digestion");
-      KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(new KeyManager());
       mEntityFactory = new EntityFactory();
 		mFrameTimer = new GameTimer();
 		mFrameTimer.setTimeInterval( (1/30)*1000 /* 33 millisecond */ );
