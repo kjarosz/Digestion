@@ -3,15 +3,18 @@ package Graphics;
 import Core.Game.GameWindowListener;
 import Util.ErrorLog;
 import java.awt.Component;
+import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
+import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 public class GameWindow {
+   private BufferStrategy mBackBuffer;
+   
 	private JFrame mWindow;
    
-   private GameWindowListener mWindowListener;
    private Component mDisplayedItem;
 	
 	private GraphicsDevice mFullscreenDevice;
@@ -30,6 +33,12 @@ public class GameWindow {
       mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mWindow.addWindowListener(new GameWindowListener());
 		mWindow.setVisible(true);
+      setupBackBuffer();
+   }
+   
+   private void setupBackBuffer() {
+      mWindow.createBufferStrategy(2);
+      mBackBuffer = mWindow.getBufferStrategy();
    }
    
    private void loadSettings() {
@@ -113,6 +122,9 @@ public class GameWindow {
    }
    
    public void update() {
-      mWindow.paintAll(mWindow.getGraphics());
+      Graphics g = mBackBuffer.getDrawGraphics();
+      mWindow.paintAll(g);
+      g.dispose();
+      mBackBuffer.show();
    }
 }

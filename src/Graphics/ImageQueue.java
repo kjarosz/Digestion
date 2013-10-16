@@ -14,7 +14,7 @@ class ImageQueue {
 	private ColorMode mLastMode;
 	
 	ImageQueue() {
-		mItemBuffer = new LinkedList<ImageItem>();
+		mItemBuffer = new LinkedList<>();
 	}
 	
 	ColorMode setMode(ColorMode mode) {

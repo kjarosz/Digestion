@@ -38,7 +38,7 @@ public class Game {
       setupKeyDispatcher();
       mEntityFactory = new EntityFactory();
 		mFrameTimer = new GameTimer();
-		mFrameTimer.setTimeInterval( (1/30)*1000 /* 33 millisecond */ );
+		mFrameTimer.setTimeInterval( 1000/30 );
       mLevel = new Level();
       mWorld = new World();
 		mPaused = true;
@@ -104,8 +104,7 @@ public class Game {
             AnimationSystem.animate(mWorld);
             
 				if(mFrameTimer.hasTimeIntervalPassed()) {
-               DrawingSystem.draw(mWorld, canvas);					
-               canvas.showCanvas();
+               DrawingSystem.draw(mWorld, canvas);	
                mWindow.update();
 					mFrameTimer.reset();
 				}
