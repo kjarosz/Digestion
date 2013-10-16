@@ -17,10 +17,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class PlayerSpawner extends EntitySpawner {  
-   final Vector2D LEFT_VELOCITY = new Vector2D(-5, 0);
-   final Vector2D UP_VELOCITY = new Vector2D(0, 5);
-   final Vector2D RIGHT_VELOCITY = new Vector2D(5, 0);
-   final Vector2D DOWN_VELOCITY = new Vector2D(0, -5); 
+   final Vector2D LEFT_VELOCITY = new Vector2D(-25, 0);
+   final Vector2D UP_VELOCITY = new Vector2D(0, -25);
+   final Vector2D RIGHT_VELOCITY = new Vector2D(25, 0);
+   final Vector2D DOWN_VELOCITY = new Vector2D(0, 25); 
    
    @Override
    public int spawn(EntityComponents components) {

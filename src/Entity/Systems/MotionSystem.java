@@ -27,18 +27,12 @@ public class MotionSystem {
    
    private static void moveEntityWithCollision(EntityComponents components, World world) {
       long deltaTime = getDeltaTime(components.movable);
-      Vector2D posShift = integrateVelocity(components.movable, deltaTime);
-      if(Math.abs(posShift.x) != 0.0)
-         System.out.println("Done");
-      components.position.x += posShift.x;
-      components.position.y += posShift.y;
+      components.position.x += (components.movable.velocity.x/1000.0) * deltaTime;
+      components.position.y += (components.movable.velocity.y/1000.0) * deltaTime;
    }
    
    private static void moveEntityWithoutCollision(EntityComponents components) {
       long deltaTime = getDeltaTime(components.movable);
-      Vector2D posShift = integrateVelocity(components.movable, deltaTime);
-      components.position.x += posShift.x;
-      components.position.y += posShift.y;
    }
    
    private static long getDeltaTime(Movable movable) {
@@ -46,33 +40,5 @@ public class MotionSystem {
       long deltaTime = time - movable.last_time;
       movable.last_time = time;
       return deltaTime;
-   }
-   
-   private static Vector2D integrateAcceleration(Vector2D acceleration, long deltaTime) {
-		return new Vector2D(acceleration.x*deltaTime, acceleration.y*deltaTime);
-   }
-   
-   private static Vector2D integrateVelocity(Movable movable, long deltaTime) {
-		// Using Runge Kutta 4 (I hope)		
-		Vector2D positionShift = new Vector2D(0.0, 0.0);
-      Vector2D acceleration = new Vector2D(movable.acceleration);
-		Vector2D velocity = new Vector2D(movable.velocity);
-		
-		positionShift.add(velocity);
-		
-		velocity.add(integrateAcceleration(acceleration, (int)(deltaTime/2.0)));
-		
-		velocity.multiply(2);
-		positionShift.add(velocity);
-		velocity.divide(2);
-		
-		velocity.add(integrateAcceleration(acceleration, (int)(deltaTime/2.0)));
-		
-		positionShift.add(velocity);		
-		positionShift.multiply(deltaTime/6);
-		
-		velocity.set(velocity);
-		
-		return positionShift;
    }
 }
