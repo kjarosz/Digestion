@@ -33,6 +33,7 @@ public class PlayerSpawner extends EntitySpawner {
    }
    
    private int setCollidable(Collidable collidable) {
+      collidable.bindToImageDimensions = true;
       collidable.width = 32;
       collidable.height = 64;
       return World.ENTITY_COLLIDABLE;
@@ -44,7 +45,7 @@ public class PlayerSpawner extends EntitySpawner {
       movable.velocity.x = 0.0;
       movable.velocity.y = 0.0;
       movable.last_time = System.currentTimeMillis();
-      return World.ENTITY_COLLIDABLE;
+      return World.ENTITY_MOVABLE;
    }
    
    private int setControllable(Controllable controllable) {
