@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package Core.LevelEditor.Panels.Tabs;
 
 import java.awt.*;
@@ -85,20 +81,5 @@ public class PathfindingTab extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
-
-      /*
-		if(command.equals("Generate")) {
-			mMainFrame.mLevel.GetPlatformGraph().GenerateGraph();
-		} else if(command.equals("Clear")) {
-			mMainFrame.mLevel.GetPlatformGraph().ClearGraph();
-		} else if(command.equals("ClearPath")) {
-			mMainFrame.mLevel.GetPlatformGraph().ClearPath();
-		} else if(command.equals("ViewAll")) {
-			mMainFrame.mLevel.GetPlatformGraph().SetView(PlatformGraph.ViewType.VIEWALL);
-		} else if(command.equals("ViewSelected")) {
-			mMainFrame.mLevel.GetPlatformGraph().SetView(PlatformGraph.ViewType.VIEWSELECTED);
-		} 
-		
-		mMainFrame.Draw(); */
 	}
 }
