@@ -2,7 +2,6 @@
 
 import Core.Game.Game;
 import Util.ErrorLog;
-//import Sound.SoundSystem;
 
 public class Main {
 	public static void main(String arguments[]) {

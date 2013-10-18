@@ -1,4 +1,0 @@
-windowResolution = 800x600x
-fullscreen = false
-levelDirectory = "Levels"
-entityDirectory = "Entities"
