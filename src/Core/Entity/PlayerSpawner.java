@@ -25,21 +25,21 @@ public class PlayerSpawner extends EntitySpawner {
    @Override
    public int spawn(EntityComponents components) {
       int mask = World.ENTITY_NONE;
-      mask |= setCollidable(components.collidable);
-      mask |= setMovable(components.movable);
-      mask |= setControllable(components.controllable);
-      mask |= setDrawable(components.drawable);
+      mask |= makeCollidable(components.collidable);
+      mask |= makeMovable(components.movable);
+      mask |= makeControllable(components.controllable);
+      mask |= makeDrawable(components.drawable);
       return   mask;
    }
    
-   private int setCollidable(Collidable collidable) {
+   private int makeCollidable(Collidable collidable) {
       collidable.bindToImageDimensions = true;
       collidable.width = 32;
       collidable.height = 64;
       return World.ENTITY_COLLIDABLE;
    }
    
-   private int setMovable(Movable movable) {
+   private int makeMovable(Movable movable) {
       movable.acceleration.x = 0.0;
       movable.acceleration.y = 0.0;
       movable.velocity.x = 0.0;
@@ -48,7 +48,7 @@ public class PlayerSpawner extends EntitySpawner {
       return World.ENTITY_MOVABLE;
    }
    
-   private int setControllable(Controllable controllable) {
+   private int makeControllable(Controllable controllable) {
       constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_VELOCITY);      
       constructMovingKeyMapping(controllable, KeyEvent.VK_W, UP_VELOCITY);
       constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_VELOCITY);
@@ -77,7 +77,7 @@ public class PlayerSpawner extends EntitySpawner {
       controllable.keyMappings.add(keyMapping);
    }
    
-   private int setDrawable(Drawable drawable) {
+   private int makeDrawable(Drawable drawable) {
       try {
          drawable.image = ImageIO.read(new File("Players" + File.separator + "Gordon" + File.separator + "standing.gif"));
       } catch(IOException ex) {

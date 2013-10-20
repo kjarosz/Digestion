@@ -20,11 +20,12 @@ import java.awt.KeyboardFocusManager;
 import java.awt.event.KeyEvent;
 
 public class Game {
-	private GameWindow mWindow;
+   private GameWindow mWindow;
    
    private MenuStack mMenuStack;
+   private GameCanvas mGameCanvas;
 	
-	private boolean mPaused;
+   private boolean mPaused;
    private boolean mQuit;
 
    private EntityFactory mEntityFactory;
@@ -35,6 +36,7 @@ public class Game {
 
 	public Game() {
 		mWindow = new GameWindow("Digestion");
+		mGameCanvas = new GameCanvas();
       setupKeyDispatcher();
       mEntityFactory = new EntityFactory();
 		mFrameTimer = new GameTimer();
@@ -65,31 +67,31 @@ public class Game {
       
       mQuit = false;
       
-      GameCanvas canvas = new GameCanvas();
-      mWindow.switchTo(canvas);
-      execute(canvas);
+      mWindow.switchTo(mGameCanvas);
+      execute();
    }
    
 	public void pause() { 
       mPaused = true;
       PauseMenu pauseMenu = new PauseMenu(this, mMenuStack);
-      pauseMenu.display();
+      mMenuStack.pushScreen(pauseMenu);
+      mWindow.switchTo(mMenuStack);
    }
    
    public void resume() {
       mPaused = false;
+      mWorld.resetTimers();
+      mFrameTimer.reset();
+      mWindow.switchTo(mGameCanvas);
    }
    
-	public void unpause() { 
-      if(mLevel == null)
-         return;
-      
+   public void quitToMenu() {
+      mQuit = true;
+   }
+   
+	private void execute() {
       mPaused = false;
       mFrameTimer.reset();
-   }
-   
-	private void execute(GameCanvas canvas) {
-		unpause();
 		
       boolean escProcessed = false;
 		while(!mQuit) {
@@ -104,7 +106,7 @@ public class Game {
             AnimationSystem.animate(mWorld);
             
 				if(mFrameTimer.hasTimeIntervalPassed()) {
-               DrawingSystem.draw(mWorld, canvas);	
+               DrawingSystem.draw(mWorld, mGameCanvas);	
                mWindow.update();
 					mFrameTimer.reset();
 				}
@@ -118,8 +120,6 @@ public class Game {
          if(!KeyManager.isKeyPressed(KeyEvent.VK_ESCAPE) && escProcessed)
             escProcessed = false;
 		}
-      
-      mPaused = true;
       
       mWindow.switchTo(mMenuStack);
 	}

@@ -1,27 +1,27 @@
 package Core.Menu;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+
 import Core.Game.Game;
 import Menu.MenuScreen;
 import Menu.MenuStack;
-import Util.ErrorLog;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 
 public class PauseMenu extends MenuScreen implements ActionListener {
    private final String ACTION_RESUME = "Resume";
    private final String ACTION_OPTIONS = "Options";
    private final String ACTION_QUIT = "Quit";
    
-   private ErrorLog mErrorLog;
    private Game mGame;
    
    private MenuStack mStack;
-   private boolean mVisible;
    
    public PauseMenu(Game game, MenuStack stack) {
       mStack = stack;
+      mGame = game;
       
       createWidgets();
    }
@@ -44,45 +44,18 @@ public class PauseMenu extends MenuScreen implements ActionListener {
       quitButton.addActionListener(this);
       add(quitButton);
    }
-   
-   public void display() {
-      if(mVisible)
-         return;
-      
-      mVisible = true;
-      mStack.pushScreen(this);
-   }
-   
-   public void remove() {
-      if(!mVisible)
-         return;
-      
-      mVisible = false;
-      
-      while(mStack.currentScreen() != this)
-         mStack.popScreen();
-      
-      mStack.popScreen();
-   }
-
-   public void previousScreen() {
-      if(mStack.currentScreen() == this)
-         mGame.unpause();
-      
-      mStack.popScreen();
-   }
-   
    @Override
    public void actionPerformed(ActionEvent e) {
       String command = e.getActionCommand();
       
       if(command.compareTo(ACTION_RESUME) == 0) {
-         mGame.unpause();
+         mGame.resume();
+         mStack.popScreen();
       } else if(command.compareTo(ACTION_OPTIONS) == 0) {
          
       } else if(command.compareTo(ACTION_QUIT) == 0) {
-        //mGame.quitLevel();
-         mGame.unpause();
+         mStack.popScreen();
+         mGame.quitToMenu();
       }
    }
 }
