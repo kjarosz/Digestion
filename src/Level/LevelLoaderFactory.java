@@ -58,7 +58,7 @@ public class LevelLoaderFactory {
       if(!level.name.isEmpty())
          return level.name;
       
-      String name = (String)JOptionPane.showInputDialog("Enter the name of the level:");
+      String name = (String)JOptionPane.showInputDialog("Enter the name of the level:");               
       if(name.isEmpty()) {
          JOptionPane.showMessageDialog(null, "Names cannot be empty");
          throw new MissingNameException("Empty name found.");

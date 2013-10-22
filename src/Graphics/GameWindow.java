@@ -1,14 +1,17 @@
 package Graphics;
 
-import Core.Game.GameWindowListener;
-import Util.ErrorLog;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
 import java.awt.image.BufferStrategy;
+
 import javax.swing.JFrame;
+
+import Core.Game.GameWindowListener;
+import Input.KeyManager;
+import Util.ErrorLog;
 
 public class GameWindow {
    private BufferStrategy mBackBuffer;
@@ -33,6 +36,7 @@ public class GameWindow {
       mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mWindow.addWindowListener(new GameWindowListener());
 		mWindow.setVisible(true);
+		new KeyManager(mWindow.getRootPane());
       setupBackBuffer();
    }
    

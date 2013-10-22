@@ -1,17 +1,24 @@
 package Entity;
 
-import Core.Entity.BreakingBlockSpawner;
-import Core.Entity.PlayerSpawner;
-import Level.World;
 import java.awt.geom.Point2D;
 
+import Core.Entity.BreakingBlockSpawner;
+import Core.Entity.IceBlockSpawner;
+import Core.Entity.NormalBlockSpawner;
+import Core.Entity.PlayerSpawner;
+import Core.Entity.SpikeyBlockSpawner;
+import Core.Entity.ZombieSpawner;
+import Level.World;
+
 public class EntityFactory {
-   final private String ENTITY_NAMES[] = { 
-      "Player", "Breaking Block" 
+   final private String ENTITY_NAMES[] = {
+      "Breaking Block", "Ice Block", "Normal Block",
+      "Player", "Spikey Block", "Zombie" 
    };
 
    final private EntitySpawner ENTITY_SPAWNERS[] = { 
-      new PlayerSpawner(), new BreakingBlockSpawner() 
+      new BreakingBlockSpawner(), new IceBlockSpawner(), new NormalBlockSpawner(),
+      new PlayerSpawner(), new SpikeyBlockSpawner(), new ZombieSpawner()
    };
    
    public String[] getEntityNames() {

@@ -37,7 +37,6 @@ public class Game {
 	public Game() {
 		mWindow = new GameWindow("Digestion");
 		mGameCanvas = new GameCanvas();
-      setupKeyDispatcher();
       mEntityFactory = new EntityFactory();
 		mFrameTimer = new GameTimer();
 		mFrameTimer.setTimeInterval( 1000/30 );
@@ -46,12 +45,6 @@ public class Game {
 		mPaused = true;
       setupMenuStack();
 	}
-   
-   private void setupKeyDispatcher() {
-      KeyboardFocusManager focusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-      KeyManager keyEventDispatcher = new KeyManager();
-      focusManager.addKeyEventDispatcher(keyEventDispatcher);
-   }
    
    private void setupMenuStack() {
       mMenuStack = new MenuStack();
