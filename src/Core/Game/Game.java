@@ -1,5 +1,8 @@
 package Core.Game;
 
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+
 import Core.Menu.MainMenu;
 import Core.Menu.PauseMenu;
 import Entity.EntityFactory;
@@ -15,9 +18,6 @@ import Level.LevelLoadingScript;
 import Level.World;
 import Menu.MenuStack;
 import Util.GameTimer;
-import java.awt.Color;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.KeyEvent;
 
 public class Game {
    private GameWindow mWindow;
