@@ -54,6 +54,12 @@ public class Vector2D {
 		y = vec.y;
 		return this;
 	}
+	
+	public Vector2D set(double x, double y) {
+	   this.x = x;
+	   this.y = y;
+	   return this;
+	}
 
 	public boolean equals(Vector2D vec) {
 		return (x == vec.x) && (y == vec.y);

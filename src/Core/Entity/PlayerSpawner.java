@@ -17,10 +17,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class PlayerSpawner extends EntitySpawner {  
-   final Vector2D LEFT_VELOCITY = new Vector2D(-25, 0);
-   final Vector2D UP_VELOCITY = new Vector2D(0, -25);
-   final Vector2D RIGHT_VELOCITY = new Vector2D(25, 0);
-   final Vector2D DOWN_VELOCITY = new Vector2D(0, 25); 
+   private final Vector2D LEFT_ACCELERATION = new Vector2D(-250, 0);
+   private final Vector2D RIGHT_ACCELERATION = new Vector2D(250, 0);
+   private final Vector2D UP_ACCELERATION = new Vector2D(0, -250);
+   private final Vector2D DOWN_ACCELERATION = new Vector2D(0, 250); 
    
    @Override
    public int spawn(EntityComponents components) {
@@ -41,18 +41,19 @@ public class PlayerSpawner extends EntitySpawner {
    
    private int makeMovable(Movable movable) {
       movable.acceleration.x = 0.0;
-      movable.acceleration.y = 0.0;
+      movable.acceleration.y = Movable.GRAVITY;
       movable.velocity.x = 0.0;
       movable.velocity.y = 0.0;
-      movable.last_time = System.currentTimeMillis();
+      movable.maximumSpeed = 75.0;
+      movable.lastTime = System.currentTimeMillis();
       return World.ENTITY_MOVABLE;
    }
    
    private int makeControllable(Controllable controllable) {
-      constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_VELOCITY);      
-      constructMovingKeyMapping(controllable, KeyEvent.VK_W, UP_VELOCITY);
-      constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_VELOCITY);
-      constructMovingKeyMapping(controllable, KeyEvent.VK_S, DOWN_VELOCITY);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_ACCELERATION);      
+      constructMovingKeyMapping(controllable, KeyEvent.VK_W, UP_ACCELERATION);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_ACCELERATION);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_S, DOWN_ACCELERATION);
       
       return World.ENTITY_CONTROLLABLE;
    }
@@ -63,12 +64,12 @@ public class PlayerSpawner extends EntitySpawner {
       keyMapping.keyFunction = new ControlFunction() {
          @Override
          public void keyPressed(EntityComponents components) {
-            components.movable.velocity.add(changeVelocity);
+            components.movable.acceleration.add(changeVelocity);
          }
          
          @Override
          public void keyReleased(EntityComponents components) {
-            components.movable.velocity.subtract(changeVelocity);
+            components.movable.acceleration.subtract(changeVelocity);
          }
       };
       keyMapping.pressProcessed = false;

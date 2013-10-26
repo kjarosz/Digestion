@@ -33,7 +33,7 @@ public class SpikeyBlockSpawner extends EntitySpawner {
       movable.acceleration.y = 0.0;
       movable.velocity.x = 0.0;
       movable.velocity.y = 0.0;
-      movable.last_time = System.currentTimeMillis();
+      movable.lastTime = System.currentTimeMillis();
       return World.ENTITY_MOVABLE;
    }
    
