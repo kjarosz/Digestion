@@ -6,6 +6,8 @@ import Entity.EntityComponents;
 import Entity.Components.Movable;
 import Entity.Components.Position;
 import Level.World;
+import Util.BoundingRectangle;
+import Util.RKIntegrator;
 import Util.Vector2D;
 
 public class MotionSystem {
@@ -28,28 +30,26 @@ public class MotionSystem {
       return (entity & World.ENTITY_MOVABLE) != 0;
    }
    
-   private static boolean entityIsCollidable(int entity) {
-      return (entity & World.ENTITY_COLLIDABLE) != 0;
-   }
-   
    private static void moveEntity(int id, World world) {
-      boolean collidable = entityIsCollidable(world.getEntityMask(id));
-      
       Movable movable = world.accessComponents(id).movable;
       double deltaTime = getDeltaTime(movable);
       while(deltaTime > 0.0) {
          double timeStep = getTimeStep(deltaTime);
          deltaTime -= timeStep;
 
-         Vector2D posShift = integrateVelocity(movable.maximumSpeed, movable.velocity, movable.acceleration, timeStep);
+         Vector2D posShift = RKIntegrator.integrateVelocity(movable.maximumSpeed, movable.velocity, movable.acceleration, timeStep);
          
-         if(collidable)
+         if(entityIsCollidable(world.getEntityMask(id)))
             performCollisionCheckingAndResponse(posShift, id, world);
          
          Position position = world.accessComponents(id).position;
          position.x += posShift.x;
          position.y += posShift.y;
       }
+   }
+   
+   private static boolean entityIsCollidable(int entity) {
+      return (entity & World.ENTITY_COLLIDABLE) != 0;
    }
    
    private static double getDeltaTime(Movable movable) {
@@ -66,92 +66,42 @@ public class MotionSystem {
          return timeFrame;
    }
    
-   private static Vector2D integrateVelocity(double maxVelocity, Vector2D velocity, Vector2D acceleration, double elapsedTime) {
-      Vector2D k[] = new Vector2D[4];
-      for(int i = 0; i < 4; i++)
-         k[i] = new Vector2D();
-      
-      calculateIntervals(k, maxVelocity, velocity, acceleration, elapsedTime);
-      
-      Vector2D positionShift = new Vector2D(0.0, 0.0);
-      positionShift.add(k[0]);
-      positionShift.add(k[1].multiply(2));
-      positionShift.add(k[2].multiply(2));
-      positionShift.add(k[3]);
-      positionShift.multiply(elapsedTime);
-      positionShift.divide(6);
-      return positionShift;
-   }
-   
-   private static void calculateIntervals(Vector2D intervals[], double maxVelocity, Vector2D velocity, Vector2D acceleration, double elapsedTime) {
-      Vector2D accelCopy = new Vector2D(acceleration);
-      
-      intervals[0].set(velocity);
-      
-      intervals[1].set(velocity);
-      intervals[1].add(accelCopy.multiply(elapsedTime).multiply(0.5));
-      accelCopy.set(acceleration);
-      
-      intervals[2].set(intervals[1]);
-      
-      intervals[3].set(velocity);
-      intervals[3].add(accelCopy.multiply(elapsedTime));
-      
-      for(int i = 0; i < 4; i++)
-         clipVector(intervals[i], maxVelocity);
-      
-      velocity.set(intervals[3]);
-   }
-   
-   private static void clipVector(Vector2D vector, double maxVelocity) {
-      if(Math.abs(vector.x) > maxVelocity)
-         vector.x = maxVelocity*(vector.x/Math.abs(vector.x));
-      
-      if(Math.abs(vector.y) > maxVelocity)
-         vector.y = maxVelocity*(vector.y/Math.abs(vector.y));
-   }
-   
    private static void performCollisionCheckingAndResponse(Vector2D positionShift, int id, World world) {
-      EntityComponents entityComponents = world.accessComponents(id);
-      Rectangle2D.Double entity = createBoundingRectangle(entityComponents);
-      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
-         int entityMask = world.getEntityMask(i);
-         if(i == id || !entityIsCollidable(entityMask))
-            continue;
-         
-         Rectangle2D.Double otherEntity = createBoundingRectangle(world.accessComponents(i));
-         if(entity.intersects(otherEntity))
-            respondToCollision(positionShift, entityComponents, world.accessComponents(i));
-      }
+      BoundingRectangle sourceEntity = new BoundingRectangle(id, world);
+      BoundingRectangle entity = new BoundingRectangle(id, world);
+      applyPositionShift(sourceEntity, positionShift, entity);
       
-      entityComponents.position.x += positionShift.x;
-      entityComponents.position.y += positionShift.y;
-   }
+      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+         if(i == id || !entityIsCollidable(world.getEntityMask(i)))
+            continue;
 
-   private static Rectangle2D.Double createBoundingRectangle(EntityComponents components) {
-      Rectangle2D.Double rect = new Rectangle2D.Double();
-      rect.x = components.position.x;
-      rect.y = components.position.y;
-      if(components.collidable.bindToImageDimensions) {
-         rect.width = components.drawable.image.getWidth();
-         rect.height = components.drawable.image.getHeight();
-      } else {
-         rect.width = components.collidable.width;
-         rect.height = components.collidable.height;
+         if(entitiesIntersect(entity, i, world)) {
+            respondToCollision(positionShift, world.accessComponents(id), world.accessComponents(i));
+            applyPositionShift(sourceEntity, positionShift, entity);
+            i = 0;
+         }
       }
-      return rect;
+   }
+   
+   private static void applyPositionShift(BoundingRectangle source, Vector2D positionShift, BoundingRectangle object) {
+      object.x = source.x + positionShift.x;
+      object.y = source.y + positionShift.y;
+   }
+   
+   private static boolean entitiesIntersect(BoundingRectangle entity, int id2, World world) {
+      EntityComponents otherEntityComponents = world.accessComponents(id2);
+      BoundingRectangle otherEntity = new BoundingRectangle(otherEntityComponents);
+      
+      return entity.intersects(otherEntity);
    }
    
    private static void respondToCollision(Vector2D positionShift, EntityComponents entity, EntityComponents otherEntity) {
-      Rectangle2D.Double mover = createBoundingRectangle(entity);
-      int shortestProjection = projectOufOfCollision(mover, createBoundingRectangle(otherEntity));
-      if(shortestProjection == PROJECT_LEFT || shortestProjection == PROJECT_RIGHT) {
-         entity.movable.velocity.x = 0.0;
-         positionShift.x = mover.x - entity.position.x;
-      } else if(shortestProjection == PROJECT_UP || shortestProjection == PROJECT_DOWN) {
-         entity.movable.velocity.y = 0.0;
-         positionShift.y = mover.y - entity.position.y;
-      }
+      BoundingRectangle projectedEntity = new BoundingRectangle(entity);
+      BoundingRectangle otherEntityBox = new BoundingRectangle(otherEntity);
+      
+      int projection = projectOufOfCollision(projectedEntity, otherEntityBox);
+      
+      applyCollisionForces(projection, positionShift, entity, projectedEntity);
    }
    
    private static int projectOufOfCollision(Rectangle2D.Double mover, Rectangle2D.Double obstacle) {
@@ -192,6 +142,21 @@ public class MotionSystem {
             break;
          case PROJECT_DOWN:   
             mover.y += projections[shortestProjection]; 
+            break;
+      }
+   }
+   
+   private static void applyCollisionForces(int projection, Vector2D positionShift, EntityComponents entity, Rectangle2D.Double projectedEntity) {
+      switch(projection) {
+         case PROJECT_LEFT:
+         case PROJECT_RIGHT:
+            entity.movable.velocity.x = 0.0;
+            positionShift.x = projectedEntity.x - entity.position.x;
+            break;
+         case PROJECT_UP:
+         case PROJECT_DOWN:
+            entity.movable.velocity.y = 0.0;
+            positionShift.y = projectedEntity.y - entity.position.y;
             break;
       }
    }
