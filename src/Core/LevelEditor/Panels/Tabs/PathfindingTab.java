@@ -80,6 +80,6 @@ public class PathfindingTab extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand();
+		//String command = e.getActionCommand();
 	}
 }

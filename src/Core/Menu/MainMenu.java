@@ -1,16 +1,17 @@
 package Core.Menu;
 
-import Core.Game.Game;
-import Core.LevelEditor.LevelEditor;
-import Menu.MenuScreen;
-import Menu.MenuStack;
-import Util.ErrorLog;
 import java.awt.Dimension;
 import java.awt.event.ActionListener;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+
+import Core.Game.Game;
+import Core.LevelEditor.LevelEditor;
+import Menu.MenuScreen;
+import Menu.MenuStack;
 
 public class MainMenu extends MenuScreen implements ActionListener {
    final private String ACTION_SINGLE_PLAYER = "Single Player";

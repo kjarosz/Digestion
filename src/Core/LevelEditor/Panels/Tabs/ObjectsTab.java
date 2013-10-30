@@ -18,7 +18,7 @@ public class ObjectsTab extends JPanel implements ActionListener {
    
    private ImageIcon mCanvas;
    private ScrollablePicture mPicture;
-   private JComboBox mObjectSelector;
+   private JComboBox<String> mObjectSelector;
 
 	public ObjectsTab(EntityFactory entityFactory) {
       loadEntities(entityFactory);      
@@ -83,7 +83,7 @@ public class ObjectsTab extends JPanel implements ActionListener {
    }
    
    private void createObjectSelector() {
-      mObjectSelector = new JComboBox(mEntityNames);
+      mObjectSelector = new JComboBox<>(mEntityNames);
       mObjectSelector.setActionCommand(ACTION_OBJECT_SELECT);
       mObjectSelector.addActionListener(this);
    }

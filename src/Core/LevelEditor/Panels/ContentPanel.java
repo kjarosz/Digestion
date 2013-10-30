@@ -24,7 +24,6 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
    
 	private JCheckBox mGridEnBox;
 	private JCheckBox mObjectsEnBox;
-	private JCheckBox mPathEnBox;
 	
 	private JTextField mWidth;
 	private JTextField mHeight;

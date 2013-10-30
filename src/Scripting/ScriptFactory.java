@@ -14,7 +14,7 @@ public class ScriptFactory {
       mCompiledScripts = new HashMap<>();
 	}
    
-   public ScriptObject createScriptInstance(File scriptFile, String className, Class classType) {
+   public ScriptObject createScriptInstance(File scriptFile, String className, Class<?> classType) {
       if(!scriptIsAlreadyCompiled(className)) 
          compileScript(scriptFile, className, classType);
       
@@ -28,7 +28,7 @@ public class ScriptFactory {
       return mCompiledScripts.get(className) != null;
    }
    
-   private void compileScript(File scriptFile, String className, Class classType) {
+   private void compileScript(File scriptFile, String className, Class<?> classType) {
 		mInterpreter.execfile(scriptFile.getPath());
       PyObject code = mInterpreter.get(className);
       mCompiledScripts.put(className, code);
