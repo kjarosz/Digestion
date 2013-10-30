@@ -1,14 +1,12 @@
 package Menu;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.util.LinkedList;
+
 import javax.swing.JPanel;
 
 public class MenuStack extends JPanel {
    private LinkedList<MenuScreen> mScreenStack;
-   
-   private Color mBackgroundColor;
    
    public MenuStack() {
       mScreenStack = new LinkedList<>();
