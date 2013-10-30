@@ -4,21 +4,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.image.BufferStrategy;
+
 import javax.swing.JPanel;
 
 public class GameCanvas extends JPanel implements CanvasInterface {	
-	private BufferStrategy mBackBuffer;
-   private boolean mBackBufferFailed;
-	
 	private GameViewport mViewport;
 	private boolean mViewportEnabled;
 	
 	private ImageQueue mImageQueue;
 	
 	public GameCanvas() {
-      mBackBufferFailed = false;
-      
 		mViewport = new GameViewport();
 		mViewportEnabled = false;
       
