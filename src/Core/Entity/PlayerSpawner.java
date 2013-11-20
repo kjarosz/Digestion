@@ -1,20 +1,23 @@
 package Core.Entity;
 
-import Entity.Components.Collidable;
-import Entity.Components.Controllable;
-import Entity.Components.Drawable;
-import Entity.Components.Movable;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
+import Entity.Components.Collidable;
+import Entity.Components.Controllable;
+import Entity.Components.Destructible;
+import Entity.Components.Drawable;
+import Entity.Components.Movable;
 import Entity.Systems.DrawingSystem;
 import Input.ControlFunction;
 import Input.KeyMapping;
 import Level.World;
 import Util.Vector2D;
-import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
 
 public class PlayerSpawner extends EntitySpawner {  
    private final Vector2D LEFT_ACCELERATION = new Vector2D(-250, 0);
@@ -27,6 +30,7 @@ public class PlayerSpawner extends EntitySpawner {
       int mask = World.ENTITY_NONE;
       mask |= makeCollidable(components.collidable);
       mask |= makeMovable(components.movable);
+      mask |= makeDestructible(components.destructible);
       mask |= makeControllable(components.controllable);
       mask |= makeDrawable(components.drawable);
       return   mask;
@@ -44,9 +48,15 @@ public class PlayerSpawner extends EntitySpawner {
       movable.acceleration.y = Movable.GRAVITY;
       movable.velocity.x = 0.0;
       movable.velocity.y = 0.0;
-      movable.maximumSpeed = 75.0;
+      movable.maximumSpeed = 100.0;
       movable.lastTime = System.currentTimeMillis();
       return World.ENTITY_MOVABLE;
+   }
+   
+   private int makeDestructible(Destructible destructible) {
+      destructible.health = 100;
+      destructible.maxHealth = 100;
+      return World.ENTITY_DESTRUCTIBLE;
    }
    
    private int makeControllable(Controllable controllable) {

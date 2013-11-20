@@ -18,6 +18,8 @@ public class MotionSystem {
    
    private static final double MAXIMUM_TIME_STEP = 1.0/60.0;
    
+   private static final double FRICTION = 250.0;
+   
    public static void move(World world) {
       for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
          int entity = world.getEntityMask(i);
@@ -36,20 +38,9 @@ public class MotionSystem {
       while(deltaTime > 0.0) {
          double timeStep = getTimeStep(deltaTime);
          deltaTime -= timeStep;
-
-         Vector2D posShift = RKIntegrator.integrateVelocity(movable.maximumSpeed, movable.velocity, movable.acceleration, timeStep);
          
-         if(entityIsCollidable(world.getEntityMask(id)))
-            performCollisionCheckingAndResponse(posShift, id, world);
-         
-         Position position = world.accessComponents(id).position;
-         position.x += posShift.x;
-         position.y += posShift.y;
+         simulatePhysics(timeStep, id, world);
       }
-   }
-   
-   private static boolean entityIsCollidable(int entity) {
-      return (entity & World.ENTITY_COLLIDABLE) != 0;
    }
    
    private static double getDeltaTime(Movable movable) {
@@ -64,6 +55,34 @@ public class MotionSystem {
          return MAXIMUM_TIME_STEP;
       else 
          return timeFrame;
+   }
+   
+   private static void simulatePhysics(double timeStep, int id, World world) {
+      Movable movable = world.accessComponents(id).movable;
+      
+      Vector2D posShift = RKIntegrator.integrateVelocity(movable.maximumSpeed, movable.velocity, movable.acceleration, timeStep);
+      
+      if(entityIsCollidable(world.getEntityMask(id)));
+         //performCollisionCheckingAndResponse(posShift, id, world);
+      
+      applyFriction(movable.velocity, movable.acceleration, timeStep);
+            
+      Position position = world.accessComponents(id).position;
+      position.x += posShift.x;
+      position.y += posShift.y;
+   }
+   
+   private static boolean entityIsCollidable(int entity) {
+      return (entity & World.ENTITY_COLLIDABLE) != 0;
+   }
+   
+   private static void applyFriction(Vector2D velocity, Vector2D acceleration, double timeStep) {
+      if(Math.abs(acceleration.x) < 0.1)
+      {
+         if(velocity.x < 1.0)
+            velocity.x = 0.0;
+         velocity.x -= Math.signum(velocity.x)*(timeStep*FRICTION);
+      }
    }
    
    private static void performCollisionCheckingAndResponse(Vector2D positionShift, int id, World world) {

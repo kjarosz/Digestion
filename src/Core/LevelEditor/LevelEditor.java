@@ -162,8 +162,16 @@ public class LevelEditor extends MenuScreen implements ActionListener {
          bounds.x = components.position.x;
          bounds.y = components.position.y;
          if((mask & World.ENTITY_COLLIDABLE) != 0) {
-            bounds.width = components.collidable.width;
-            bounds.height = components.collidable.height;
+            if(components.collidable.bindToImageDimensions)
+            {
+               bounds.width = components.drawable.image.getWidth();
+               bounds.height = components.drawable.image.getHeight();
+            }
+            else
+            {
+               bounds.width = components.collidable.width;
+               bounds.height = components.collidable.height;
+            }
          } else {
             bounds.width = components.drawable.image.getWidth();
             bounds.height = components.drawable.image.getHeight();
@@ -223,6 +231,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       script.loadLevel(mLevel);
       mWorld.clearEntities();
       script.createEntities(mEntityFactory, mWorld);
+      mContentPanel.setCanvasSize(mLevel.size.width, mLevel.size.height);
       mContentPanel.update();
    }
    

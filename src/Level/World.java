@@ -11,6 +11,7 @@ public class World {
    public static final int ENTITY_CONTROLLABLE = 8 | ENTITY_MOVABLE;
    public static final int ENTITY_ANIMATED = 16 | ENTITY_DRAWABLE;
    public static final int ENTITY_TRIGGERABLE = 32;
+   public static final int ENTITY_DESTRUCTIBLE = 64;
    
    private int mEntities[];
    

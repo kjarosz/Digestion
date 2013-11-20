@@ -35,6 +35,7 @@ public class LevelMenu extends MenuScreen implements ActionListener {
    
    private void createLevelList() {
       mLevelList = new JList<>(mLevelScriptLoader.getLevelScripts());
+      mLevelList.setSelectedIndex(0);
       mListScroller = new JScrollPane(mLevelList);
       add(mListScroller, BorderLayout.CENTER);
    }
