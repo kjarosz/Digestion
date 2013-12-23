@@ -1,11 +1,13 @@
 package Menu;
 
 import java.awt.BorderLayout;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
 
-public class MenuStack extends JPanel {
+public class MenuStack extends JPanel implements ComponentListener {
    private LinkedList<MenuScreen> mScreenStack;
    
    public MenuStack() {
@@ -19,8 +21,7 @@ public class MenuStack extends JPanel {
       mScreenStack.add(screen);
       
       add(mScreenStack.getLast(), BorderLayout.CENTER);
-      revalidate();
-      repaint();
+      update();
    }
    
    public void popScreen() {
@@ -31,10 +32,29 @@ public class MenuStack extends JPanel {
       mScreenStack.removeLast();
       
       add(mScreenStack.getLast(), BorderLayout.CENTER);
+      update();
+   }
+
+   private void update()    {
+      revalidate();
       repaint();
    }
    
    public MenuScreen currentScreen() {
       return (MenuScreen)getComponent(getComponentCount()-1);
    }
+   
+   @Override
+   public void componentResized(ComponentEvent arg0) {
+      update();
+   }
+
+   @Override
+   public void componentHidden(ComponentEvent arg0) {}
+
+   @Override
+   public void componentMoved(ComponentEvent arg0) { }
+
+   @Override
+   public void componentShown(ComponentEvent arg0) {   }
 }

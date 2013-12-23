@@ -3,6 +3,7 @@ package Graphics;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
+import Entity.EntityComponents;
 import Util.Size;
 
 /*******************************
@@ -25,7 +26,7 @@ import Util.Size;
 public class GameViewport {
 	private Size mLevelSize;
 	
-	private Rectangle2D mFocusObject;
+	private EntityComponents mFocusObject;
 	
 	private Rectangle2D mLevelViewport;
 	
@@ -46,8 +47,8 @@ public class GameViewport {
 		return true;
 	}
 	
-	public void setFocusObject(Rectangle2D object) {
-		mFocusObject = object;
+	public void setFocusObject(EntityComponents focusObject) {
+		mFocusObject = focusObject;
 	}
 	
 	public void setLevelSize(Size levelSize) {
@@ -55,6 +56,10 @@ public class GameViewport {
 			return;
 		
 		mLevelSize = levelSize;
+	}
+	
+	public void setWindowSize(int width, int height) {
+	   mLevelViewport.setRect(0, 0, width, height);
 	}
 	
 	public boolean contains(double x, double y, double width, double height) {
@@ -98,7 +103,7 @@ public class GameViewport {
 		if(mLevelSize.width < center.width) {
 			center.x = 0;
 		} else {
-			center.x = (int)mFocusObject.getCenterX() - center.width/2;
+			center.x = (int)getFocusX() - center.width/2;
 			
 			if(center.x < 0)
 				center.x = 0;
@@ -109,7 +114,7 @@ public class GameViewport {
 		if(mLevelSize.height < center.height) {
 			center.y = 0;
 		} else {
-			center.y = (int)mFocusObject.getCenterY() - center.height/2;
+			center.y = (int)getFocusY() - center.height/2;
 			
 			if(center.y < 0)
 				center.y = 0;
@@ -118,5 +123,27 @@ public class GameViewport {
 		}
 		
 		mLevelViewport.setRect(center);
+	}
+	
+	private double getFocusX() {
+	   double width = 0.0;
+	   if(mFocusObject.collidable.bindToImageDimensions) {
+	      width = mFocusObject.drawable.image.getWidth();
+	   } else {
+	      width = mFocusObject.collidable.width;
+	   }
+	   
+	   return mFocusObject.position.x + width/2.0;
+	}
+	
+	private double getFocusY() {
+      double height = 0.0;
+      if(mFocusObject.collidable.bindToImageDimensions) {
+         height = mFocusObject.drawable.image.getHeight();
+      } else {
+         height = mFocusObject.collidable.height;
+      }
+      
+      return mFocusObject.position.y + height/2.0;
 	}
 }

@@ -5,12 +5,14 @@ import java.awt.event.KeyEvent;
 
 import Core.Menu.MainMenu;
 import Core.Menu.PauseMenu;
+import Entity.EntityComponents;
 import Entity.EntityFactory;
 import Entity.Systems.AnimationSystem;
 import Entity.Systems.ControlSystem;
 import Entity.Systems.DrawingSystem;
 import Entity.Systems.MotionSystem;
 import Graphics.GameCanvas;
+import Graphics.GameViewport;
 import Graphics.GameWindow;
 import Input.KeyManager;
 import Level.Level;
@@ -57,10 +59,11 @@ public class Game {
    public void startLevel(LevelLoadingScript loadingScript) {
       loadingScript.loadLevel(mLevel);
       loadingScript.createEntities(mEntityFactory, mWorld);
-      
+
       mQuit = false;
-      
+      mMenuStack.popScreen(); // Get rid of loading screen.
       mWindow.switchTo(mGameCanvas);
+      mWindow.update();
       execute();
    }
    
@@ -86,6 +89,8 @@ public class Game {
       mPaused = false;
       mFrameTimer.reset();
 		
+      setFocusObject();
+      
       boolean escProcessed = false;
 		while(!mQuit) {
 			if(mPaused) {
@@ -115,5 +120,22 @@ public class Game {
 		}
       
       mWindow.switchTo(mMenuStack);
+	}
+	
+	private void setFocusObject() {
+	   for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+	      int entityMask = mWorld.getEntityMask(i);
+	      if((entityMask & World.ENTITY_FOCUSABLE) != 0) {
+	         EntityComponents components = mWorld.accessComponents(i);
+	         
+	         GameViewport viewport = new GameViewport();
+	         viewport.initialize(mWindow.getWidth(), mWindow.getHeight(), 
+	               mLevel.size.width, mLevel.size.height);
+	         viewport.setFocusObject(components);
+	         
+	         mGameCanvas.setViewport(viewport);
+	         break;
+	      }
+	   }
 	}
 }

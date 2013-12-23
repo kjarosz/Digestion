@@ -62,7 +62,7 @@ public class MotionSystem {
       
       Vector2D posShift = RKIntegrator.integrateVelocity(movable.maximumSpeed, movable.velocity, movable.acceleration, timeStep);
       
-      if(entityIsCollidable(world.getEntityMask(id)));
+      if(entityIsCollidable(world.getEntityMask(id)))
          performCollisionCheckingAndResponse(posShift, id, world);
       
       applyFriction(movable.velocity, movable.acceleration, timeStep);

@@ -88,11 +88,11 @@ public class GameWindow {
 	}
 	
 	public int getWidth() {
-		return mWidth;
+	   return mWidth;
 	}
 	
 	public int getHeight() {
-		return mHeight;
+	   return mHeight;
 	}
 	
 	public void setSize(int width, int height) {
@@ -112,9 +112,10 @@ public class GameWindow {
    private void setWindowedSize(int width, int height) {
       Insets insets = mWindow.getInsets();
 
-      mWidth = width + insets.left + insets.right;
-      mHeight = height + insets.top + insets.bottom;
-      mWindow.setSize(width, height);
+      mWidth = width;
+      mHeight = height;
+      mWindow.setSize(width + insets.left + insets.right, 
+            height + insets.top + insets.bottom);
    }
    
    public void switchTo(Component component) {

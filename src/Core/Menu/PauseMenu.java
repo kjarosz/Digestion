@@ -1,8 +1,10 @@
 package Core.Menu;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 
@@ -14,6 +16,8 @@ public class PauseMenu extends MenuScreen implements ActionListener {
    private final String ACTION_RESUME = "Resume";
    private final String ACTION_OPTIONS = "Options";
    private final String ACTION_QUIT = "Quit";
+   
+   private final Dimension BUTTON_SIZE = new Dimension(110, 25);
    
    private Game mGame;
    
@@ -28,22 +32,26 @@ public class PauseMenu extends MenuScreen implements ActionListener {
    
    private void createWidgets() {
       setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-      
-      JButton resumeButton = new JButton("Resume");
-      resumeButton.setActionCommand(ACTION_RESUME);
-      resumeButton.addActionListener(this);
-      add(resumeButton);
-      
-      JButton optionsButton = new JButton("Options");
-      optionsButton.setActionCommand(ACTION_OPTIONS);
-      optionsButton.addActionListener(this);
-      add(optionsButton);
-      
-      JButton quitButton = new JButton("Quit");
-      quitButton.setActionCommand(ACTION_QUIT);
-      quitButton.addActionListener(this);
-      add(quitButton);
+
+      add(Box.createVerticalGlue());
+      addButton("Resume", ACTION_RESUME);
+      add(Box.createVerticalStrut(5));
+      addButton("Options", ACTION_OPTIONS);
+      add(Box.createVerticalStrut(5));
+      addButton("Quit", ACTION_QUIT);
+      add(Box.createVerticalGlue());
    }
+   
+   private void addButton(String name, String command) {
+      JButton button = new JButton(name);
+      button.setMinimumSize(BUTTON_SIZE);
+      button.setMaximumSize(BUTTON_SIZE);
+      button.setAlignmentX(JButton.CENTER_ALIGNMENT);
+      button.setActionCommand(command);
+      button.addActionListener(this);
+      add(button);
+   }
+   
    @Override
    public void actionPerformed(ActionEvent e) {
       String command = e.getActionCommand();

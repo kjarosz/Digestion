@@ -66,6 +66,8 @@ public class SinglePlayerMenu extends MenuScreen implements ActionListener {
          // Return stack to the Main Menu
          mStack.popScreen();
          
+         mStack.pushScreen(new LoadingScreen());
+         
          Thread thread = 
          new Thread(
             new Runnable() {

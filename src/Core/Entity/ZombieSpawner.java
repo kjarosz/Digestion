@@ -9,6 +9,13 @@ public class ZombieSpawner extends EntitySpawner {
    public int spawn(EntityComponents components) {
       int entityMask = World.ENTITY_NONE;
       
+      entityMask = makeSpawner();
+      
       return entityMask;
+   }
+   
+   private int makeSpawner() {
+      
+      return World.ENTITY_SPAWNER;
    }
 }

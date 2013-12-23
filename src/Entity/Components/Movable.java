@@ -3,7 +3,7 @@ package Entity.Components;
 import Util.Vector2D;
 
 public class Movable {
-   public final static double GRAVITY = 75;
+   public final static double GRAVITY = 250;
    
    public double maximumSpeed;
    public Vector2D velocity;
@@ -13,7 +13,7 @@ public class Movable {
    public long lastTime;
    
    public Movable() {
-      maximumSpeed = -1;
+      maximumSpeed = 0.0;
       velocity = new Vector2D(0.0, 0.0);
       acceleration = new Vector2D(0.0, 0.0);
       mass = 0.0;

@@ -81,6 +81,8 @@ public class GameCanvas extends JPanel implements CanvasInterface {
          Rectangle objectRect = new Rectangle();
          ImageItem imageItem;
          
+         Rectangle bounds = g.getClipBounds();
+         mViewport.setWindowSize(bounds.width, bounds.height);
          mViewport.update();
 
          while(mImageQueue.hasImages()) {

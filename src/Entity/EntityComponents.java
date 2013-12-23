@@ -11,6 +11,7 @@ public class EntityComponents {
    public Collidable collidable;
    public Movable movable;
    public Controllable controllable;
+   public Spawner spawner;
    
    public EntityComponents() {
       position = new Position();
@@ -19,5 +20,6 @@ public class EntityComponents {
       collidable = new Collidable();
       movable = new Movable();
       controllable = new Controllable();
+      spawner = new Spawner();
    }
 }

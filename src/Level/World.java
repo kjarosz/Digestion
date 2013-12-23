@@ -3,7 +3,7 @@ package Level;
 import Entity.EntityComponents;
 
 public class World {
-   public static final int MAXIMUM_ENTITIES = 2000;
+   public static final int MAXIMUM_ENTITIES = 20000;
    public static final int ENTITY_NONE = 0;
    public static final int ENTITY_DRAWABLE = 1;
    public static final int ENTITY_MOVABLE = 2;
@@ -12,6 +12,8 @@ public class World {
    public static final int ENTITY_ANIMATED = 16 | ENTITY_DRAWABLE;
    public static final int ENTITY_TRIGGERABLE = 32;
    public static final int ENTITY_DESTRUCTIBLE = 64;
+   public static final int ENTITY_FOCUSABLE = 128;
+   public static final int ENTITY_SPAWNER = 256;
    
    private int mEntities[];
    
