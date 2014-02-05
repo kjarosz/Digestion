@@ -33,15 +33,11 @@ public class Game {
    private EntityFactory mEntityFactory;
    private Level mLevel;
    private World mWorld;
-	
-	private GameTimer mFrameTimer;
 
 	public Game() {
 		mWindow = new GameWindow("Digestion");
 		mGameCanvas = new GameCanvas();
       mEntityFactory = new EntityFactory();
-		mFrameTimer = new GameTimer();
-		mFrameTimer.setTimeInterval( 1000/30 );
       mLevel = new Level();
       mWorld = new World();
 		mPaused = true;
@@ -77,7 +73,6 @@ public class Game {
    public void resume() {
       mPaused = false;
       mWorld.resetTimers();
-      mFrameTimer.reset();
       mWindow.switchTo(mGameCanvas);
    }
    
@@ -87,10 +82,13 @@ public class Game {
    
 	private void execute() {
       mPaused = false;
-      mFrameTimer.reset();
 		
       setFocusObject();
       
+      GameTimer fpsUpdateTimer = new GameTimer();
+      fpsUpdateTimer.setTimeInterval(5000);
+      
+      int frameCounter = 0;
       boolean escProcessed = false;
 		while(!mQuit) {
 			if(mPaused) {
@@ -102,12 +100,9 @@ public class Game {
             ControlSystem.manipulate(mWorld);
             MotionSystem.move(mWorld);
             AnimationSystem.animate(mWorld);
+            DrawingSystem.draw(mWorld, mGameCanvas);
             
-				if(mFrameTimer.hasTimeIntervalPassed()) {
-               DrawingSystem.draw(mWorld, mGameCanvas);	
-               mWindow.update();
-					mFrameTimer.reset();
-				}
+            mWindow.update();
             
             if(KeyManager.isKeyPressed(KeyEvent.VK_ESCAPE) && !escProcessed) {
                escProcessed = true;
@@ -117,7 +112,15 @@ public class Game {
          
          if(!KeyManager.isKeyPressed(KeyEvent.VK_ESCAPE) && escProcessed)
             escProcessed = false;
+         
+         frameCounter++;
+         if(fpsUpdateTimer.hasTimeIntervalPassed()) {
+            updateFPS(frameCounter, fpsUpdateTimer.getElapsedTime());
+            fpsUpdateTimer.reset();
+            frameCounter = 0;
+         }
 		}
+		mWindow.setTitle("Digestion");
       
       mWindow.switchTo(mMenuStack);
 	}
@@ -137,5 +140,10 @@ public class Game {
 	         break;
 	      }
 	   }
+	}
+	
+	private void updateFPS(int frameCount, long timePassed) {
+	   double fps = (double)frameCount / (timePassed/5000.0);
+	   mWindow.setTitle("Digestion - " + fps + " FPS");
 	}
 }
