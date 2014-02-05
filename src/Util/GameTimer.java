@@ -38,6 +38,6 @@ public class GameTimer {
 	}
 	
 	public static long milliToNano(long milliUnits) {
-		return milliUnits/1000000;
+		return milliUnits*1000000;
 	}
 }
