@@ -50,6 +50,10 @@ public class GameWindow {
 		mFullscreen = false;
       setSize(800, 600);
    }
+   
+   public void setTitle(String title) {
+      mWindow.setTitle(title);
+   }
 	
 	public void switchFullscreen() {
       mFullscreen = !mFullscreen;
