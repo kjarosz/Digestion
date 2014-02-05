@@ -18,7 +18,7 @@ public class MotionSystem {
    
    private static final double MAXIMUM_TIME_STEP = 1.0/60.0;
    
-   private static final double FRICTION = 250.0;
+   private static final double FRICTION = 800.0;
    
    public static void move(World world) {
       for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
@@ -60,6 +60,7 @@ public class MotionSystem {
    private static void simulatePhysics(double timeStep, int id, World world) {
       Movable movable = world.accessComponents(id).movable;
       
+      
       Vector2D posShift = RKIntegrator.integrateVelocity(movable.maximumSpeed, movable.velocity, movable.acceleration, timeStep);
       
       if(entityIsCollidable(world.getEntityMask(id)))
@@ -79,7 +80,7 @@ public class MotionSystem {
    private static void applyFriction(Vector2D velocity, Vector2D acceleration, double timeStep) {
       if(Math.abs(acceleration.x) < 0.1)
       {
-         if(velocity.x < 1.0)
+         if(Math.abs(velocity.x) < 1.0)
             velocity.x = 0.0;
          velocity.x -= Math.signum(velocity.x)*(timeStep*FRICTION);
       }
@@ -119,6 +120,10 @@ public class MotionSystem {
       BoundingRectangle otherEntityBox = new BoundingRectangle(otherEntity);
       
       int projection = projectOufOfCollision(projectedEntity, otherEntityBox);
+      
+      if(projection == PROJECT_UP) {
+         entity.movable.jumped = entity.movable.doubleJumped = false;
+      }
       
       applyCollisionForces(projection, positionShift, entity, projectedEntity);
    }
