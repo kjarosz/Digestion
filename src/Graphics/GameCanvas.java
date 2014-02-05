@@ -13,16 +13,24 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 	
 	private ImageQueue mImageQueue;
 	
+	private boolean mInvertedYAxis;
+	
 	public GameCanvas() {
 		mViewport = new GameViewport();
 		mViewportEnabled = false;
       
 		mImageQueue = new ImageQueue();
+		
+		mInvertedYAxis = false;
 	}
 	
 	public void setViewport(GameViewport viewport) {		
 		mViewport = viewport;
 		mViewportEnabled = true;
+	}
+	
+	public void invertYAxis(boolean flag) {
+	   mInvertedYAxis = flag;
 	}
 	
    @Override
@@ -108,6 +116,15 @@ public class GameCanvas extends JPanel implements CanvasInterface {
    @Override
    public void paint(Graphics g) {
       mImageQueue.sort();
+      
+      Graphics2D g2 = (Graphics2D)g;
+      
+      if(mInvertedYAxis) {
+         int midpoint = getHeight()/2;
+         g2.translate(0, midpoint);
+         g2.scale(1.0f, -1.0f);
+         g2.translate(0, -midpoint);
+      }
       
       drawItems((Graphics2D)g);
    }

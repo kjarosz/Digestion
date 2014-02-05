@@ -37,6 +37,7 @@ public class Game {
 	public Game() {
 		mWindow = new GameWindow("Digestion");
 		mGameCanvas = new GameCanvas();
+		mGameCanvas.invertYAxis(true);
       mEntityFactory = new EntityFactory();
       mLevel = new Level();
       mWorld = new World();
