@@ -90,6 +90,6 @@ public class Vector2D {
 	
 	@Override
 	public String toString() {
-		return "Vector2D.x = " + Double.toString(x) + ", Vector2D.y = " + Double.toString(y);
+		return "<" + Double.toString(x) + ", " + Double.toString(y) + ">";
 	}
 }
