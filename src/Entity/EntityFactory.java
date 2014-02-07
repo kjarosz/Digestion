@@ -8,7 +8,7 @@ import Core.Entity.NormalBlockSpawner;
 import Core.Entity.PlayerSpawner;
 import Core.Entity.SpikeyBlockSpawner;
 import Core.Entity.ZombieSpawner;
-import Level.World;
+import Level.EntityContainer;
 
 public class EntityFactory {
    final private String ENTITY_NAMES[] = {
@@ -34,6 +34,6 @@ public class EntityFactory {
             return ENTITY_SPAWNERS[i].spawn(components);
          }
       }
-      return World.ENTITY_NONE;
+      return EntityContainer.ENTITY_NONE;
    }
 }

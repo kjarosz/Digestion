@@ -2,7 +2,7 @@ package Entity.Systems;
 
 import Entity.EntityComponents;
 import Graphics.CanvasInterface;
-import Level.World;
+import Level.EntityContainer;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,10 +32,10 @@ public class DrawingSystem {
       return gNullImage;
    }
    
-   public static void draw(World world, CanvasInterface canvas) {
-      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+   public static void draw(EntityContainer world, CanvasInterface canvas) {
+      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          int entity = world.getEntityMask(i);
-         if((entity & World.ENTITY_DRAWABLE) != 0)
+         if((entity & EntityContainer.ENTITY_DRAWABLE) != 0)
             drawEntity(world.accessComponents(i), canvas);
       }
    }

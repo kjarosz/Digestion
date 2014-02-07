@@ -5,7 +5,7 @@ import java.awt.geom.Rectangle2D;
 import Entity.EntityComponents;
 import Entity.Components.Movable;
 import Entity.Components.Position;
-import Level.World;
+import Level.EntityContainer;
 import Util.BoundingRectangle;
 import Util.RKIntegrator;
 import Util.Vector2D;
@@ -20,8 +20,8 @@ public class MotionSystem {
    
    private static final double FRICTION = 800.0;
    
-   public static void move(World world) {
-      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+   public static void move(EntityContainer world) {
+      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          int entity = world.getEntityMask(i);
          if(entityIsMovable(entity))
             moveEntity(i, world);
@@ -29,10 +29,10 @@ public class MotionSystem {
    }
    
    private static boolean entityIsMovable(int entity) {
-      return (entity & World.ENTITY_MOVABLE) != 0;
+      return (entity & EntityContainer.ENTITY_MOVABLE) != 0;
    }
    
-   private static void moveEntity(int id, World world) {
+   private static void moveEntity(int id, EntityContainer world) {
       Movable movable = world.accessComponents(id).movable;
       double deltaTime = getDeltaTime(movable);
       while(deltaTime > 0.0) {
@@ -57,7 +57,7 @@ public class MotionSystem {
          return timeFrame;
    }
    
-   private static void simulatePhysics(double timeStep, int id, World world) {
+   private static void simulatePhysics(double timeStep, int id, EntityContainer world) {
       Movable movable = world.accessComponents(id).movable;
       
       
@@ -74,7 +74,7 @@ public class MotionSystem {
    }
    
    private static boolean entityIsCollidable(int entity) {
-      return (entity & World.ENTITY_COLLIDABLE) != 0;
+      return (entity & EntityContainer.ENTITY_COLLIDABLE) != 0;
    }
    
    private static void applyFriction(Vector2D velocity, Vector2D acceleration, double timeStep) {
@@ -86,12 +86,12 @@ public class MotionSystem {
       }
    }
    
-   private static void performCollisionCheckingAndResponse(Vector2D positionShift, int id, World world) {
+   private static void performCollisionCheckingAndResponse(Vector2D positionShift, int id, EntityContainer world) {
       BoundingRectangle sourceEntity = new BoundingRectangle(id, world);
       BoundingRectangle entity = new BoundingRectangle(id, world);
       applyPositionShift(sourceEntity, positionShift, entity);
       
-      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          if(i == id || !entityIsCollidable(world.getEntityMask(i)))
             continue;
 
@@ -108,7 +108,7 @@ public class MotionSystem {
       object.y = source.y + positionShift.y;
    }
    
-   private static boolean entitiesIntersect(BoundingRectangle entity, int id2, World world) {
+   private static boolean entitiesIntersect(BoundingRectangle entity, int id2, EntityContainer world) {
       EntityComponents otherEntityComponents = world.accessComponents(id2);
       BoundingRectangle otherEntity = new BoundingRectangle(otherEntityComponents);
       

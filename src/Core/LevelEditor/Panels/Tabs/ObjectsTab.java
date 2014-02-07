@@ -4,7 +4,7 @@ import Entity.EntityComponents;
 import Entity.EntityFactory;
 import Entity.Systems.DrawingSystem;
 import Graphics.ScrollablePicture;
-import Level.World;
+import Level.EntityContainer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
@@ -41,7 +41,7 @@ public class ObjectsTab extends JPanel implements ActionListener {
               mEntityComponents[index]);
       
       // We want to see the entity in the level editor so we assign a null image
-      if((mask & World.ENTITY_DRAWABLE) == 0)
+      if((mask & EntityContainer.ENTITY_DRAWABLE) == 0)
          mEntityComponents[index].drawable.image = DrawingSystem.getNullImage();
    }
    

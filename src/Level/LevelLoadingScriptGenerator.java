@@ -5,7 +5,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 
 public class LevelLoadingScriptGenerator {
-   protected static void generateScript(Level level, World world, BufferedWriter writer) throws IOException {
+   protected static void generateScript(Level level, EntityContainer world, BufferedWriter writer) throws IOException {
       writeHeader(writer);
       writeLoadLevel(level, writer);
       writeLoadEntities(world, writer);
@@ -45,11 +45,11 @@ public class LevelLoadingScriptGenerator {
       writer.newLine();
    }
    
-   private static void writeLoadEntities(World world, BufferedWriter writer) throws IOException {
+   private static void writeLoadEntities(EntityContainer world, BufferedWriter writer) throws IOException {
       writer.write("\tdef createEntities(self, factory, world):");               writer.newLine();
-      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          int mask = world.getEntityMask(i);
-         if(mask == World.ENTITY_NONE)
+         if(mask == EntityContainer.ENTITY_NONE)
             continue;
          
          EntityComponents components = world.accessComponents(i);

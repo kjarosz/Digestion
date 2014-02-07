@@ -5,7 +5,7 @@ import Entity.Components.Drawable;
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
 import Entity.Systems.DrawingSystem;
-import Level.World;
+import Level.EntityContainer;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -13,7 +13,7 @@ import javax.imageio.ImageIO;
 public class NormalBlockSpawner extends EntitySpawner {
    @Override
    public int spawn(EntityComponents components) {
-      int entityMask = World.ENTITY_NONE;
+      int entityMask = EntityContainer.ENTITY_NONE;
       entityMask |= makeCollidable(components.collidable);
       entityMask |= makeDrawable(components.drawable);
       return entityMask;
@@ -21,7 +21,7 @@ public class NormalBlockSpawner extends EntitySpawner {
    
    private int makeCollidable(Collidable collidable) {
       collidable.bindToImageDimensions = true;
-      return World.ENTITY_COLLIDABLE;
+      return EntityContainer.ENTITY_COLLIDABLE;
    }
    
    private int makeDrawable(Drawable drawable) {
@@ -34,6 +34,6 @@ public class NormalBlockSpawner extends EntitySpawner {
       } catch(IOException ex) {
          drawable.image = DrawingSystem.getNullImage();
       }
-      return World.ENTITY_DRAWABLE;
+      return EntityContainer.ENTITY_DRAWABLE;
    }
 }

@@ -5,7 +5,7 @@ import Core.LevelEditor.Panels.Control.ContentPanelControl;
 import Entity.EntityComponents;
 import Graphics.ScrollablePanel;
 import Level.Level;
-import Level.World;
+import Level.EntityContainer;
 import Util.Size;
 import java.awt.*;
 import java.awt.event.*;
@@ -15,7 +15,7 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
 	public static final int CONTENT_PANEL = 0;
 	
    private Level mLevel;
-   private World mWorld;
+   private EntityContainer mWorld;
    
 	// CONTENT PANEL
    private ScrollablePanel mCanvas;
@@ -32,7 +32,7 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
 
 	boolean mGridEnabled, mBckgrEnabled, mObjectsEnabled, mPlatformsEnabled;
 	
-	public ContentPanel(LevelEditor editor, Level level, World world) {
+	public ContentPanel(LevelEditor editor, Level level, EntityContainer world) {
       mLevel = level;
       mWorld = world;
       mGridEnabled = mBckgrEnabled = mObjectsEnabled = mPlatformsEnabled = true;
@@ -90,7 +90,7 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
       container.add(toggle);
    }
    
-   public void setNewLevel(Level level, World world) {
+   public void setNewLevel(Level level, EntityContainer world) {
       mLevel = level;
       mWorld = world;
       reset();
@@ -147,8 +147,8 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
    }
    
    private void drawWorld() {
-      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
-         if(mWorld.getEntityMask(i) == World.ENTITY_NONE)
+      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
+         if(mWorld.getEntityMask(i) == EntityContainer.ENTITY_NONE)
             continue;
          
          EntityComponents components = mWorld.accessComponents(i);

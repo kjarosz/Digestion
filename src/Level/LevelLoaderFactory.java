@@ -33,7 +33,7 @@ public class LevelLoaderFactory {
       return (LevelLoadingScript)scriptObject.script;
    }
    
-   public void saveLevel(Level level, World world) {
+   public void saveLevel(Level level, EntityContainer world) {
       try (BufferedWriter writer = getWriter(level)) {
          LevelLoadingScriptGenerator.generateScript(level, world, writer);
       } catch(IOException | MissingNameException ex) {

@@ -2,12 +2,12 @@ package Core.Entity;
 
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
-import Level.World;
+import Level.EntityContainer;
 
 public class ZombieSpawner extends EntitySpawner {
    @Override
    public int spawn(EntityComponents components) {
-      int entityMask = World.ENTITY_NONE;
+      int entityMask = EntityContainer.ENTITY_NONE;
       
       entityMask = makeSpawner();
       
@@ -16,6 +16,6 @@ public class ZombieSpawner extends EntitySpawner {
    
    private int makeSpawner() {
       
-      return World.ENTITY_SPAWNER;
+      return EntityContainer.ENTITY_SPAWNER;
    }
 }

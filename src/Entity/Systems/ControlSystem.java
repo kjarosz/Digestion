@@ -4,11 +4,11 @@ import Entity.Components.Controllable;
 import Entity.EntityComponents;
 import Input.KeyManager;
 import Input.KeyMapping;
-import Level.World;
+import Level.EntityContainer;
 
 public class ControlSystem {
-   public static void manipulate(World world) {
-      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+   public static void manipulate(EntityContainer world) {
+      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          int entity = world.getEntityMask(i);
          if(isControllable(entity)) {
             manipulateEntity(world.accessComponents(i));
@@ -17,7 +17,7 @@ public class ControlSystem {
    }
    
    private static boolean isControllable(int entity) {
-      return (entity & World.ENTITY_CONTROLLABLE) != 0;
+      return (entity & EntityContainer.ENTITY_CONTROLLABLE) != 0;
    }
    
    private static void manipulateEntity(EntityComponents entity) {

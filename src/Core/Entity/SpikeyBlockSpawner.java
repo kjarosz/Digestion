@@ -6,7 +6,7 @@ import Entity.Components.Movable;
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
 import Entity.Systems.DrawingSystem;
-import Level.World;
+import Level.EntityContainer;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -15,7 +15,7 @@ public class SpikeyBlockSpawner extends EntitySpawner {
 
    @Override
    public int spawn(EntityComponents components) {
-      int entityMask = World.ENTITY_NONE;
+      int entityMask = EntityContainer.ENTITY_NONE;
       entityMask |= makeCollidable(components.collidable);
       entityMask |= makeMovable(components.movable);
       entityMask |= makeDrawable(components.drawable);
@@ -25,7 +25,7 @@ public class SpikeyBlockSpawner extends EntitySpawner {
 
    private int makeCollidable(Collidable collidable) {
       collidable.bindToImageDimensions = true;
-      return World.ENTITY_COLLIDABLE;
+      return EntityContainer.ENTITY_COLLIDABLE;
    }
    
    private int makeMovable(Movable movable) {
@@ -34,7 +34,7 @@ public class SpikeyBlockSpawner extends EntitySpawner {
       movable.velocity.x = 0.0;
       movable.velocity.y = 0.0;
       movable.lastTime = System.currentTimeMillis();
-      return World.ENTITY_MOVABLE;
+      return EntityContainer.ENTITY_MOVABLE;
    }
    
    private int makeDrawable(Drawable drawable) {
@@ -47,10 +47,10 @@ public class SpikeyBlockSpawner extends EntitySpawner {
       } catch(IOException ex) {
          drawable.image = DrawingSystem.getNullImage();
       }
-      return World.ENTITY_DRAWABLE;
+      return EntityContainer.ENTITY_DRAWABLE;
    }
    
    private int makeTriggerable() {
-      return World.ENTITY_TRIGGERABLE;
+      return EntityContainer.ENTITY_TRIGGERABLE;
    }
 }

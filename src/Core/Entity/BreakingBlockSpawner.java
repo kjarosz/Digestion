@@ -11,12 +11,13 @@ import Entity.Components.Collidable;
 import Entity.Components.Destructible;
 import Entity.Components.Drawable;
 import Entity.Systems.DrawingSystem;
-import Level.World;
+import Level.EntityContainer;
 
 public class BreakingBlockSpawner extends EntitySpawner {
    @Override
    public int spawn(EntityComponents components) {
-      int mask = World.ENTITY_NONE;
+      int mask = EntityContainer.ENTITY_NONE;
+      
       mask |= setCollidable(components.collidable);
       mask |= setDestructible(components.destructible);
       mask |= setDrawable(components.drawable);
@@ -26,7 +27,7 @@ public class BreakingBlockSpawner extends EntitySpawner {
    private int setCollidable(Collidable collidable) {
       collidable.width = 32;
       collidable.height = 32;
-      return World.ENTITY_COLLIDABLE;
+      return EntityContainer.ENTITY_COLLIDABLE;
    }
    
    private int setDestructible(Destructible destructible) {
@@ -34,7 +35,7 @@ public class BreakingBlockSpawner extends EntitySpawner {
       destructible.maxHealth = 100;
       destructible.selfReviving = true;
       destructible.revivalInterval = 2000;
-      return World.ENTITY_DESTRUCTIBLE;
+      return EntityContainer.ENTITY_DESTRUCTIBLE;
    }
    
    private int setDrawable(Drawable drawable) {
@@ -47,6 +48,6 @@ public class BreakingBlockSpawner extends EntitySpawner {
       } catch(IOException ex) {
          drawable.image = DrawingSystem.getNullImage();
       }
-      return World.ENTITY_DRAWABLE;
+      return EntityContainer.ENTITY_DRAWABLE;
    }
 }

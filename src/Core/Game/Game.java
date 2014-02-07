@@ -17,7 +17,7 @@ import Graphics.GameWindow;
 import Input.KeyManager;
 import Level.Level;
 import Level.LevelLoadingScript;
-import Level.World;
+import Level.EntityContainer;
 import Menu.MenuStack;
 import Util.GameTimer;
 
@@ -32,7 +32,7 @@ public class Game {
 
    private EntityFactory mEntityFactory;
    private Level mLevel;
-   private World mWorld;
+   private EntityContainer mWorld;
 
 	public Game() {
 		mWindow = new GameWindow("Digestion");
@@ -40,7 +40,7 @@ public class Game {
 		mGameCanvas.invertYAxis(true);
       mEntityFactory = new EntityFactory();
       mLevel = new Level();
-      mWorld = new World();
+      mWorld = new EntityContainer();
 		mPaused = true;
       setupMenuStack();
 	}
@@ -127,9 +127,9 @@ public class Game {
 	}
 	
 	private void setFocusObject() {
-	   for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+	   for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
 	      int entityMask = mWorld.getEntityMask(i);
-	      if((entityMask & World.ENTITY_FOCUSABLE) != 0) {
+	      if((entityMask & EntityContainer.ENTITY_FOCUSABLE) != 0) {
 	         EntityComponents components = mWorld.accessComponents(i);
 	         
 	         GameViewport viewport = new GameViewport();

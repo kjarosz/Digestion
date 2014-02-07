@@ -2,7 +2,7 @@ package Level;
 
 import Entity.EntityComponents;
 
-public class World {
+public class EntityContainer {
    public static final int MAXIMUM_ENTITIES = 20000;
    public static final int ENTITY_NONE = 0;
    public static final int ENTITY_DRAWABLE = 1;
@@ -20,7 +20,7 @@ public class World {
    private EntityComponents mEmptyComponent;   
    private EntityComponents mComponents[];
    
-   public World() {
+   public EntityContainer() {
       mEntities = new int[MAXIMUM_ENTITIES];
       clearEntities();
       

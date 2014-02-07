@@ -16,7 +16,7 @@ import Entity.Components.Movable;
 import Entity.Systems.DrawingSystem;
 import Input.ControlFunction;
 import Input.KeyMapping;
-import Level.World;
+import Level.EntityContainer;
 import Util.Vector2D;
 
 public class PlayerSpawner extends EntitySpawner {
@@ -28,13 +28,13 @@ public class PlayerSpawner extends EntitySpawner {
    
    @Override
    public int spawn(EntityComponents components) {
-      int mask = World.ENTITY_NONE;
+      int mask = EntityContainer.ENTITY_NONE;
       mask |= makeCollidable(components.collidable);
       mask |= makeMovable(components.movable);
       mask |= makeDestructible(components.destructible);
       mask |= makeControllable(components.controllable);
       mask |= makeDrawable(components.drawable);
-      mask |= World.ENTITY_FOCUSABLE;
+      mask |= EntityContainer.ENTITY_FOCUSABLE;
       return   mask;
    }
    
@@ -42,7 +42,7 @@ public class PlayerSpawner extends EntitySpawner {
       collidable.bindToImageDimensions = true;
       collidable.width = 32;
       collidable.height = 64;
-      return World.ENTITY_COLLIDABLE;
+      return EntityContainer.ENTITY_COLLIDABLE;
    }
    
    private int makeMovable(Movable movable) {
@@ -52,13 +52,13 @@ public class PlayerSpawner extends EntitySpawner {
       movable.velocity.y = 0.0;
       movable.maximumSpeed = 400.0;
       movable.lastTime = System.currentTimeMillis();
-      return World.ENTITY_MOVABLE;
+      return EntityContainer.ENTITY_MOVABLE;
    }
    
    private int makeDestructible(Destructible destructible) {
       destructible.health = 100;
       destructible.maxHealth = 100;
-      return World.ENTITY_DESTRUCTIBLE;
+      return EntityContainer.ENTITY_DESTRUCTIBLE;
    }
    
    private int makeControllable(Controllable controllable) {
@@ -67,7 +67,7 @@ public class PlayerSpawner extends EntitySpawner {
       constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_ACCELERATION, ZERO_VECTOR);
       constructMovingKeyMapping(controllable, KeyEvent.VK_S, DOWN_ACCELERATION, ZERO_VECTOR);
       
-      return World.ENTITY_CONTROLLABLE;
+      return EntityContainer.ENTITY_CONTROLLABLE;
    }
    
    private void constructMovingKeyMapping(Controllable controllable, int keyCode, 
@@ -129,6 +129,6 @@ public class PlayerSpawner extends EntitySpawner {
       } catch(IOException ex) {
          drawable.image = DrawingSystem.getNullImage();
       }
-      return World.ENTITY_DRAWABLE;
+      return EntityContainer.ENTITY_DRAWABLE;
    }
 }

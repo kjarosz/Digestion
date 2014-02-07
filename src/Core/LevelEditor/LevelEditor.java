@@ -7,7 +7,7 @@ import Entity.EntityFactory;
 import Level.Level;
 import Level.LevelLoaderFactory;
 import Level.LevelLoadingScript;
-import Level.World;
+import Level.EntityContainer;
 import Menu.MenuScreen;
 import Menu.MenuStack;
 import Util.ErrorLog;
@@ -41,7 +41,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
    
    private LevelLoaderFactory mLevelLoaderFactory;
    private Level mLevel;
-   private World mWorld;
+   private EntityContainer mWorld;
    
    public LevelEditor(MenuStack stack) {
       mStack = stack;
@@ -50,7 +50,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       mLevelLoaderFactory = new LevelLoaderFactory();
       
       mLevel = new Level();
-      mWorld = new World();
+      mWorld = new EntityContainer();
       
       createWidgets();
    }
@@ -131,12 +131,12 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       EntityComponents entityComp = mWorld.accessComponents(id);
       Rectangle entity = new Rectangle((int)entityComp.position.x, (int)entityComp.position.y,
                  entityComp.drawable.image.getWidth(), entityComp.drawable.image.getHeight());
-      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          if(i == id)
             continue;
          
          int mask = mWorld.getEntityMask(i);
-         if(mask == World.ENTITY_NONE)
+         if(mask == EntityContainer.ENTITY_NONE)
             continue;
          
          EntityComponents otherComp = mWorld.accessComponents(i);
@@ -153,15 +153,15 @@ public class LevelEditor extends MenuScreen implements ActionListener {
    private void removeEntity(Point position) {
       int mask;
       Rectangle2D.Double bounds = new Rectangle2D.Double();
-      for(int i = 0; i < World.MAXIMUM_ENTITIES; i++) {
+      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          mask = mWorld.getEntityMask(i);
-         if(mask == World.ENTITY_NONE)
+         if(mask == EntityContainer.ENTITY_NONE)
             continue;
          
          EntityComponents components = mWorld.accessComponents(i);
          bounds.x = components.position.x;
          bounds.y = components.position.y;
-         if((mask & World.ENTITY_COLLIDABLE) != 0) {
+         if((mask & EntityContainer.ENTITY_COLLIDABLE) != 0) {
             if(components.collidable.bindToImageDimensions)
             {
                bounds.width = components.drawable.image.getWidth();

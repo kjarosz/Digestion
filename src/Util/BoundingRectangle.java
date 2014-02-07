@@ -3,7 +3,7 @@ package Util;
 import java.awt.geom.Rectangle2D.Double;
 
 import Entity.EntityComponents;
-import Level.World;
+import Level.EntityContainer;
 
 public class BoundingRectangle extends Double {
    public BoundingRectangle(EntityComponents components) {
@@ -20,7 +20,7 @@ public class BoundingRectangle extends Double {
       }
    }
    
-   public BoundingRectangle(int id, World world) {
+   public BoundingRectangle(int id, EntityContainer world) {
       this(world.accessComponents(id));
    }
 }
