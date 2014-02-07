@@ -1,8 +1,11 @@
 package Level;
 
-import Entity.EntityComponents;
 import java.io.BufferedWriter;
 import java.io.IOException;
+
+import org.jbox2d.common.Vec2;
+
+import Entity.EntityComponents;
 
 public class LevelLoadingScriptGenerator {
    protected static void generateScript(Level level, EntityContainer world, BufferedWriter writer) throws IOException {
@@ -55,7 +58,9 @@ public class LevelLoadingScriptGenerator {
          EntityComponents components = world.accessComponents(i);
          writer.write("\t\tspawnEntity(world, factory, ");
          writer.write("\"" + components.name + "\", ");
-         writer.write("Point2D.Double(" + components.position.x + ", " + components.position.y + "))");
+         
+         Vec2 position = components.body.getPosition();
+         writer.write("Point2D.Double(" + position.x + ", " + position.y + "))");
          writer.newLine();
       }
       writer.newLine();
