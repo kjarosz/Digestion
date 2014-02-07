@@ -1,24 +1,28 @@
 package Entity;
 
-import Entity.Components.*;
+import org.jbox2d.dynamics.Body;
+
+import Entity.Components.Controllable;
+import Entity.Components.Destructible;
+import Entity.Components.Drawable;
+import Entity.Components.Spawner;
 
 public class EntityComponents {
    public String name;
    
-   public Position position;
+   public Body body;
+   public float width;
+   public float height;
    public Destructible destructible;
    public Drawable drawable;
-   public Collidable collidable;
-   public Movable movable;
    public Controllable controllable;
    public Spawner spawner;
    
    public EntityComponents() {
-      position = new Position();
+   	width = 0.0f;
+      height = 0.0f;
       destructible = new Destructible();
       drawable = new Drawable();
-      collidable = new Collidable();
-      movable = new Movable();
       controllable = new Controllable();
       spawner = new Spawner();
    }
