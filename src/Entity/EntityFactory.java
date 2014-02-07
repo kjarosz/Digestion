@@ -1,6 +1,7 @@
 package Entity;
 
-import java.awt.geom.Point2D;
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
 
 import Core.Entity.BreakingBlockSpawner;
 import Core.Entity.IceBlockSpawner;
@@ -25,13 +26,11 @@ public class EntityFactory {
       return ENTITY_NAMES;
    }
    
-   public int createEntity(String name, Point2D.Double position, EntityComponents components) {
+   public int createEntity(World world, String name, Vec2 position, EntityComponents components) {
       for(int i = 0; i < ENTITY_NAMES.length; i++) {
          if(name.equals(ENTITY_NAMES[i])) {
             components.name = name;
-            components.position.x = position.x;
-            components.position.y = position.y;
-            return ENTITY_SPAWNERS[i].spawn(null, null, components);
+            return ENTITY_SPAWNERS[i].spawn(world, position, components);
          }
       }
       return EntityContainer.ENTITY_NONE;
