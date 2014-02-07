@@ -10,11 +10,13 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
+
 public class IceBlockSpawner extends EntitySpawner {
    @Override
-   public int spawn(EntityComponents components) {
+   public int spawn(World world, Vec2 position, EntityComponents components) {
       int entityMask = EntityContainer.ENTITY_NONE;
-      entityMask |= makeCollidable(components.collidable);
       entityMask |= makeDrawable(components.drawable);
       return entityMask;
    }

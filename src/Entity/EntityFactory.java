@@ -31,7 +31,7 @@ public class EntityFactory {
             components.name = name;
             components.position.x = position.x;
             components.position.y = position.y;
-            return ENTITY_SPAWNERS[i].spawn(components);
+            return ENTITY_SPAWNERS[i].spawn(null, null, components);
          }
       }
       return EntityContainer.ENTITY_NONE;

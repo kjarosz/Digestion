@@ -6,6 +6,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
+
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
 import Entity.Components.Collidable;
@@ -27,10 +30,8 @@ public class PlayerSpawner extends EntitySpawner {
    private final Vector2D DOWN_ACCELERATION = new Vector2D(0, 120); 
    
    @Override
-   public int spawn(EntityComponents components) {
+   public int spawn(World world, Vec2 position, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
-      mask |= makeCollidable(components.collidable);
-      mask |= makeMovable(components.movable);
       mask |= makeDestructible(components.destructible);
       mask |= makeControllable(components.controllable);
       mask |= makeDrawable(components.drawable);
