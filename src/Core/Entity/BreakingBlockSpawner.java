@@ -5,6 +5,9 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
+
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
 import Entity.Components.Collidable;
@@ -15,18 +18,17 @@ import Level.EntityContainer;
 
 public class BreakingBlockSpawner extends EntitySpawner {
    @Override
-   public int spawn(EntityComponents components) {
+   public int spawn(World world, Vec2 position, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
-      
-      mask |= setCollidable(components.collidable);
+      mask |= setCollidable(components);
       mask |= setDestructible(components.destructible);
       mask |= setDrawable(components.drawable);
       return mask;
    }
    
-   private int setCollidable(Collidable collidable) {
-      collidable.width = 32;
-      collidable.height = 32;
+   private int setCollidable(EntityComponents components) {
+   	
+   	
       return EntityContainer.ENTITY_COLLIDABLE;
    }
    
