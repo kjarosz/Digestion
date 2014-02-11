@@ -6,32 +6,36 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
-import Entity.Components.Collidable;
 import Entity.Components.Controllable;
 import Entity.Components.Destructible;
 import Entity.Components.Drawable;
-import Entity.Components.Movable;
 import Entity.Systems.DrawingSystem;
 import Input.ControlFunction;
 import Input.KeyMapping;
 import Level.EntityContainer;
-import Util.Vector2D;
 
 public class PlayerSpawner extends EntitySpawner {
-   private final Vector2D ZERO_VECTOR = new Vector2D(0, 0);
-   private final Vector2D LEFT_ACCELERATION = new Vector2D(-250, 0);
-   private final Vector2D RIGHT_ACCELERATION = new Vector2D(250, 0);
-   private final Vector2D JUMP_VELOCITY = new Vector2D(0, -700);
-   private final Vector2D DOWN_ACCELERATION = new Vector2D(0, 120); 
+	private final float WIDTH = 0.5f;
+	private final float HEIGHT = 2.0f;
+	
+   private final Vec2 LEFT_FORCE = new Vec2(-250, 0);
+   private final Vec2 RIGHT_FORCE = new Vec2(250, 0);
+   private final Vec2 UP_FORCE = new Vec2(0, -700);
+   private final Vec2 DOWN_FORCE = new Vec2(0, 120); 
    
    @Override
    public int spawn(World world, Vec2 position, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
+      mask |= makeMovable(world, position, components);
       mask |= makeDestructible(components.destructible);
       mask |= makeControllable(components.controllable);
       mask |= makeDrawable(components.drawable);
@@ -39,21 +43,25 @@ public class PlayerSpawner extends EntitySpawner {
       return   mask;
    }
    
-   private int makeCollidable(Collidable collidable) {
-      collidable.bindToImageDimensions = true;
-      collidable.width = 32;
-      collidable.height = 64;
-      return EntityContainer.ENTITY_COLLIDABLE;
-   }
-   
-   private int makeMovable(Movable movable) {
-      movable.acceleration.x = 0.0;
-      movable.acceleration.y = Movable.GRAVITY;
-      movable.velocity.x = 0.0;
-      movable.velocity.y = 0.0;
-      movable.maximumSpeed = 400.0;
-      movable.lastTime = System.currentTimeMillis();
-      return EntityContainer.ENTITY_MOVABLE;
+   private int makeMovable(World world, Vec2 position, EntityComponents components) {
+   	BodyDef def = new BodyDef();
+   	def.type = BodyType.DYNAMIC;
+   	def.fixedRotation = true;
+   	def.position = new Vec2(position);
+   	
+   	components.body = world.createBody(def);
+   	components.width = WIDTH;
+   	components.height = HEIGHT;
+   	
+   	PolygonShape shape = new PolygonShape();
+   	shape.setAsBox(components.width/2.0f, components.height/2.0f);
+   	
+   	FixtureDef fixtureDef = new FixtureDef();
+   	fixtureDef.shape = shape;
+   	fixtureDef.density = 1.0f;
+   	components.body.createFixture(fixtureDef);
+   	
+      return EntityContainer.ENTITY_COLLIDABLE | EntityContainer.ENTITY_MOVABLE;
    }
    
    private int makeDestructible(Destructible destructible) {
@@ -63,59 +71,27 @@ public class PlayerSpawner extends EntitySpawner {
    }
    
    private int makeControllable(Controllable controllable) {
-      constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_ACCELERATION, ZERO_VECTOR);
-      constructJumpKeyMapping(controllable, KeyEvent.VK_W, ZERO_VECTOR, JUMP_VELOCITY);
-      constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_ACCELERATION, ZERO_VECTOR);
-      constructMovingKeyMapping(controllable, KeyEvent.VK_S, DOWN_ACCELERATION, ZERO_VECTOR);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_FORCE);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_W, UP_FORCE);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_FORCE);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_S, DOWN_FORCE);
       
       return EntityContainer.ENTITY_CONTROLLABLE;
    }
    
    private void constructMovingKeyMapping(Controllable controllable, int keyCode, 
-         final Vector2D changeAcceleration, final Vector2D changeVelocity) {
+         final Vec2 force) {
       KeyMapping keyMapping = new KeyMapping();
       keyMapping.keyCode = keyCode;
       keyMapping.keyFunction = new ControlFunction() {
          @Override
          public void keyPressed(EntityComponents components) {
-            components.movable.acceleration.add(changeAcceleration);
-            components.movable.velocity.add(changeVelocity);
+         	components.movable.actingForces.addLocal(force);
          }
          
          @Override
          public void keyReleased(EntityComponents components) {
-            components.movable.acceleration.subtract(changeAcceleration);
-         }
-      };
-      keyMapping.pressProcessed = false;
-      keyMapping.releaseProcessed = true;
-      
-      controllable.keyMappings.add(keyMapping);
-   }
-   
-   private void constructJumpKeyMapping(Controllable controllable, int keyCode,
-         final Vector2D changeAcceleration, final Vector2D changeVelocity) {
-      KeyMapping keyMapping = new KeyMapping();
-      keyMapping.keyCode = keyCode;
-      keyMapping.keyFunction = new ControlFunction() {
-         @Override
-         public void keyPressed(EntityComponents components) {
-            if(components.movable.jumped) {
-               if(components.movable.doubleJumped) {
-                  return;
-               } else {
-                  components.movable.doubleJumped = true;
-               }
-            } else {
-               components.movable.jumped = true;
-            }
-            
-            components.movable.acceleration.add(changeAcceleration);
-            components.movable.velocity.add(changeVelocity);
-         }
-         @Override
-         public void keyReleased(EntityComponents components) { 
-            components.movable.acceleration.subtract(changeAcceleration);
+         	components.movable.actingForces.subLocal(force);
          }
       };
       keyMapping.pressProcessed = false;

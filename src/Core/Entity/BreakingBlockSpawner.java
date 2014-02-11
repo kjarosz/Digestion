@@ -5,12 +5,13 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.World;
 
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
-import Entity.Components.Collidable;
 import Entity.Components.Destructible;
 import Entity.Components.Drawable;
 import Entity.Systems.DrawingSystem;
@@ -20,14 +21,24 @@ public class BreakingBlockSpawner extends EntitySpawner {
    @Override
    public int spawn(World world, Vec2 position, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
-      mask |= setCollidable(components);
+      mask |= setCollidable(world, position, components);
       mask |= setDestructible(components.destructible);
       mask |= setDrawable(components.drawable);
       return mask;
    }
    
-   private int setCollidable(EntityComponents components) {
+   private int setCollidable(World world, Vec2 position, EntityComponents components) {
+   	BodyDef bodyDef = new BodyDef();
+   	bodyDef.position = new Vec2(position);
    	
+   	components.body = world.createBody(bodyDef);
+   	components.width = 1.0f;
+   	components.height = 1.0f;
+   	
+   	PolygonShape shape = new PolygonShape();
+   	shape.setAsBox(components.width/2.0f, components.height/2.0f);
+   	
+   	components.body.createFixture(shape, 0.0f);
    	
       return EntityContainer.ENTITY_COLLIDABLE;
    }
