@@ -13,12 +13,18 @@ public class ScrollablePanel extends JScrollPane implements CanvasInterface {
    private BufferedImage mCanvas;
    private ScrollablePicture mCanvasContainer;
    
+   private boolean mInvertedYAxis;
+   private float mUnitConversionFactor;
+   
    public ScrollablePanel(ContentPanelControl canvasControl, Size size) {
       super();
       
       mImageQueue = new ImageQueue();
       mCanvas = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
       createWidgets(canvasControl);
+      
+      mInvertedYAxis = false;
+      mUnitConversionFactor = 1.0f;
    }
    
    private void createWidgets(ContentPanelControl canvasControl) {
@@ -30,6 +36,14 @@ public class ScrollablePanel extends JScrollPane implements CanvasInterface {
       mCanvasContainer.addMouseMotionListener(canvasControl);
       add(mCanvasContainer);
       setViewportView(mCanvasContainer);
+   }
+   
+   public void invertYAxis(boolean flag) {
+      mInvertedYAxis = flag;
+   }
+   
+   public void setUnitConversionFactor(float factor) {
+      mUnitConversionFactor = factor;
    }
    
    public Dimension getCanvasSize() {
@@ -80,17 +94,22 @@ public class ScrollablePanel extends JScrollPane implements CanvasInterface {
    }
    
    private void drawItems(Graphics2D g) {
+      if(mInvertedYAxis) {
+         float midpoint = mCanvas.getHeight()/2.0f;
+         g.translate(0, midpoint);
+         g.scale(1.0f, -1.0f);
+         g.translate(0, midpoint);
+      }
+      
       ImageItem imageItem;
       while(mImageQueue.hasImages()) {
          imageItem = mImageQueue.nextImage(g);
          
-         
-         
          g.drawImage(imageItem.image, 
-                  imageItem.x, 
-                  imageItem.y, 
-                  imageItem.width, 
-                  imageItem.height, 
+                  (int)(imageItem.x * mUnitConversionFactor), 
+                  (int)(imageItem.y * mUnitConversionFactor), 
+                  (int)(imageItem.width * mUnitConversionFactor), 
+                  (int)(imageItem.height * mUnitConversionFactor), 
                   null);
       }
    }
