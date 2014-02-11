@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.geom.Rectangle2D;
 
 import javax.swing.JPanel;
 
@@ -84,24 +85,23 @@ public class GameCanvas extends JPanel implements CanvasInterface {
       while(mImageQueue.hasImages()) {
          imageItem = mImageQueue.nextImage(g);
          g.drawImage(imageItem.image, 
-                  imageItem.x, 
-                  imageItem.y, 
-                  imageItem.width, 
-                  imageItem.height, 
+                  (int)(imageItem.x * mUnitConversionFactor), 
+                  (int)(imageItem.y * mUnitConversionFactor), 
+                  (int)(imageItem.width * mUnitConversionFactor), 
+                  (int)(imageItem.height * mUnitConversionFactor), 
                   null);
       }
    }
    
    private void drawWithViewport(Graphics2D g) {
-         Rectangle objectRect = new Rectangle();
-         ImageItem imageItem;
-         
          Rectangle bounds = g.getClipBounds();
          mViewport.setWindowSize(bounds.width, bounds.height);
          mViewport.update();
 
          while(mImageQueue.hasImages()) {
-            imageItem = mImageQueue.nextImage(g);
+            ImageItem imageItem = mImageQueue.nextImage(g);
+            
+            Rectangle2D.Float objectRect = new Rectangle2D.Float();
             objectRect.x = imageItem.x;
             objectRect.y = imageItem.y;
             objectRect.width = imageItem.width;
@@ -112,10 +112,10 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 
             mViewport.translate(imageItem.x, imageItem.y, imageItem.width, imageItem.height, objectRect);
             g.drawImage(imageItem.image,
-                     objectRect.x,
-                     objectRect.y,
-                     objectRect.width,
-                     objectRect.height,
+                     (int)(objectRect.x * mUnitConversionFactor),
+                     (int)(objectRect.y * mUnitConversionFactor),
+                     (int)(objectRect.width * mUnitConversionFactor),
+                     (int)(objectRect.height * mUnitConversionFactor),
                      null);
          }
    }
@@ -132,8 +132,6 @@ public class GameCanvas extends JPanel implements CanvasInterface {
          g2.scale(1.0f, -1.0f);
          g2.translate(0, -midpoint);
       }
-      
-      g2.scale(mUnitConversionFactor, mUnitConversionFactor);
       
       drawItems((Graphics2D)g);
    }
