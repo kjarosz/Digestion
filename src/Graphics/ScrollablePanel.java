@@ -56,7 +56,7 @@ public class ScrollablePanel extends JScrollPane implements CanvasInterface {
    }
 
    @Override
-   public void drawImage(Image image, int x, int y, int z, int width, int height) {
+   public void drawImage(Image image, float x, float y, float z, float width, float height) {
 		ImageItem imageItem = new ImageItem();
 		imageItem.image = image;
 		imageItem.x = x;
@@ -83,6 +83,9 @@ public class ScrollablePanel extends JScrollPane implements CanvasInterface {
       ImageItem imageItem;
       while(mImageQueue.hasImages()) {
          imageItem = mImageQueue.nextImage(g);
+         
+         
+         
          g.drawImage(imageItem.image, 
                   imageItem.x, 
                   imageItem.y, 

@@ -14,6 +14,7 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 	private ImageQueue mImageQueue;
 	
 	private boolean mInvertedYAxis;
+	private float mUnitConversionFactor;
 	
 	public GameCanvas() {
 		mViewport = new GameViewport();
@@ -22,6 +23,7 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 		mImageQueue = new ImageQueue();
 		
 		mInvertedYAxis = false;
+		mUnitConversionFactor = 1.0f;
 	}
 	
 	public void setViewport(GameViewport viewport) {		
@@ -32,6 +34,11 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 	public void invertYAxis(boolean flag) {
 	   mInvertedYAxis = flag;
 	}
+	
+	public void setUnitConversionFactor(float factor) {
+	   mUnitConversionFactor = factor;
+	}
+	
 	
    @Override
 	public ColorMode setGraphicsMode(ColorMode newMode) {
@@ -44,7 +51,7 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 	}
 	
    @Override
-	public void drawImage(Image image, int x, int y, int z, int width, int height) {
+	public void drawImage(Image image, float x, float y, float z, float width, float height) {
 		ImageItem imageItem = new ImageItem();
 		imageItem.image = image;
 		imageItem.x = x;
@@ -125,6 +132,8 @@ public class GameCanvas extends JPanel implements CanvasInterface {
          g2.scale(1.0f, -1.0f);
          g2.translate(0, -midpoint);
       }
+      
+      g2.scale(mUnitConversionFactor, mUnitConversionFactor);
       
       drawItems((Graphics2D)g);
    }
