@@ -5,16 +5,21 @@ import java.util.Comparator;
 
 public class ImageItem implements Comparator<ImageItem> {
 	public Image image;
-	public int x;
-	public int y;
-	public int z;
-	public int width;
-	public int height;
+	public float x;
+	public float y;
+	public float z;
+	public float width;
+	public float height;
 	
 	ColorMode colorMode;
 
    @Override
 	public int compare(ImageItem first, ImageItem second) {
-		return first.z - second.z;
+      if(first.z < second.z)
+         return -1;
+      else if(first.z > second.z)
+         return 1;
+      
+      return 0;
 	}
 }
