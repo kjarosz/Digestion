@@ -1,32 +1,36 @@
 package Core.LevelEditor;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JToolBar;
+
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
+
 import Core.LevelEditor.Panels.ContentPanel;
 import Core.LevelEditor.Panels.SettingsPanel;
 import Entity.EntityComponents;
 import Entity.EntityFactory;
+import Level.EntityContainer;
 import Level.Level;
 import Level.LevelLoaderFactory;
 import Level.LevelLoadingScript;
-import Level.EntityContainer;
 import Menu.MenuScreen;
 import Menu.MenuStack;
 import Util.ErrorLog;
 import Util.FileExistsException;
 import Util.Size;
-import java.awt.BorderLayout;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JToolBar;
 
 public class LevelEditor extends MenuScreen implements ActionListener {
+   private final float pixelsPerMeter = 32.0f;
+   
    private final String ACTION_NEW_LEVEL = "New Level";
    private final String ACTION_OPEN_LEVEL = "Load Level";
    private final String ACTION_SAVE_LEVEL = "Save Level";
@@ -41,6 +45,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
    
    private LevelLoaderFactory mLevelLoaderFactory;
    private Level mLevel;
+   private World mMuckBox2DWorld;
    private EntityContainer mWorld;
    
    public LevelEditor(MenuStack stack) {
@@ -50,6 +55,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       mLevelLoaderFactory = new LevelLoaderFactory();
       
       mLevel = new Level();
+      mMuckBox2DWorld = new World(new Vec2(0.0f, 0.0f));
       mWorld = new EntityContainer();
       
       createWidgets();
@@ -104,22 +110,30 @@ public class LevelEditor extends MenuScreen implements ActionListener {
    }
    
    private void respondToMouseClickInEntityMode(MouseEvent e, int button) {
+      Vec2 position = convertPixelsToMeters(new Vec2(e.getX(), e.getY()));
       switch(button)
       {
          case MouseEvent.BUTTON1:
-            placeEntity(new Point(e.getX(), e.getY()));
+            placeEntity(position);
          break;
          case MouseEvent.BUTTON3:
-            removeEntity(new Point(e.getX(), e.getY()));
+            removeEntity(position);
          break;
       }
    }
    
-   private void placeEntity(Point position) {
+   private Vec2 convertPixelsToMeters(Vec2 pixels) {
+      Vec2 meters = new Vec2();
+      meters.x = pixels.x / pixelsPerMeter;
+      meters.y = pixels.y / pixelsPerMeter;
+      return meters;
+   }
+   
+   private void placeEntity(Vec2 position) {
       int id = mWorld.createNewEntity();
       String selectedEntity = mSettingsPanel.getSelectedEntity();
-      int mask = mEntityFactory.createEntity(selectedEntity, 
-              new Point2D.Double(position.x, position.y), 
+      int mask = mEntityFactory.createEntity(mMuckBox2DWorld, selectedEntity, 
+              position, 
               mWorld.accessComponents(id));
       if(entityCollidesWithOthers(id))
          return;
@@ -129,8 +143,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
    
    private boolean entityCollidesWithOthers(int id) {
       EntityComponents entityComp = mWorld.accessComponents(id);
-      Rectangle entity = new Rectangle((int)entityComp.position.x, (int)entityComp.position.y,
-                 entityComp.drawable.image.getWidth(), entityComp.drawable.image.getHeight());
+      Rectangle2D.Float entity = createEntityShape(entityComp.body.getPosition(), entityComp.width, entityComp.height);
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          if(i == id)
             continue;
@@ -140,8 +153,8 @@ public class LevelEditor extends MenuScreen implements ActionListener {
             continue;
          
          EntityComponents otherComp = mWorld.accessComponents(i);
-         Rectangle other = new Rectangle((int)otherComp.position.x, (int)otherComp.position.y,
-                 otherComp.drawable.image.getWidth(), otherComp.drawable.image.getHeight());
+         Rectangle2D.Float other = createEntityShape(otherComp.body.getPosition(),
+               otherComp.width, otherComp.height);
          
          if(other.intersects(entity))
             return true;
@@ -150,7 +163,16 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       return false;
    }
    
-   private void removeEntity(Point position) {
+   private Rectangle2D.Float createEntityShape(Vec2 position, float width, float height) {
+      Rectangle2D.Float shape = new Rectangle2D.Float();
+      shape.x = position.x - width/2.0f;
+      shape.y = position.y - height/2.0f;
+      shape.width = width/2.0f;
+      shape.height = height/2.0f;
+      return shape;
+   }
+   
+   private void removeEntity(Vec2 coordinates) {
       int mask;
       Rectangle2D.Double bounds = new Rectangle2D.Double();
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
@@ -159,25 +181,13 @@ public class LevelEditor extends MenuScreen implements ActionListener {
             continue;
          
          EntityComponents components = mWorld.accessComponents(i);
-         bounds.x = components.position.x;
-         bounds.y = components.position.y;
-         if((mask & EntityContainer.ENTITY_COLLIDABLE) != 0) {
-            if(components.collidable.bindToImageDimensions)
-            {
-               bounds.width = components.drawable.image.getWidth();
-               bounds.height = components.drawable.image.getHeight();
-            }
-            else
-            {
-               bounds.width = components.collidable.width;
-               bounds.height = components.collidable.height;
-            }
-         } else {
-            bounds.width = components.drawable.image.getWidth();
-            bounds.height = components.drawable.image.getHeight();
-         }
+         Vec2 position = components.body.getPosition();
+         bounds.x = position.x;
+         bounds.y = position.y;
+         bounds.width = components.width;
+         bounds.height = components.height;
          
-         if(bounds.contains(position))
+         if(bounds.contains(coordinates.x, coordinates.y))
             mWorld.destroyEntity(i);
       }
       mContentPanel.update();
