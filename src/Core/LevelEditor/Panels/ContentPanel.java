@@ -1,15 +1,33 @@
 package Core.LevelEditor.Panels;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseEvent;
+
+import javax.swing.JCheckBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.JToolBar;
+
+import org.jbox2d.common.Vec2;
+
 import Core.LevelEditor.LevelEditor;
 import Core.LevelEditor.Panels.Control.ContentPanelControl;
 import Entity.EntityComponents;
 import Graphics.ScrollablePanel;
-import Level.Level;
 import Level.EntityContainer;
+import Level.Level;
 import Util.Size;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
 
 public final class ContentPanel extends JPanel implements ActionListener, FocusListener {
 	public static final int CONTENT_PANEL = 0;
@@ -152,10 +170,11 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
             continue;
          
          EntityComponents components = mWorld.accessComponents(i);
+         Vec2 position = components.body.getPosition();
          mCanvas.drawImage(components.drawable.image,
-                 (int)components.position.x,
-                 (int)components.position.y,
-                 (int)components.position.z,
+                 position.x,
+                 position.y,
+                 0.0f,
                  components.drawable.image.getWidth(),
                  components.drawable.image.getHeight());
       }
