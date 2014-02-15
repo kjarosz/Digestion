@@ -40,7 +40,10 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 	   mUnitConversionFactor = factor;
 	}
 	
-	
+	public float getUnitConversionFactor() {
+	   return mUnitConversionFactor;
+	}
+		
    @Override
 	public ColorMode setGraphicsMode(ColorMode newMode) {
 		return mImageQueue.setMode(new ColorMode(newMode));

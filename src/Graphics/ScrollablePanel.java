@@ -46,6 +46,10 @@ public class ScrollablePanel extends JScrollPane implements CanvasInterface {
       mUnitConversionFactor = factor;
    }
    
+   public float getUnitConversionFactor() {
+      return mUnitConversionFactor;
+   }
+   
    public Dimension getCanvasSize() {
       return new Dimension(mCanvas.getWidth(), mCanvas.getHeight());
    }
