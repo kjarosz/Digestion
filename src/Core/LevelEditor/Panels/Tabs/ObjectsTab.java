@@ -1,14 +1,24 @@
 package Core.LevelEditor.Panels.Tabs;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
+
 import Entity.EntityComponents;
 import Entity.EntityFactory;
 import Entity.Systems.DrawingSystem;
 import Graphics.ScrollablePicture;
 import Level.EntityContainer;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.Point2D;
-import javax.swing.*;
 
 public class ObjectsTab extends JPanel implements ActionListener {
    private final String ACTION_OBJECT_SELECT = "Object Select";
@@ -29,18 +39,22 @@ public class ObjectsTab extends JPanel implements ActionListener {
       mEntityNames = entityFactory.getEntityNames();
       mEntityComponents = new EntityComponents[mEntityNames.length];
       
+      // TODO Eliminate the need to instantiate a Box2D world for entities
+      // in the preview tab.
+      World world = new World(new Vec2(0.0f, 0.0f));
       for(int i = 0; i < mEntityNames.length; i++)
-         createEntity(i, mEntityNames[i], entityFactory);
+         createEntity(world, i, mEntityNames[i], entityFactory);
    }
    
-   private void createEntity(int index, String name, EntityFactory entityFactory) {
+   private void createEntity(World world,int index, String name, EntityFactory entityFactory) {
       mEntityComponents[index] = new EntityComponents();
       
-      int mask = entityFactory.createEntity(name, 
-              new Point2D.Double(0.0, 0.0), 
+      int mask = entityFactory.createEntity(world, name, 
+              new Vec2(0.0f, 0.0f), 
               mEntityComponents[index]);
       
-      // We want to see the entity in the level editor so we assign a null image
+      // We want to see the entity in the level editor so a null image 
+      // will represent object's lack of a sprite.
       if((mask & EntityContainer.ENTITY_DRAWABLE) == 0)
          mEntityComponents[index].drawable.image = DrawingSystem.getNullImage();
    }
