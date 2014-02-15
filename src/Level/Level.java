@@ -8,14 +8,14 @@ import Util.Size;
 
 public class Level {
    public String name;
-	public Size size;
+	public Vec2 size;
 	public Vec2 gravity;
    
    public BufferedImage mBackground;
 
 	public Level() {
       name = "";
-      size = new Size(800, 600);
+      size = new Vec2(25.0f, 18.75f);
       gravity = new Vec2(0.0f, 9.81f);
 	}
 }
