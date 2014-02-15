@@ -1,12 +1,16 @@
 package Entity.Systems;
 
-import Entity.EntityComponents;
-import Graphics.CanvasInterface;
-import Level.EntityContainer;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+
 import javax.imageio.ImageIO;
+
+import org.jbox2d.common.Vec2;
+
+import Entity.EntityComponents;
+import Graphics.CanvasInterface;
+import Level.EntityContainer;
 
 public class DrawingSystem {
 	private static BufferedImage gNullImage;
@@ -41,11 +45,12 @@ public class DrawingSystem {
    }
    
    private static void drawEntity(EntityComponents components, CanvasInterface canvas) {
+      Vec2 position = components.body.getPosition();
       canvas.drawImage(components.drawable.image, 
-              (int)components.position.x,
-              (int)components.position.y,
-              (int)components.position.z,
-              components.drawable.image.getWidth(),
-              components.drawable.image.getHeight());
+              position.x,
+              position.y,
+              0.0f,
+              components.width,
+              components.height);
    }
 }
