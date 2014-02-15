@@ -7,23 +7,6 @@ import org.jbox2d.common.Vec2;
 
 import Entity.EntityComponents;
 
-/*******************************
- * 
- * To shed some light on the mysterious purpose
- * of this class, its basic purpose is to translate
- * level coordinates to screen coordinates and 
- * provide mechanism to check if objects fall
- * within the viewable area of the level. This,
- * of course, is not without a catch. 
- * 
- * The class provides a mechanism to set up
- * a following camera. That is, given a reference
- * to a some object on the screen, the class will
- * move the coordinates so that the object is 
- * always displayed on the screen.
- * 
- */
-
 public class GameViewport {
 	private Vec2 mLevelSize;
 	
@@ -31,21 +14,22 @@ public class GameViewport {
 	
 	private Rectangle2D mLevelViewport;
 	
-	public GameViewport() {
-		mLevelSize = new Vec2(0, 0);
-		
-		mFocusObject = null;
-		
-		mLevelViewport = new Rectangle2D.Double();
-	}
+	/**
+	 * Creates a viewport class that translates objects within the game
+	 * world so that the focus object is always visible.
+	 * 
+	 * @param levelSize Size of the level that contains the game world. 
+	 *                  This must be in the same units as the focus object.
+	 * @param screenSize Size of the window canvas where things are drawn.
+	 *                  This must be in the same units as the focus object.
+	 */
 	
-	public boolean initialize(float screenWidth, float screenHeight, float levelWidth, float levelHeight) {
-		mLevelSize.x = levelWidth;
-		mLevelSize.y = levelHeight;
+	public GameViewport(Vec2 levelSize, Vec2 screenSize) {
+		mLevelSize = new Vec2(levelSize);
+
+      mFocusObject = null;
 		
-		mLevelViewport.setRect(0, 0, screenWidth, screenHeight);
-		
-		return true;
+		mLevelViewport = new Rectangle2D.Double(0, 0, screenSize.x, screenSize.y);
 	}
 	
 	public void setFocusObject(EntityComponents focusObject) {
@@ -59,7 +43,7 @@ public class GameViewport {
 		mLevelSize = levelSize;
 	}
 	
-	public void setWindowSize(int width, int height) {
+	public void setWindowSize(float width, float height) {
 	   mLevelViewport.setRect(0, 0, width, height);
 	}
 	
@@ -71,8 +55,6 @@ public class GameViewport {
 		return mLevelViewport.intersects(object);
 	}
 	
-	// If output is null, the function creates a new rectangle and
-	// returns that instead. Otherwise, the output rectangle is returned.
 	public Rectangle2D translate(Rectangle2D input, Rectangle2D output) {
 		if(input == null)
 			return null;
