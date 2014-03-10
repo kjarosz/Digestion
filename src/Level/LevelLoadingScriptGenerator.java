@@ -32,7 +32,7 @@ public class LevelLoadingScriptGenerator {
    }
    
    private static void writeSpawnFunction(BufferedWriter writer) throws IOException {
-      writer.write("def spawnEntity(world, factory, name, position):");           writer.newLine();
+      writer.write("def spawnEntity(world, factory, name, position):");          writer.newLine();
       writer.write("\tid = world.createNewEntity()");                            writer.newLine();
       writer.write("\tcomponents = world.accessComponents(id)");                 writer.newLine();
       writer.write("\tmask = factory.createEntity(name, position, components)"); writer.newLine();
@@ -42,8 +42,8 @@ public class LevelLoadingScriptGenerator {
    
    private static void writeLoadLevel(Level level, BufferedWriter writer) throws IOException {
       writer.write("\tdef loadLevel(self, level):");                                                     writer.newLine();
-      writer.write("\t\tlevel.name = \"" + level.name + "\"");                                                    writer.newLine();
-      writer.write("\t\tlevel.size = Size(" + level.size.width + ", " + level.size.height + ")");        writer.newLine();
+      writer.write("\t\tlevel.name = \"" + level.name + "\"");                                           writer.newLine();
+      writer.write("\t\tlevel.size = Size(" + level.size.x + ", " + level.size.y + ")");        			writer.newLine();
       writer.write("\t\tlevel.gravity = " + level.gravity);                                              writer.newLine();
       writer.newLine();
    }
