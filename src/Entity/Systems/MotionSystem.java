@@ -6,6 +6,7 @@ import Entity.EntityComponents;
 import Entity.Components.Movable;
 import Entity.Components.Position;
 import Level.EntityContainer;
+import Util.BoundingRectangle;
 import Util.RKIntegrator;
 import Util.Vector2D;
 
