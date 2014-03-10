@@ -4,6 +4,7 @@ import org.jbox2d.common.Vec2;
 
 public class Movable {
 	
+	public float lastTime;
 	public Vec2 actingForces;
    
    public Movable() {
