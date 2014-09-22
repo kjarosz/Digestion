@@ -43,7 +43,7 @@ public class LevelLoadingScriptGenerator {
    private static void writeLoadLevel(Level level, BufferedWriter writer) throws IOException {
       writer.write("\tdef loadLevel(self, level):");                                                     writer.newLine();
       writer.write("\t\tlevel.name = \"" + level.name + "\"");                                                    writer.newLine();
-      writer.write("\t\tlevel.size = Size(" + level.size.width + ", " + level.size.height + ")");        writer.newLine();
+      writer.write("\t\tlevel.size = Size(" + level.size.x + ", " + level.size.y + ")");        writer.newLine();
       writer.write("\t\tlevel.gravity = " + level.gravity);                                              writer.newLine();
       writer.newLine();
    }

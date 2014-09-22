@@ -3,6 +3,8 @@ package Core.Game;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 
+import org.jbox2d.common.Vec2;
+
 import Core.Menu.MainMenu;
 import Core.Menu.PauseMenu;
 import Entity.EntityComponents;
@@ -15,9 +17,9 @@ import Graphics.GameCanvas;
 import Graphics.GameViewport;
 import Graphics.GameWindow;
 import Input.KeyManager;
+import Level.EntityContainer;
 import Level.Level;
 import Level.LevelLoadingScript;
-import Level.EntityContainer;
 import Menu.MenuStack;
 import Util.GameTimer;
 
@@ -132,9 +134,7 @@ public class Game {
 	      if((entityMask & EntityContainer.ENTITY_FOCUSABLE) != 0) {
 	         EntityComponents components = mWorld.accessComponents(i);
 	         
-	         GameViewport viewport = new GameViewport();
-	         viewport.initialize(mWindow.getWidth(), mWindow.getHeight(), 
-	               mLevel.size.width, mLevel.size.height);
+	         GameViewport viewport = new GameViewport(mLevel.size, new Vec2(mWindow.getWidth(), mWindow.getHeight()));
 	         viewport.setFocusObject(components);
 	         
 	         mGameCanvas.setViewport(viewport);

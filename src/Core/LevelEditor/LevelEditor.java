@@ -218,7 +218,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       String name = JOptionPane.showInputDialog("Enter name of the level.");
       
       mLevel.name = name;
-      mLevel.size = new Size(800, 600);
+      mLevel.size = new Vec2(800, 600);
       mWorld.clearEntities();
       
       mContentPanel.update();
@@ -241,7 +241,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       script.loadLevel(mLevel);
       mWorld.clearEntities();
       script.createEntities(mEntityFactory, mWorld);
-      mContentPanel.setCanvasSize(mLevel.size.width, mLevel.size.height);
+      mContentPanel.setCanvasSize(mLevel.size.x, mLevel.size.y);
       mContentPanel.update();
    }
    

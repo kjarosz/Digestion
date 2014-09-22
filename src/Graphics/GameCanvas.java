@@ -18,7 +18,7 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 	private float mUnitConversionFactor;
 	
 	public GameCanvas() {
-		mViewport = new GameViewport();
+		mViewport = null;
 		mViewportEnabled = false;
       
 		mImageQueue = new ImageQueue();
@@ -27,7 +27,7 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 		mUnitConversionFactor = 1.0f;
 	}
 	
-	public void setViewport(GameViewport viewport) {		
+	public void setViewport(GameViewport viewport) {
 		mViewport = viewport;
 		mViewportEnabled = true;
 	}
