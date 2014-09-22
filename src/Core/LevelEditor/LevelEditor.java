@@ -241,7 +241,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       script.loadLevel(mLevel);
       mWorld.clearEntities();
       script.createEntities(mEntityFactory, mWorld);
-      mContentPanel.setCanvasSize(mLevel.size.x, mLevel.size.y);
+      mContentPanel.setCanvasSize((int)mLevel.size.x, (int)mLevel.size.y);
       mContentPanel.update();
    }
    

@@ -67,7 +67,7 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
    }
    
    private void createLevelCanvas(LevelEditor editor) {
-      mCanvas = new ScrollablePanel(new ContentPanelControl(editor), mLevel.size);
+      mCanvas = new ScrollablePanel(new ContentPanelControl(editor), new Size(mLevel.size));
       add(mCanvas, BorderLayout.CENTER);
    }
    
@@ -115,7 +115,7 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
    }
 	
 	public void reset() {
-      setCanvasSize(mLevel.size.width, mLevel.size.height);
+      setCanvasSize((int)mLevel.size.x, (int)mLevel.size.y);
 		
       mGridSize.width = 32;
       mGridSize.height = 32;
@@ -210,18 +210,18 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
 		if(source == mWidth) {
 			try {
             int width = Integer.parseInt(mWidth.getText());
-            mLevel.size.width = width;
-            setCanvasSize(mLevel.size.width, mLevel.size.height);
+            mLevel.size.x = width;
+            setCanvasSize((int)mLevel.size.x, (int)mLevel.size.y);
 			} catch (NumberFormatException ex) {
-				mWidth.setText(Integer.toString(mLevel.size.width));
+				mWidth.setText(Integer.toString((int)mLevel.size.x));
 			}
 		} else if(source == mHeight) {
 			try {
             int height = Integer.parseInt(mHeight.getText());
-            mLevel.size.height = height;
-            setCanvasSize(mLevel.size.width, mLevel.size.height);
+            mLevel.size.y = height;
+            setCanvasSize((int)mLevel.size.x, (int)mLevel.size.y);
 			} catch (NumberFormatException ex) {
-				mHeight.setText(Integer.toString(mLevel.size.height));
+				mHeight.setText(Integer.toString((int)mLevel.size.y));
 			}
 		} else if(source == mXGridSize) {
 			try {
