@@ -6,7 +6,6 @@ import Entity.EntityComponents;
 import Entity.Components.Movable;
 import Entity.Components.Position;
 import Level.EntityContainer;
-import Util.BoundingRectangle;
 import Util.RKIntegrator;
 import Util.Vector2D;
 
@@ -21,6 +20,8 @@ public class MotionSystem {
    private static final double FRICTION = 800.0;
    
    public static void move(EntityContainer world) {
+   	
+   	
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          int entity = world.getEntityMask(i);
          if(entityIsMovable(entity))
