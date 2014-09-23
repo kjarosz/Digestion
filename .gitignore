@@ -12,3 +12,4 @@ ErrorLog.txt
 *.war
 *.ear
 /bin
+/lib
