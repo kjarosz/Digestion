@@ -175,10 +175,11 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
             continue;
          
          EntityComponents components = mWorld.accessComponents(i);
-         Vec2 position = components.body.getPosition();
+         Vec2 m_position = components.body.getPosition();
+         Vec2 px_position = UnitConverter.metersToPixels(m_position);
          mCanvas.drawImage(components.drawable.image,
-                 position.x,
-                 position.y,
+                 px_position.x,
+                 px_position.y,
                  0.0f,
                  components.drawable.image.getWidth(),
                  components.drawable.image.getHeight());
