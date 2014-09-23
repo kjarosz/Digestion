@@ -28,6 +28,7 @@ import Graphics.ScrollablePanel;
 import Level.EntityContainer;
 import Level.Level;
 import Util.Size;
+import Util.UnitConverter;
 
 public final class ContentPanel extends JPanel implements ActionListener, FocusListener {
 	public static final int CONTENT_PANEL = 0;
@@ -67,7 +68,8 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
    }
    
    private void createLevelCanvas(LevelEditor editor) {
-      mCanvas = new ScrollablePanel(new ContentPanelControl(editor), new Size(mLevel.size));
+      Vec2 px_levelSize = UnitConverter.metersToPixels(mLevel.m_size);
+      mCanvas = new ScrollablePanel(new ContentPanelControl(editor), new Size(px_levelSize));
       add(mCanvas, BorderLayout.CENTER);
    }
    
@@ -77,8 +79,10 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
 		contentToolbar.add(new JSeparator(JSeparator.VERTICAL));
 		
 		contentToolbar.add(new JLabel("Size:"));
-      mWidth = createTextField("800", 4, contentToolbar);
-      mHeight = createTextField("600", 4, contentToolbar);
+		
+		Vec2 px_levelSize = UnitConverter.metersToPixels(mLevel.m_size);
+      mWidth = createTextField((int)px_levelSize.x + "", 4, contentToolbar);
+      mHeight = createTextField((int)px_levelSize.y + "", 4, contentToolbar);
 		
       contentToolbar.add(new JLabel("GridSize:"));
       mXGridSize = createTextField("32", 4, contentToolbar);
@@ -115,7 +119,8 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
    }
 	
 	public void reset() {
-      setCanvasSize((int)mLevel.size.x, (int)mLevel.size.y);
+	   Vec2 px_levelSize = UnitConverter.metersToPixels(mLevel.m_size);
+      setCanvasSize((int)px_levelSize.x, (int)px_levelSize.y);
 		
       mGridSize.width = 32;
       mGridSize.height = 32;
@@ -208,35 +213,59 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
 		Object source = e.getSource();
 		
 		if(source == mWidth) {
-			try {
-            int width = Integer.parseInt(mWidth.getText());
-            mLevel.size.x = width;
-            setCanvasSize((int)mLevel.size.x, (int)mLevel.size.y);
-			} catch (NumberFormatException ex) {
-				mWidth.setText(Integer.toString((int)mLevel.size.x));
-			}
+		   getLevelWidth();
 		} else if(source == mHeight) {
-			try {
-            int height = Integer.parseInt(mHeight.getText());
-            mLevel.size.y = height;
-            setCanvasSize((int)mLevel.size.x, (int)mLevel.size.y);
-			} catch (NumberFormatException ex) {
-				mHeight.setText(Integer.toString((int)mLevel.size.y));
-			}
+		   getLevelHeight();
 		} else if(source == mXGridSize) {
-			try {
-            mGridSize.width = Integer.parseInt(mXGridSize.getText());
-			} catch (NumberFormatException ex) {
-				mXGridSize.setText(Integer.toString(mGridSize.width));
-			}
+		   getGridWidth();
 		} else if(source == mYGridSize) {
-			try {
-            mGridSize.height = Integer.parseInt(mYGridSize.getText());
-			} catch (NumberFormatException ex) {
-				mYGridSize.setText(Integer.toString(mGridSize.height));
-			}
+		   getGridHeight();
 		}
 		update();
+	}
+	
+	private void getLevelWidth() {
+      try {
+         int px_width = Integer.parseInt(mWidth.getText());
+         mLevel.m_size.x = UnitConverter.pixelsToMeters(px_width);
+         setCanvasSize(
+               (int)px_width, 
+               (int)UnitConverter.metersToPixels(mLevel.m_size.y));
+      } catch (NumberFormatException ex) {
+         mWidth.setText(
+               Integer.toString(
+                     (int)UnitConverter.metersToPixels(mLevel.m_size.x)));
+      }
+	}
+	
+	private void getLevelHeight() {
+      try {
+         int px_height = Integer.parseInt(mHeight.getText());
+         mLevel.m_size.y = UnitConverter.pixelsToMeters(px_height);
+         setCanvasSize(
+               (int)UnitConverter.metersToPixels(mLevel.m_size.x), 
+               (int)px_height);
+      } catch (NumberFormatException ex) {
+         mHeight.setText(
+               Integer.toString(
+                     (int)UnitConverter.metersToPixels(mLevel.m_size.y)));
+      }
+	}
+	
+	private void getGridWidth() {
+      try {
+         mGridSize.width = Integer.parseInt(mXGridSize.getText());
+      } catch (NumberFormatException ex) {
+         mXGridSize.setText(Integer.toString(mGridSize.width));
+      }
+	}
+	
+	private void getGridHeight() {
+      try {
+         mGridSize.height = Integer.parseInt(mYGridSize.getText());
+      } catch (NumberFormatException ex) {
+         mYGridSize.setText(Integer.toString(mGridSize.height));
+      }
 	}
 	
 	@Override

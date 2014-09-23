@@ -26,10 +26,9 @@ import Menu.MenuScreen;
 import Menu.MenuStack;
 import Util.ErrorLog;
 import Util.FileExistsException;
+import Util.UnitConverter;
 
 public class LevelEditor extends MenuScreen implements ActionListener {
-   private final float pixelsPerMeter = 32.0f;
-   
    private final String ACTION_NEW_LEVEL = "New Level";
    private final String ACTION_OPEN_LEVEL = "Load Level";
    private final String ACTION_SAVE_LEVEL = "Save Level";
@@ -109,7 +108,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
    }
    
    private void respondToMouseClickInEntityMode(MouseEvent e, int button) {
-      Vec2 position = convertPixelsToMeters(new Vec2(e.getX(), e.getY()));
+      Vec2 position = UnitConverter.pixelsToMeters(new Vec2(e.getX(), e.getY()));
       switch(button)
       {
          case MouseEvent.BUTTON1:
@@ -119,13 +118,6 @@ public class LevelEditor extends MenuScreen implements ActionListener {
             removeEntity(position);
          break;
       }
-   }
-   
-   private Vec2 convertPixelsToMeters(Vec2 pixels) {
-      Vec2 meters = new Vec2();
-      meters.x = pixels.x / pixelsPerMeter;
-      meters.y = pixels.y / pixelsPerMeter;
-      return meters;
    }
    
    private void placeEntity(Vec2 position) {
@@ -216,8 +208,9 @@ public class LevelEditor extends MenuScreen implements ActionListener {
    private void createANewLevel() throws IOException {
       String name = JOptionPane.showInputDialog("Enter name of the level.");
       
+      
       mLevel.name = name;
-      mLevel.size = new Vec2(800, 600);
+      mLevel.m_size = new Vec2(25.0f, 18.75f);
       mWorld.clearEntities();
       
       mContentPanel.update();
@@ -240,7 +233,9 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       script.loadLevel(mLevel);
       mWorld.clearEntities();
       script.createEntities(mEntityFactory, mWorld);
-      mContentPanel.setCanvasSize((int)mLevel.size.x, (int)mLevel.size.y);
+      
+      Vec2 px_levelSize = UnitConverter.metersToPixels(mLevel.m_size);
+      mContentPanel.setCanvasSize((int)px_levelSize.x, (int)px_levelSize.y);
       mContentPanel.update();
    }
    

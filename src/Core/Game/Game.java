@@ -134,7 +134,7 @@ public class Game {
 	      if((entityMask & EntityContainer.ENTITY_FOCUSABLE) != 0) {
 	         EntityComponents components = mWorld.accessComponents(i);
 	         
-	         GameViewport viewport = new GameViewport(mLevel.size, new Vec2(mWindow.getWidth(), mWindow.getHeight()));
+	         GameViewport viewport = new GameViewport(mLevel.m_size, new Vec2(mWindow.getWidth(), mWindow.getHeight()));
 	         viewport.setFocusObject(components);
 	         
 	         mGameCanvas.setViewport(viewport);
