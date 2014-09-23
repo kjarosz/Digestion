@@ -1,6 +1,14 @@
 *.class
 
+# Eclipse Files #
+.classpath
+.project
+
+# Game Files #
+ErrorLog.txt
+
 # Package Files #
 *.jar
 *.war
 *.ear
+/bin
