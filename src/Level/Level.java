@@ -4,8 +4,6 @@ import java.awt.image.BufferedImage;
 
 import org.jbox2d.common.Vec2;
 
-import Util.Size;
-
 public class Level {
    public String name;
 	public Vec2 size;

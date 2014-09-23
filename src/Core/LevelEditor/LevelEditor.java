@@ -26,7 +26,6 @@ import Menu.MenuScreen;
 import Menu.MenuStack;
 import Util.ErrorLog;
 import Util.FileExistsException;
-import Util.Size;
 
 public class LevelEditor extends MenuScreen implements ActionListener {
    private final float pixelsPerMeter = 32.0f;
