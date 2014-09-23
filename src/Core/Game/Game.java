@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 import org.jbox2d.common.Vec2;
+import org.jbox2d.dynamics.World;
 
 import Core.Menu.MainMenu;
 import Core.Menu.PauseMenu;
@@ -34,6 +35,7 @@ public class Game {
 
    private EntityFactory mEntityFactory;
    private Level mLevel;
+   private World mBox2DWorld;
    private EntityContainer mWorld;
 
 	public Game() {
@@ -58,7 +60,10 @@ public class Game {
    public void startLevel(LevelLoadingScript loadingScript) {
       loadingScript.loadLevel(mLevel);
       loadingScript.createEntities(mEntityFactory, mWorld);
-
+      mBox2DWorld = new World(mLevel.m_gravity);
+      
+      MotionSystem.resetTimer();
+      
       mQuit = false;
       mMenuStack.popScreen(); // Get rid of loading screen.
       mWindow.switchTo(mGameCanvas);
@@ -76,6 +81,7 @@ public class Game {
    public void resume() {
       mPaused = false;
       mWorld.resetTimers();
+      MotionSystem.resetTimer();
       mWindow.switchTo(mGameCanvas);
    }
    
@@ -101,7 +107,7 @@ public class Game {
             }
 			} else {
             ControlSystem.manipulate(mWorld);
-            MotionSystem.move(mWorld);
+            MotionSystem.move(mBox2DWorld, mWorld);
             AnimationSystem.animate(mWorld);
             DrawingSystem.draw(mWorld, mGameCanvas);
             
