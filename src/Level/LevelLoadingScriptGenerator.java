@@ -22,7 +22,7 @@ public class LevelLoadingScriptGenerator {
    }
    
    private static void writeImports(BufferedWriter writer) throws IOException {
-      writer.write("from Util import Size");                   writer.newLine();
+      writer.write("from org.jbox2d.common import Vec2");      writer.newLine();
       writer.write("from Level import Level");                 writer.newLine();
       writer.write("from Level import LevelLoadingScript");    writer.newLine();
       writer.write("from Entity import EntityFactory");        writer.newLine();
@@ -32,7 +32,7 @@ public class LevelLoadingScriptGenerator {
    }
    
    private static void writeSpawnFunction(BufferedWriter writer) throws IOException {
-      writer.write("def spawnEntity(world, factory, name, position):");           writer.newLine();
+      writer.write("def spawnEntity(world, factory, name, position):");          writer.newLine();
       writer.write("\tid = world.createNewEntity()");                            writer.newLine();
       writer.write("\tcomponents = world.accessComponents(id)");                 writer.newLine();
       writer.write("\tmask = factory.createEntity(name, position, components)"); writer.newLine();
@@ -41,10 +41,10 @@ public class LevelLoadingScriptGenerator {
    }
    
    private static void writeLoadLevel(Level level, BufferedWriter writer) throws IOException {
-      writer.write("\tdef loadLevel(self, level):");                                                     writer.newLine();
-      writer.write("\t\tlevel.name = \"" + level.name + "\"");                                                    writer.newLine();
-      writer.write("\t\tlevel.size = Size(" + level.m_size.x + ", " + level.m_size.y + ")");        writer.newLine();
-      writer.write("\t\tlevel.gravity = " + level.m_gravity);                                              writer.newLine();
+      writer.write("\tdef loadLevel(self, level):");                                            writer.newLine();
+      writer.write("\t\tlevel.name = \"" + level.name + "\"");                                  writer.newLine();
+      writer.write("\t\tlevel.m_size = Vec2(" + level.m_size.x + ", " + level.m_size.y + ")");  writer.newLine();
+      writer.write("\t\tlevel.m_gravity = " + level.m_gravity);                                 writer.newLine();
       writer.newLine();
    }
    
