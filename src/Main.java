@@ -16,7 +16,6 @@ public class Main {
 	            ErrorLog errorLog = ErrorLog.getInstance();
 	            errorLog.displayMessageDialog(e.getMessage());
 	         }
-	         
 	      }
 	   });
 	}
