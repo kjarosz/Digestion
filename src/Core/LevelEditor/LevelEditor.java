@@ -232,7 +232,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
          return;
       script.loadLevel(mLevel);
       mWorld.clearEntities();
-      script.createEntities(mEntityFactory, mWorld);
+      script.createEntities(mMuckBox2DWorld, mEntityFactory, mWorld);
       
       Vec2 px_levelSize = UnitConverter.metersToPixels(mLevel.m_size);
       mContentPanel.setCanvasSize((int)px_levelSize.x, (int)px_levelSize.y);

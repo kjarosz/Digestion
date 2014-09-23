@@ -2,8 +2,12 @@ package Scripting;
 
 import java.io.File;
 import java.util.HashMap;
+
+import org.python.core.PyException;
 import org.python.core.PyObject;
 import org.python.util.PythonInterpreter;
+
+import Util.ErrorLog;
 
 public class ScriptFactory {   
    private PythonInterpreter mInterpreter;
@@ -29,8 +33,13 @@ public class ScriptFactory {
    }
    
    private void compileScript(File scriptFile, String className, Class<?> classType) {
-		mInterpreter.execfile(scriptFile.getPath());
-      PyObject code = mInterpreter.get(className);
-      mCompiledScripts.put(className, code);
+      try {
+   		mInterpreter.execfile(scriptFile.getPath());
+         PyObject code = mInterpreter.get(className);
+         mCompiledScripts.put(className, code);
+      } catch(PyException ex) {
+         ErrorLog logger = ErrorLog.getInstance();
+         logger.writeError(ex.toString());
+      }
    }
 }
