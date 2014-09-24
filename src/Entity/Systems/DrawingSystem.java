@@ -11,6 +11,7 @@ import org.jbox2d.common.Vec2;
 import Entity.EntityComponents;
 import Graphics.CanvasInterface;
 import Level.EntityContainer;
+import Util.UnitConverter;
 
 public class DrawingSystem {
 	private static BufferedImage gNullImage;
@@ -45,10 +46,11 @@ public class DrawingSystem {
    }
    
    private static void drawEntity(EntityComponents components, CanvasInterface canvas) {
-      Vec2 position = components.body.getPosition();
+      Vec2 m_position = components.body.getPosition();
+      Vec2 px_position = UnitConverter.metersToPixels(m_position);
       canvas.drawImage(components.drawable.image, 
-              position.x,
-              position.y,
+              px_position.x,
+              px_position.y,
               0.0f,
               components.width,
               components.height);

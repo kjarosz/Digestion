@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
+import org.python.core.PyException;
 
 import Core.Menu.MainMenu;
 import Core.Menu.PauseMenu;
@@ -22,6 +23,7 @@ import Level.EntityContainer;
 import Level.Level;
 import Level.LevelLoadingScript;
 import Menu.MenuStack;
+import Util.ErrorLog;
 import Util.GameTimer;
 
 public class Game {
@@ -58,9 +60,16 @@ public class Game {
    }
 	
    public void startLevel(LevelLoadingScript loadingScript) {
-      loadingScript.loadLevel(mLevel);
-      loadingScript.createEntities(mEntityFactory, mWorld);
-      mBox2DWorld = new World(mLevel.m_gravity);
+      try {
+         loadingScript.loadLevel(mLevel);
+         mBox2DWorld = new World(mLevel.m_gravity);
+         loadingScript.createEntities(mBox2DWorld, mEntityFactory, mWorld);
+      } catch(PyException ex) {
+         ErrorLog logger = ErrorLog.getInstance();
+         logger.writeError(ex.toString());
+         mMenuStack.popScreen();
+         return;
+      }
       
       MotionSystem.resetTimer();
       
