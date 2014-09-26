@@ -79,7 +79,6 @@ public class Game {
          loadingScript.loadLevel(mLevel);
          mBox2DWorld = new World(mLevel.m_gravity);
          loadingScript.createEntities(mBox2DWorld, mEntityFactory, mWorld);
-         System.out.println(mBox2DWorld.getBodyCount());
       } catch(PyException ex) {
          ErrorLog logger = ErrorLog.getInstance();
          logger.writeError(ex.toString());
