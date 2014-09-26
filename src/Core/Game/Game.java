@@ -60,15 +60,9 @@ public class Game {
    }
 	
    public void startLevel(LevelLoadingScript loadingScript) {
-      try {
-         loadingScript.loadLevel(mLevel);
-         mBox2DWorld = new World(mLevel.m_gravity);
-         loadingScript.createEntities(mBox2DWorld, mEntityFactory, mWorld);
-      } catch(PyException ex) {
-         ErrorLog logger = ErrorLog.getInstance();
-         logger.writeError(ex.toString());
+      if(!loadLevel(loadingScript)) {
          mMenuStack.popScreen();
-         return;
+      	return;
       }
       
       MotionSystem.resetTimer();
@@ -78,6 +72,20 @@ public class Game {
       mWindow.switchTo(mGameCanvas);
       mWindow.update();
       execute();
+   }
+   
+   private boolean loadLevel(LevelLoadingScript loadingScript) {
+      try {
+         loadingScript.loadLevel(mLevel);
+         mBox2DWorld = new World(mLevel.m_gravity);
+         loadingScript.createEntities(mBox2DWorld, mEntityFactory, mWorld);
+         System.out.println(mBox2DWorld.getBodyCount());
+      } catch(PyException ex) {
+         ErrorLog logger = ErrorLog.getInstance();
+         logger.writeError(ex.toString());
+         return false;
+      }
+      return true;
    }
    
 	public void pause() { 
