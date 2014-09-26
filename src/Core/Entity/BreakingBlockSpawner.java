@@ -32,11 +32,11 @@ public class BreakingBlockSpawner extends EntitySpawner {
    	bodyDef.position = new Vec2(position);
    	
    	components.body = world.createBody(bodyDef);
-   	components.width = 1.0f;
-   	components.height = 1.0f;
+   	components.m_width = 1.0f;
+   	components.m_height = 1.0f;
    	
    	PolygonShape shape = new PolygonShape();
-   	shape.setAsBox(components.width/2.0f, components.height/2.0f);
+   	shape.setAsBox(components.m_width/2.0f, components.m_height/2.0f);
    	
    	components.body.createFixture(shape, 0.0f);
    	

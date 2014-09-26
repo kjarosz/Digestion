@@ -50,11 +50,11 @@ public class PlayerSpawner extends EntitySpawner {
    	def.position = new Vec2(position);
    	
    	components.body = world.createBody(def);
-   	components.width = WIDTH;
-   	components.height = HEIGHT;
+   	components.m_width = WIDTH;
+   	components.m_height = HEIGHT;
    	
    	PolygonShape shape = new PolygonShape();
-   	shape.setAsBox(components.width/2.0f, components.height/2.0f);
+   	shape.setAsBox(components.m_width/2.0f, components.m_height/2.0f);
    	
    	FixtureDef fixtureDef = new FixtureDef();
    	fixtureDef.shape = shape;
