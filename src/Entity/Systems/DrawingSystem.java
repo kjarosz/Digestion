@@ -52,7 +52,7 @@ public class DrawingSystem {
               px_position.x,
               px_position.y,
               0.0f,
-              components.width,
-              components.height);
+              UnitConverter.metersToPixels(components.m_width),
+              UnitConverter.metersToPixels(components.m_height));
    }
 }

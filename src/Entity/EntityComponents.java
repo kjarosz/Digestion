@@ -12,8 +12,8 @@ public class EntityComponents {
    public String name;
    
    public Body body;
-   public float width;
-   public float height;
+   public float m_width;
+   public float m_height;
    public Movable movable;
    public Destructible destructible;
    public Drawable drawable;
@@ -21,8 +21,8 @@ public class EntityComponents {
    public Spawner spawner;
    
    public EntityComponents() {
-   	width = 0.0f;
-      height = 0.0f;
+   	m_width = 0.0f;
+      m_height = 0.0f;
       movable = new Movable();
       destructible = new Destructible();
       drawable = new Drawable();

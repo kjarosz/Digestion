@@ -134,7 +134,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
    
    private boolean entityCollidesWithOthers(int id) {
       EntityComponents entityComp = mWorld.accessComponents(id);
-      Rectangle2D.Float entity = createEntityShape(entityComp.body.getPosition(), entityComp.width, entityComp.height);
+      Rectangle2D.Float entity = createEntityShape(entityComp.body.getPosition(), entityComp.m_width, entityComp.m_height);
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          if(i == id)
             continue;
@@ -145,7 +145,7 @@ public class LevelEditor extends MenuScreen implements ActionListener {
          
          EntityComponents otherComp = mWorld.accessComponents(i);
          Rectangle2D.Float other = createEntityShape(otherComp.body.getPosition(),
-               otherComp.width, otherComp.height);
+               otherComp.m_width, otherComp.m_height);
          
          if(other.intersects(entity))
             return true;
@@ -175,8 +175,8 @@ public class LevelEditor extends MenuScreen implements ActionListener {
          Vec2 position = components.body.getPosition();
          bounds.x = position.x;
          bounds.y = position.y;
-         bounds.width = components.width;
-         bounds.height = components.height;
+         bounds.width = components.m_width;
+         bounds.height = components.m_height;
          
          if(bounds.contains(coordinates.x, coordinates.y))
             mWorld.destroyEntity(i);

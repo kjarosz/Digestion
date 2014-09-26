@@ -25,6 +25,7 @@ import Level.LevelLoadingScript;
 import Menu.MenuStack;
 import Util.ErrorLog;
 import Util.GameTimer;
+import Util.UnitConverter;
 
 public class Game {
    private GameWindow mWindow;
@@ -149,7 +150,8 @@ public class Game {
 	      if((entityMask & EntityContainer.ENTITY_FOCUSABLE) != 0) {
 	         EntityComponents components = mWorld.accessComponents(i);
 	         
-	         GameViewport viewport = new GameViewport(mLevel.m_size, new Vec2(mWindow.getWidth(), mWindow.getHeight()));
+	         Vec2 px_levelSize = UnitConverter.metersToPixels(mLevel.m_size);
+	         GameViewport viewport = new GameViewport(px_levelSize, new Vec2(mWindow.getWidth(), mWindow.getHeight()));
 	         viewport.setFocusObject(components);
 	         
 	         mGameCanvas.setViewport(viewport);

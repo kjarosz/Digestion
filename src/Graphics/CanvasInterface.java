@@ -10,8 +10,6 @@ public interface CanvasInterface {
     * 
     * To reset conversion factor, call the function with 1.0f as argument.
     */
-   public void       setUnitConversionFactor(float factor);
-   public float      getUnitConversionFactor();
    
    public ColorMode  setGraphicsMode(ColorMode newMode);
    public void       drawImage(ImageItem imageItem);

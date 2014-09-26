@@ -15,7 +15,6 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 	private ImageQueue mImageQueue;
 	
 	private boolean mInvertedYAxis;
-	private float mUnitConversionFactor;
 	
 	public GameCanvas() {
 		mViewport = null;
@@ -24,7 +23,6 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 		mImageQueue = new ImageQueue();
 		
 		mInvertedYAxis = false;
-		mUnitConversionFactor = 1.0f;
 	}
 	
 	public void setViewport(GameViewport viewport) {
@@ -34,14 +32,6 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 	
 	public void invertYAxis(boolean flag) {
 	   mInvertedYAxis = flag;
-	}
-	
-	public void setUnitConversionFactor(float factor) {
-	   mUnitConversionFactor = factor;
-	}
-	
-	public float getUnitConversionFactor() {
-	   return mUnitConversionFactor;
 	}
 		
    @Override
@@ -88,10 +78,10 @@ public class GameCanvas extends JPanel implements CanvasInterface {
       while(mImageQueue.hasImages()) {
          imageItem = mImageQueue.nextImage(g);
          g.drawImage(imageItem.image, 
-                  (int)(imageItem.x * mUnitConversionFactor), 
-                  (int)(imageItem.y * mUnitConversionFactor), 
-                  (int)(imageItem.width * mUnitConversionFactor), 
-                  (int)(imageItem.height * mUnitConversionFactor), 
+                  (int)(imageItem.x), 
+                  (int)(imageItem.y), 
+                  (int)(imageItem.width), 
+                  (int)(imageItem.height), 
                   null);
       }
    }
@@ -112,13 +102,15 @@ public class GameCanvas extends JPanel implements CanvasInterface {
 
             if(!mViewport.contains(objectRect))
                continue;
-
+            
+            System.out.println(objectRect);
             mViewport.translate(imageItem.x, imageItem.y, imageItem.width, imageItem.height, objectRect);
+            System.out.println(objectRect);
             g.drawImage(imageItem.image,
-                     (int)(objectRect.x * mUnitConversionFactor),
-                     (int)(objectRect.y * mUnitConversionFactor),
-                     (int)(objectRect.width * mUnitConversionFactor),
-                     (int)(objectRect.height * mUnitConversionFactor),
+                     (int)(objectRect.x),
+                     (int)(objectRect.y),
+                     (int)(objectRect.width),
+                     (int)(objectRect.height),
                      null);
          }
    }

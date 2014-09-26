@@ -5,6 +5,8 @@ import java.awt.geom.Rectangle2D;
 
 import org.jbox2d.common.Vec2;
 
+import Util.UnitConverter;
+
 import Entity.EntityComponents;
 
 public class GameViewport {
@@ -69,7 +71,9 @@ public class GameViewport {
 		else
 			translation = output;
 		
+		
 		translation.setRect(mLevelViewport.getX(), mLevelViewport.getY(), width, height);
+		output.setRect(translation);
 		
 		return translation;
 	}
@@ -78,15 +82,16 @@ public class GameViewport {
 		if(mFocusObject == null)
 			return;
 		
-		Vec2 position = mFocusObject.body.getPosition();
+		Vec2 m_position = mFocusObject.body.getPosition();
+		Vec2 px_position = UnitConverter.metersToPixels(m_position);
 		
 		// Shifting the viewport to center on the object of focus
       Rectangle2D center = mLevelViewport.getBounds2D();
 		double centerWidth = center.getWidth();
 		double centerHeight = center.getHeight();
 		
-		double centerX = centerDimension(mLevelSize.x, centerWidth, position.x);
-		double centerY = centerDimension(mLevelSize.y, centerHeight, position.y);
+		double centerX = centerDimension(mLevelSize.x, centerWidth, px_position.x);
+		double centerY = centerDimension(mLevelSize.y, centerHeight, px_position.y);
 		
 		mLevelViewport.setRect(centerX, centerY, centerWidth, centerHeight);
 	}
