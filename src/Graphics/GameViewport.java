@@ -72,7 +72,7 @@ public class GameViewport {
 			translation = output;
 		
 		
-		translation.setRect(mLevelViewport.getX(), mLevelViewport.getY(), width, height);
+		translation.setRect(x - mLevelViewport.getX(), y - mLevelViewport.getY(), width, height);
 		output.setRect(translation);
 		
 		return translation;
