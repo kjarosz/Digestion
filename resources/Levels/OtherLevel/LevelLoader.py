@@ -113,5 +113,5 @@ class LevelLoader(LevelLoadingScript):
 		spawnEntity(world, factory, entityContainer, "Breaking Block", Vec2(9.0, 13.0))
 		spawnEntity(world, factory, entityContainer, "Breaking Block", Vec2(10.0, 13.0))
 		spawnEntity(world, factory, entityContainer, "Breaking Block", Vec2(11.0, 13.0))
-		spawnEntity(world, factory, entityContainer, "Player", Vec2(12.0, 16.0))
+		spawnEntity(world, factory, entityContainer, "Player", Vec2(14.0, 3.0))
 
