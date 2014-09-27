@@ -46,13 +46,15 @@ public class DrawingSystem {
    }
    
    private static void drawEntity(EntityComponents components, CanvasInterface canvas) {
-      Vec2 m_position = components.body.getPosition();
+      Vec2 m_position = new Vec2(components.body.getPosition());
+      m_position.x -= components.m_width/2.0f;
+      m_position.y -= components.m_height/2.0f;
       Vec2 px_position = UnitConverter.metersToPixels(m_position);
       canvas.drawImage(components.drawable.image, 
               px_position.x,
               px_position.y,
               0.0f,
-              UnitConverter.metersToPixels(components.m_width),
-              UnitConverter.metersToPixels(components.m_height));
+              Math.round(UnitConverter.metersToPixels(components.m_width)),
+              Math.round(UnitConverter.metersToPixels(components.m_height)));
    }
 }
