@@ -27,10 +27,9 @@ public class PlayerSpawner extends EntitySpawner {
 	private final float WIDTH = 0.5f;
 	private final float HEIGHT = 2.0f;
 	
-   private final Vec2 LEFT_FORCE = new Vec2(-250, 0);
-   private final Vec2 RIGHT_FORCE = new Vec2(250, 0);
-   private final Vec2 UP_FORCE = new Vec2(0, -700);
-   private final Vec2 DOWN_FORCE = new Vec2(0, 120); 
+   private final Vec2 LEFT_FORCE = new Vec2(-50f, 0);
+   private final Vec2 RIGHT_FORCE = new Vec2(50f, 0);
+   private final Vec2 UP_FORCE = new Vec2(0, -50f);
    
    @Override
    public int spawn(World world, Vec2 position, EntityComponents components) {
@@ -74,7 +73,6 @@ public class PlayerSpawner extends EntitySpawner {
       constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_FORCE);
       constructMovingKeyMapping(controllable, KeyEvent.VK_W, UP_FORCE);
       constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_FORCE);
-      constructMovingKeyMapping(controllable, KeyEvent.VK_S, DOWN_FORCE);
       
       return EntityContainer.ENTITY_CONTROLLABLE;
    }
@@ -86,12 +84,12 @@ public class PlayerSpawner extends EntitySpawner {
       keyMapping.keyFunction = new ControlFunction() {
          @Override
          public void keyPressed(EntityComponents components) {
-         	components.movable.actingForces.addLocal(force);
+            components.movable.actingForces.addLocal(force);
          }
          
          @Override
          public void keyReleased(EntityComponents components) {
-         	components.movable.actingForces.subLocal(force);
+            components.movable.actingForces.subLocal(force);
          }
       };
       keyMapping.pressProcessed = false;

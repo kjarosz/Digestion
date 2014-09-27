@@ -2,12 +2,21 @@ package Entity.Systems;
 
 import org.jbox2d.dynamics.World;
 
+import Entity.EntityComponents;
 import Level.EntityContainer;
 
 public class MotionSystem {
 	private static long sLastTime = 0;
    
    public static void move(World box2DWorld, EntityContainer world) {
+      
+      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
+         if((world.getEntityMask(i) & EntityContainer.ENTITY_MOVABLE) != EntityContainer.ENTITY_MOVABLE)
+            continue;
+         
+         EntityComponents components = world.accessComponents(i);
+         components.body.applyForceToCenter(components.movable.actingForces);
+      }
       
       box2DWorld.step((float)nanoToSeconds(getElapsedTime()), 6, 2);
    }
