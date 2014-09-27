@@ -175,7 +175,9 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
             continue;
          
          EntityComponents components = mWorld.accessComponents(i);
-         Vec2 m_position = components.body.getPosition();
+         Vec2 m_position = new Vec2(components.body.getPosition());
+         m_position.x -= UnitConverter.pixelsToMeters(components.drawable.image.getWidth())/2.0f;
+         m_position.y -= UnitConverter.pixelsToMeters(components.drawable.image.getHeight())/2.0f;
          Vec2 px_position = UnitConverter.metersToPixels(m_position);
          mCanvas.drawImage(components.drawable.image,
                  px_position.x,
@@ -188,8 +190,8 @@ public final class ContentPanel extends JPanel implements ActionListener, FocusL
    
    public MouseEvent snapToGrid(MouseEvent e) {
       Point coords = e.getPoint();
-      coords.x = ((int)(coords.x/mGridSize.width))*mGridSize.width;
-      coords.y = ((int)(coords.y/mGridSize.height))*mGridSize.height;
+      coords.x = (int)(coords.x/mGridSize.width)*mGridSize.width + (int)(mGridSize.width/2.0f);
+      coords.y = (int)(coords.y/mGridSize.height)*mGridSize.height + (int)(mGridSize.height/2.0f);
       
       return new MouseEvent(e.getComponent(), e.getID(), e.getWhen(),
             e.getModifiers(), coords.x, coords.y, e.getClickCount(), 

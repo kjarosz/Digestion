@@ -158,8 +158,8 @@ public class LevelEditor extends MenuScreen implements ActionListener {
       Rectangle2D.Float shape = new Rectangle2D.Float();
       shape.x = position.x - width/2.0f;
       shape.y = position.y - height/2.0f;
-      shape.width = width/2.0f;
-      shape.height = height/2.0f;
+      shape.width = width;
+      shape.height = height;
       return shape;
    }
    
