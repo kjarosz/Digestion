@@ -6,7 +6,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.collision.shapes.ChainShape;
+import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
@@ -27,8 +28,13 @@ public class PlayerSpawner extends EntitySpawner {
 	private final float WIDTH = 0.5f;
 	private final float HEIGHT = 2.0f;
 	
-   private final Vec2 LEFT_FORCE = new Vec2(-50f, 0);
-   private final Vec2 RIGHT_FORCE = new Vec2(50f, 0);
+	private final float DENSITY = 5.0f;
+	private final float FRICTION = 2.0f;
+	
+	private final int OUTER_CIRCLE_DIVISIONS = 36;
+	
+   private final Vec2 LEFT_FORCE = new Vec2(-25f, 0);
+   private final Vec2 RIGHT_FORCE = new Vec2(25f, 0);
    private final Vec2 UP_FORCE = new Vec2(0, -50f);
    
    @Override
@@ -52,15 +58,42 @@ public class PlayerSpawner extends EntitySpawner {
    	components.m_width = WIDTH;
    	components.m_height = HEIGHT;
    	
-   	PolygonShape shape = new PolygonShape();
-   	shape.setAsBox(components.m_width/2.0f, components.m_height/2.0f);
-   	
-   	FixtureDef fixtureDef = new FixtureDef();
-   	fixtureDef.shape = shape;
-   	fixtureDef.density = 1.0f;
-   	components.body.createFixture(fixtureDef);
+   	createInnerCircleFixture(components);
+   	createOuterCircleFixture(components);
    	
       return EntityContainer.ENTITY_COLLIDABLE | EntityContainer.ENTITY_MOVABLE;
+   }
+   
+   private void createInnerCircleFixture(EntityComponents components) {
+      CircleShape innerCircle = new CircleShape();
+      innerCircle.setRadius(WIDTH/2.0f);
+      
+      FixtureDef innerCircleFixtureDef = new FixtureDef();
+      innerCircleFixtureDef.shape = innerCircle;
+      innerCircleFixtureDef.density = DENSITY;
+      innerCircleFixtureDef.friction = FRICTION;
+      components.body.createFixture(innerCircleFixtureDef);
+   }
+   
+   private void createOuterCircleFixture(EntityComponents components) {
+      ChainShape outerCircle = new ChainShape();
+      Vec2 vertices[] = new Vec2[OUTER_CIRCLE_DIVISIONS + 1];
+      for(int i = 0; i < OUTER_CIRCLE_DIVISIONS; i++) {
+         float angle = (float)((2*Math.PI)/OUTER_CIRCLE_DIVISIONS)*i;
+         float x, y;
+         
+         x = (WIDTH/2.0f)*(float)Math.cos(angle);
+         y = (HEIGHT/2.0f)*(float)Math.sin(angle);
+         vertices[i] = new Vec2(x, y);
+      }
+      vertices[OUTER_CIRCLE_DIVISIONS] = new Vec2(vertices[0]);
+      outerCircle.createChain(vertices, OUTER_CIRCLE_DIVISIONS);
+            
+      FixtureDef outerCircleFixtureDef = new FixtureDef();
+      outerCircleFixtureDef.shape = outerCircle;
+      outerCircleFixtureDef.density = DENSITY;
+      outerCircleFixtureDef.friction = FRICTION;
+      components.body.createFixture(outerCircleFixtureDef);
    }
    
    private int makeDestructible(Destructible destructible) {
