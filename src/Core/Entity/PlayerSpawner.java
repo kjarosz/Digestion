@@ -35,7 +35,7 @@ public class PlayerSpawner extends EntitySpawner {
 	
    private final Vec2 LEFT_FORCE = new Vec2(-25f, 0);
    private final Vec2 RIGHT_FORCE = new Vec2(25f, 0);
-   private final Vec2 UP_FORCE = new Vec2(0, -50f);
+   private final Vec2 UP_FORCE = new Vec2(0, -6.5f);
    
    @Override
    public int spawn(World world, Vec2 position, EntityComponents components) {
@@ -104,7 +104,7 @@ public class PlayerSpawner extends EntitySpawner {
    
    private int makeControllable(Controllable controllable) {
       constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_FORCE);
-      constructMovingKeyMapping(controllable, KeyEvent.VK_W, UP_FORCE);
+      constructJumpKeyMapping(controllable, KeyEvent.VK_W, UP_FORCE);
       constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_FORCE);
       
       return EntityContainer.ENTITY_CONTROLLABLE;
@@ -112,9 +112,7 @@ public class PlayerSpawner extends EntitySpawner {
    
    private void constructMovingKeyMapping(Controllable controllable, int keyCode, 
          final Vec2 force) {
-      KeyMapping keyMapping = new KeyMapping();
-      keyMapping.keyCode = keyCode;
-      keyMapping.keyFunction = new ControlFunction() {
+   	constructKeyMapping(controllable, keyCode, new ControlFunction() {
          @Override
          public void keyPressed(EntityComponents components) {
             components.movable.actingForces.addLocal(force);
@@ -124,11 +122,20 @@ public class PlayerSpawner extends EntitySpawner {
          public void keyReleased(EntityComponents components) {
             components.movable.actingForces.subLocal(force);
          }
-      };
-      keyMapping.pressProcessed = false;
-      keyMapping.releaseProcessed = true;
-      
-      controllable.keyMappings.add(keyMapping);
+   	});
+   }
+   
+   private void constructJumpKeyMapping(Controllable controllable, int keyCode, 
+   		final Vec2 UP_FORCE) {
+   	constructKeyMapping(controllable, keyCode, new ControlFunction() {
+   		@Override
+   		public void keyPressed(EntityComponents components) {
+   			components.body.applyLinearImpulse(UP_FORCE, new Vec2(0.0f, 0.0f));
+   		}
+   		
+   		@Override
+   		public void keyReleased(EntityComponents components) {}
+   	});
    }
    
    private int makeDrawable(Drawable drawable) {
