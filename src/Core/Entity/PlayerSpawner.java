@@ -21,7 +21,6 @@ import Entity.Components.Destructible;
 import Entity.Components.Drawable;
 import Entity.Systems.DrawingSystem;
 import Input.ControlFunction;
-import Input.KeyMapping;
 import Level.EntityContainer;
 
 public class PlayerSpawner extends EntitySpawner {
@@ -35,7 +34,7 @@ public class PlayerSpawner extends EntitySpawner {
 	
    private final Vec2 LEFT_FORCE = new Vec2(-25f, 0);
    private final Vec2 RIGHT_FORCE = new Vec2(25f, 0);
-   private final Vec2 UP_FORCE = new Vec2(0, -6.5f);
+   private final Vec2 UP_FORCE = new Vec2(0, -6.8f);
    
    @Override
    public int spawn(World world, Vec2 position, EntityComponents components) {
