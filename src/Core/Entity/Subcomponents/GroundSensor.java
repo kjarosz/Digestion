@@ -29,6 +29,7 @@ public class GroundSensor implements ContactListener {
    @Override
    public void beginContact(Contact contact) {
       if(isContactWithGround(contact, mEntity)) {
+         mEntity.movable.doubleJumpAvailable = false;
          mEntity.movable.groundContacts++;
       }
    }

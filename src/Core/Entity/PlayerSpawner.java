@@ -143,8 +143,13 @@ public class PlayerSpawner extends EntitySpawner {
    	constructKeyMapping(controllable, keyCode, new ControlFunction() {
    		@Override
    		public void keyPressed(EntityComponents components) {
-   		   if(components.movable.groundContacts > 0)
+   		   if(components.movable.groundContacts > 0) {
    		      components.body.applyLinearImpulse(UP_FORCE, new Vec2(0.0f, 0.0f));
+   		      components.movable.doubleJumpAvailable = true;
+   		   } else if(components.movable.doubleJumpAvailable) {
+               components.body.applyLinearImpulse(UP_FORCE, new Vec2(0.0f, 0.0f));
+               components.movable.doubleJumpAvailable = false;
+   		   }
    		}
    		
    		@Override

@@ -6,9 +6,11 @@ public class Movable {
 	
 	public Vec2 actingForces;
 	public int groundContacts;
+	public boolean doubleJumpAvailable;
    
    public Movable() {
    	actingForces = new Vec2(0.0f, 0.0f);
    	groundContacts = 0;
+   	doubleJumpAvailable = false;
    }
 }
