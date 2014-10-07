@@ -7,8 +7,9 @@ import Level.EntityContainer;
 
 public class MotionSystem {
 	// BitMasks for sensors
-	public final static long STAGE = 1; // Does fixture represent a part of the static stage.
-	public final static long AGENT = 2; // Does the fixture belong to a moving agent like a player or enemy.
+	public final static long STAGE         = 1; // Does fixture represent a part of the static stage.
+	public final static long AGENT         = 2; // Does the fixture belong to a moving agent like a player or enemy.
+	public final static long GROUND_SENSOR = 4;
 	
 	private static long sLastTime = 0;
 	   

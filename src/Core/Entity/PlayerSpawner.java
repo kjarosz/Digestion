@@ -6,9 +6,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.jbox2d.callbacks.ContactImpulse;
-import org.jbox2d.callbacks.ContactListener;
-import org.jbox2d.collision.Manifold;
 import org.jbox2d.collision.shapes.ChainShape;
 import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;
@@ -17,8 +14,8 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.contacts.Contact;
 
+import Core.Entity.Subcomponents.GroundSensor;
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
 import Entity.Components.Controllable;
@@ -65,9 +62,9 @@ public class PlayerSpawner extends EntitySpawner {
    	
    	createInnerCircleFixture(components);
    	createOuterCircleFixture(components);
-   	createGroundSensor(components);
    	
-   	world.setContactListener(createContactListener());
+   	GroundSensor sensor = createGroundSensor(components);
+   	world.setContactListener(sensor);
    	
       return EntityContainer.ENTITY_COLLIDABLE | EntityContainer.ENTITY_MOVABLE;
    }
@@ -105,37 +102,11 @@ public class PlayerSpawner extends EntitySpawner {
       components.body.createFixture(outerCircleFixtureDef);
    }
    
-   private void createGroundSensor(EntityComponents components) {
-   	PolygonShape shape = new PolygonShape();
-   	shape.setAsBox(WIDTH, 0.1f, new Vec2(0.0f, -1.0f), 0.0f);
-   	
-   	
-   	FixtureDef sensorFixtureDef = new FixtureDef();
-   	sensorFixtureDef.density = 1;
-   	sensorFixtureDef.isSensor = true;
-   	components.movable.canJump = false;
-   	components.body.createFixture(sensorFixtureDef);
-   	
-   }
-   
-   private ContactListener createContactListener() {
-   	return new ContactListener() {
-   		@Override
-   		public void beginContact(Contact contact) {
-   			
-   		}
-   		
-   		@Override
-   		public void preSolve(Contact contact, Manifold manifold) {}
-   		
-   		@Override
-   		public void postSolve(Contact contact, ContactImpulse impulse) {}
-   		
-   		@Override
-   		public void endContact(Contact contact) {
-   			
-   		}
-   	};
+   private GroundSensor createGroundSensor(EntityComponents components) {
+      PolygonShape shape = new PolygonShape();
+      shape.setAsBox(WIDTH, 0.1f, new Vec2(0.0f, 1.0f), 0.0f);
+      
+      return new GroundSensor(shape, components);
    }
    
    private int makeDestructible(Destructible destructible) {
@@ -172,7 +143,8 @@ public class PlayerSpawner extends EntitySpawner {
    	constructKeyMapping(controllable, keyCode, new ControlFunction() {
    		@Override
    		public void keyPressed(EntityComponents components) {
-   			components.body.applyLinearImpulse(UP_FORCE, new Vec2(0.0f, 0.0f));
+   		   if(components.movable.groundContacts > 0)
+   		      components.body.applyLinearImpulse(UP_FORCE, new Vec2(0.0f, 0.0f));
    		}
    		
    		@Override
