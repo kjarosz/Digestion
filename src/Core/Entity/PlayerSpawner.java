@@ -8,20 +8,22 @@ import javax.imageio.ImageIO;
 
 import org.jbox2d.collision.shapes.ChainShape;
 import org.jbox2d.collision.shapes.CircleShape;
+import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
+import Core.Entity.Subcomponents.GroundSensor;
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
 import Entity.Components.Controllable;
 import Entity.Components.Destructible;
 import Entity.Components.Drawable;
 import Entity.Systems.DrawingSystem;
+import Entity.Systems.MotionSystem;
 import Input.ControlFunction;
-import Input.KeyMapping;
 import Level.EntityContainer;
 
 public class PlayerSpawner extends EntitySpawner {
@@ -35,7 +37,7 @@ public class PlayerSpawner extends EntitySpawner {
 	
    private final Vec2 LEFT_FORCE = new Vec2(-25f, 0);
    private final Vec2 RIGHT_FORCE = new Vec2(25f, 0);
-   private final Vec2 UP_FORCE = new Vec2(0, -50f);
+   private final Vec2 UP_FORCE = new Vec2(0, -6.8f);
    
    @Override
    public int spawn(World world, Vec2 position, EntityComponents components) {
@@ -60,6 +62,9 @@ public class PlayerSpawner extends EntitySpawner {
    	
    	createInnerCircleFixture(components);
    	createOuterCircleFixture(components);
+   	
+   	GroundSensor sensor = createGroundSensor(components);
+   	world.setContactListener(sensor);
    	
       return EntityContainer.ENTITY_COLLIDABLE | EntityContainer.ENTITY_MOVABLE;
    }
@@ -93,7 +98,15 @@ public class PlayerSpawner extends EntitySpawner {
       outerCircleFixtureDef.shape = outerCircle;
       outerCircleFixtureDef.density = DENSITY;
       outerCircleFixtureDef.friction = FRICTION;
+      outerCircleFixtureDef.filter.categoryBits |= MotionSystem.AGENT;
       components.body.createFixture(outerCircleFixtureDef);
+   }
+   
+   private GroundSensor createGroundSensor(EntityComponents components) {
+      PolygonShape shape = new PolygonShape();
+      shape.setAsBox(WIDTH, 0.1f, new Vec2(0.0f, 1.0f), 0.0f);
+      
+      return new GroundSensor(shape, components);
    }
    
    private int makeDestructible(Destructible destructible) {
@@ -104,7 +117,7 @@ public class PlayerSpawner extends EntitySpawner {
    
    private int makeControllable(Controllable controllable) {
       constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_FORCE);
-      constructMovingKeyMapping(controllable, KeyEvent.VK_W, UP_FORCE);
+      constructJumpKeyMapping(controllable, KeyEvent.VK_W, UP_FORCE);
       constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_FORCE);
       
       return EntityContainer.ENTITY_CONTROLLABLE;
@@ -112,9 +125,7 @@ public class PlayerSpawner extends EntitySpawner {
    
    private void constructMovingKeyMapping(Controllable controllable, int keyCode, 
          final Vec2 force) {
-      KeyMapping keyMapping = new KeyMapping();
-      keyMapping.keyCode = keyCode;
-      keyMapping.keyFunction = new ControlFunction() {
+   	constructKeyMapping(controllable, keyCode, new ControlFunction() {
          @Override
          public void keyPressed(EntityComponents components) {
             components.movable.actingForces.addLocal(force);
@@ -124,11 +135,26 @@ public class PlayerSpawner extends EntitySpawner {
          public void keyReleased(EntityComponents components) {
             components.movable.actingForces.subLocal(force);
          }
-      };
-      keyMapping.pressProcessed = false;
-      keyMapping.releaseProcessed = true;
-      
-      controllable.keyMappings.add(keyMapping);
+   	});
+   }
+   
+   private void constructJumpKeyMapping(Controllable controllable, int keyCode, 
+   		final Vec2 UP_FORCE) {
+   	constructKeyMapping(controllable, keyCode, new ControlFunction() {
+   		@Override
+   		public void keyPressed(EntityComponents components) {
+   		   if(components.movable.groundContacts > 0) {
+   		      components.body.applyLinearImpulse(UP_FORCE, new Vec2(0.0f, 0.0f));
+   		      components.movable.doubleJumpAvailable = true;
+   		   } else if(components.movable.doubleJumpAvailable) {
+               components.body.applyLinearImpulse(UP_FORCE, new Vec2(0.0f, 0.0f));
+               components.movable.doubleJumpAvailable = false;
+   		   }
+   		}
+   		
+   		@Override
+   		public void keyReleased(EntityComponents components) {}
+   	});
    }
    
    private int makeDrawable(Drawable drawable) {

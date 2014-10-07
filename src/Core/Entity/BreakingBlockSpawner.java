@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 import Entity.EntityComponents;
@@ -15,6 +16,7 @@ import Entity.EntitySpawner;
 import Entity.Components.Destructible;
 import Entity.Components.Drawable;
 import Entity.Systems.DrawingSystem;
+import Entity.Systems.MotionSystem;
 import Level.EntityContainer;
 
 public class BreakingBlockSpawner extends EntitySpawner {
@@ -38,7 +40,11 @@ public class BreakingBlockSpawner extends EntitySpawner {
    	PolygonShape shape = new PolygonShape();
    	shape.setAsBox(components.m_width/2.0f, components.m_height/2.0f);
    	
-   	components.body.createFixture(shape, 0.0f);
+   	FixtureDef fixtureDef = new FixtureDef();
+   	fixtureDef.shape = shape;
+   	fixtureDef.density = 0.0f;
+   	fixtureDef.filter.categoryBits |= MotionSystem.STAGE;
+   	components.body.createFixture(fixtureDef);
    	
       return EntityContainer.ENTITY_COLLIDABLE;
    }
