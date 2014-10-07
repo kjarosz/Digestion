@@ -6,8 +6,12 @@ import Entity.EntityComponents;
 import Level.EntityContainer;
 
 public class MotionSystem {
+	// BitMasks for sensors
+	public final static long STAGE = 1; // Does fixture represent a part of the static stage.
+	public final static long AGENT = 2; // Does the fixture belong to a moving agent like a player or enemy.
+	
 	private static long sLastTime = 0;
-   
+	   
    public static void move(World box2DWorld, EntityContainer world) {
       
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
