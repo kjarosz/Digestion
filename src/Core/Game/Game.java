@@ -45,8 +45,6 @@ public class Game {
 		mWindow = new GameWindow("Digestion");
 		mGameCanvas = new GameCanvas();
       mEntityFactory = new EntityFactory();
-      mLevel = new Level();
-      mWorld = new EntityContainer();
 		mPaused = true;
       setupMenuStack();
 	}
@@ -76,7 +74,9 @@ public class Game {
    
    private boolean loadLevel(LevelLoadingScript loadingScript) {
       try {
+         mLevel = new Level();
          loadingScript.loadLevel(mLevel);
+         mWorld = new EntityContainer();
          mBox2DWorld = new World(mLevel.m_gravity);
          loadingScript.createEntities(mBox2DWorld, mEntityFactory, mWorld);
       } catch(PyException ex) {
@@ -145,9 +145,17 @@ public class Game {
             frameCounter = 0;
          }
 		}
+		performCleanUp();
+		
 		mWindow.setTitle("Digestion");
       
       mWindow.switchTo(mMenuStack);
+	}
+	
+	private void performCleanUp() {
+		mLevel = null;
+		mWorld = null;
+		mBox2DWorld = null;
 	}
 	
 	private void setFocusObject() {
