@@ -108,9 +108,7 @@ public class GameCanvas extends JPanel implements CanvasInterface {
    @Override
    public void paint(Graphics g) {
       mImageQueue.sort();
-      
-      Graphics2D g2 = (Graphics2D)g;
-      
+            
       drawItems((Graphics2D)g);
    }
 }
