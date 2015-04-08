@@ -12,6 +12,17 @@ import Core.Entity.ZombieSpawner;
 import Level.EntityContainer;
 
 public class EntityFactory {
+   private static EntityFactory sInstance;
+   
+   private EntityFactory() {}
+   
+   public static EntityFactory getInstance() {
+      if(sInstance == null) {
+         sInstance = new EntityFactory();
+      }
+      return sInstance;
+   }
+   
    final private String ENTITY_NAMES[] = {
       "Breaking Block", "Ice Block", "Normal Block",
       "Player", "Spikey Block", "Zombie" 
