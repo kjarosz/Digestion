@@ -1,4 +1,4 @@
-package Core.LevelEditor.Panels.Tabs;
+package Core.LevelEditor.Tabs;
 
 import java.awt.*;
 import java.awt.event.*;

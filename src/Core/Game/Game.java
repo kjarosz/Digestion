@@ -44,7 +44,7 @@ public class Game {
 	public Game() {
 		mWindow = new GameWindow("Digestion");
 		mGameCanvas = new GameCanvas();
-      mEntityFactory = new EntityFactory();
+      mEntityFactory = EntityFactory.getInstance();
 		mPaused = true;
       setupMenuStack();
 	}

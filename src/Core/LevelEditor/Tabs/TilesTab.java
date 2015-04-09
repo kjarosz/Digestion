@@ -1,4 +1,4 @@
-package Core.LevelEditor.Panels.Tabs;
+package Core.LevelEditor.Tabs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,15 +14,14 @@ import javax.swing.JScrollPane;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
+import Core.LevelEditor.Models.EditorSettings;
 import Entity.EntityComponents;
 import Entity.EntityFactory;
 import Entity.Systems.DrawingSystem;
 import Graphics.ScrollablePicture;
 import Level.EntityContainer;
 
-public class ObjectsTab extends JPanel implements ActionListener {
-   private final String ACTION_OBJECT_SELECT = "Object Select";
-   
+public class TilesTab extends JPanel {
    private String mEntityNames[];
    private EntityComponents mEntityComponents[];
    
@@ -30,12 +29,13 @@ public class ObjectsTab extends JPanel implements ActionListener {
    private ScrollablePicture mPicture;
    private JComboBox<String> mObjectSelector;
 
-	public ObjectsTab(EntityFactory entityFactory) {
-      loadEntities(entityFactory);      
-      createWidgets();
+	public TilesTab(EditorSettings editorSettings) {
+      loadEntities();      
+      createWidgets(editorSettings);
 	}
    
-   private void loadEntities(EntityFactory entityFactory) {
+   private void loadEntities() {
+      EntityFactory entityFactory = EntityFactory.getInstance();
       mEntityNames = entityFactory.getEntityNames();
       mEntityComponents = new EntityComponents[mEntityNames.length];
       
@@ -59,13 +59,16 @@ public class ObjectsTab extends JPanel implements ActionListener {
          mEntityComponents[index].drawable.image = DrawingSystem.getNullImage();
    }
    
-   private void createWidgets() {
+   /* ********************************************************************** */
+   /*                              VIEW                                      */
+   /* ********************************************************************** */
+   private void createWidgets(EditorSettings editorSettings) {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
       
       createObjectPreviewPanel();
 		add(Box.createVerticalStrut(5));
       
-      createObjectSelectionPanel();
+      createObjectSelectionPanel(editorSettings);
 		add(Box.createVerticalStrut(5));
       
       createInstructionPanel();
@@ -86,8 +89,8 @@ public class ObjectsTab extends JPanel implements ActionListener {
 		add(previewPanel);
    }
    
-   private void createObjectSelectionPanel() {
-      createObjectSelector();
+   private void createObjectSelectionPanel(EditorSettings editorSettings) {
+      createObjectSelector(editorSettings);
       displaySelectedEntity();
       
       JPanel objectSelectPanel = new JPanel();
@@ -96,10 +99,9 @@ public class ObjectsTab extends JPanel implements ActionListener {
 		add(objectSelectPanel);
    }
    
-   private void createObjectSelector() {
+   private void createObjectSelector(EditorSettings editorSettings) {
       mObjectSelector = new JComboBox<>(mEntityNames);
-      mObjectSelector.setActionCommand(ACTION_OBJECT_SELECT);
-      mObjectSelector.addActionListener(this);
+      mObjectSelector.addActionListener(createObjectSelectAction(editorSettings));
    }
    
    private void displaySelectedEntity() {
@@ -123,12 +125,15 @@ public class ObjectsTab extends JPanel implements ActionListener {
       return mEntityNames[mObjectSelector.getSelectedIndex()];
    }
    
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String command = e.getActionCommand();
-      
-      if(command.compareTo(ACTION_OBJECT_SELECT) == 0) {
-         displaySelectedEntity();
-      }
-	}
+   private ActionListener createObjectSelectAction(EditorSettings editorSettings) {
+      return new ActionListener() {
+         @Override
+         public void actionPerformed(ActionEvent e) {
+            int id = mObjectSelector.getSelectedIndex();
+            String entityName = mEntityNames[id];
+            editorSettings.setSelectedTile(entityName);
+            displaySelectedEntity();
+         }
+      };
+   }
 }
