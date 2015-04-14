@@ -17,7 +17,7 @@ public class SettingsPanel extends JTabbedPane {
       EntityTab entityTab = new EntityTab(editorSettings);
       add(entityTab, "Entities");
       
-      
+      editorSettings.setEditorMode(EditorMode.TILING);
       addChangeListener(createTabListener(editorSettings));
 	}
 	
