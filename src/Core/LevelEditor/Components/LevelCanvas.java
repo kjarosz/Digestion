@@ -32,9 +32,11 @@ public class LevelCanvas extends JComponent {
       mDrawerSettings = drawerSettings;
       createPropertyListeners();
       
-      ContentPanelControl contentControl 
-         = new ContentPanelControl(mEditorSettings, mLevelModel);
+      ContentPanelControl contentControl = new ContentPanelControl(
+            mEditorSettings, mLevelModel, mDrawerSettings
+      );
       addMouseListener(contentControl);
+      addMouseMotionListener(contentControl);
    }
    
    private void createPropertyListeners() {
