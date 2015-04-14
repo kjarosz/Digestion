@@ -27,6 +27,8 @@ public class EditorToolbar extends JToolBar {
    private boolean mUnsaved = false;
    
    public EditorToolbar(MenuStack stack, LevelModel levelModel) {
+      mStack = stack;
+      
       mLevelModel = levelModel;
       mLevelModel.addPropertyChangeListener(createLevelChangeTracker());
       mLevelFile = null;
@@ -149,7 +151,8 @@ public class EditorToolbar extends JToolBar {
    
    private void saveAs() {
       mLevelFile = chooseNewLevelFile();
-      save();
+      if(mLevelFile != null)
+         save();
    }
    
    private boolean dealWithUnsaved() {      
