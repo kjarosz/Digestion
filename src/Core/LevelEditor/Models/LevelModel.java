@@ -55,8 +55,19 @@ public class LevelModel extends AbstractModel {
    }
 
    public void addTiles(Tile tile) {
-      firePropertyChangeEvent("tiles", null, tile);
-      tiles.add(tile);
+      if(!tileCollides(tile)) {
+         firePropertyChangeEvent("tiles", null, tile);
+         tiles.add(tile);
+      }
+   }
+   
+   private boolean tileCollides(Tile atile) {
+      for(Tile tile: tiles) {
+         if(tile.tileRect.intersects(atile.tileRect)) {
+            return true;
+         }
+      }
+      return false;
    }
    
    public void clearTiles() {
