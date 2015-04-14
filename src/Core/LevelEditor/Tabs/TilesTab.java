@@ -97,6 +97,10 @@ public class TilesTab extends JPanel {
       objectSelectPanel.add(new JLabel("Object:"));
       objectSelectPanel.add(mObjectSelector);
 		add(objectSelectPanel);
+		
+		editorSettings.setSelectedTile(
+		      mEntityNames[0]
+		);
    }
    
    private void createObjectSelector(EditorSettings editorSettings) {
@@ -119,10 +123,6 @@ public class TilesTab extends JPanel {
       instructionPanel.add(new JLabel("To delete: Right Mouse Click"));
       instructionPanel.add(new JLabel("To modify: Alt + Right Mouse Click"));
 		add(instructionPanel);
-   }
-   
-   public String getSelectedEntity() {
-      return mEntityNames[mObjectSelector.getSelectedIndex()];
    }
    
    private ActionListener createObjectSelectAction(EditorSettings editorSettings) {
