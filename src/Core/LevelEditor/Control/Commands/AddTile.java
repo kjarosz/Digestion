@@ -80,8 +80,8 @@ public class AddTile extends LevelModelCommand {
    private Point snapToGrid(Point coords) {
       Size gridSize = mDrawer.getGridSize();
       Point snapped = new Point(coords);
-      snapped.x = (int)(coords.x/(float)gridSize.width);
-      snapped.y = (int)(coords.x/(float)gridSize.height);
+      snapped.x = (int)(coords.x/(float)gridSize.width)*gridSize.width;
+      snapped.y = (int)(coords.y/(float)gridSize.height)*gridSize.height;
       return snapped;
    }
    
