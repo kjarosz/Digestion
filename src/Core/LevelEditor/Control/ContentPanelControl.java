@@ -20,6 +20,8 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
    private LevelModelCommand mAddTileAction;
    private LevelModelCommand mRemoveTileAction;
    
+   private LevelModelCommand mCurrentCommand;
+   
    public ContentPanelControl(EditorSettings editorSettings, 
          LevelModel levelModel, DrawerSettings drawerSettings) {
       mEditorSettings = editorSettings;
@@ -41,9 +43,22 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
 
    @Override
    public void mousePressed(MouseEvent event) {
-      LevelModelCommand command = getCommand(event.getButton());
-      if(command != null) {
-         command.perform(event);
+      LevelModelCommand cmd = getCommand(event.getButton());
+      
+      if(cmd != null) {
+         mCurrentCommand = cmd;
+      }
+      
+      if(mCurrentCommand != null) {
+         mCurrentCommand.perform(event);
+      }
+   }
+   
+   @Override 
+   public void mouseReleased(MouseEvent event) {
+      LevelModelCommand cmd = getCommand(event.getButton());
+      if(cmd == mCurrentCommand) {
+         mCurrentCommand = null;
       }
    }
    
@@ -67,7 +82,6 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
    /*                              UNUSED                                    */
    /* ********************************************************************** */
    @Override public void mouseClicked(MouseEvent arg0) {}
-   @Override public void mouseReleased(MouseEvent arg0) {}
    @Override public void mouseEntered(MouseEvent arg0) {}
    @Override public void mouseExited(MouseEvent arg0) {}
    @Override public void mouseMoved(MouseEvent arg0) {}
