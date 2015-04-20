@@ -2,6 +2,7 @@ package Core.LevelEditor.Utils;
 
 import java.awt.Dimension;
 import java.awt.HeadlessException;
+import java.awt.Rectangle;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -14,8 +15,8 @@ import javax.swing.SwingWorker;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import Core.LevelEditor.Models.Entity;
 import Core.LevelEditor.Models.LevelModel;
-import Core.LevelEditor.Models.Tile;
 
 public class LevelModelWriter extends SwingWorker<File, String> {
    
@@ -84,18 +85,20 @@ public class LevelModelWriter extends SwingWorker<File, String> {
 
    @SuppressWarnings("unchecked")
    private JSONArray getTileJson() {
-      JSONArray tiles = new JSONArray();
-      for(Tile tile: mModel.getTiles()) {
+      JSONArray entities = new JSONArray();
+      for(Entity entity: mModel.getEntities()) {
          JSONObject jsonTile = new JSONObject();
-         jsonTile.put("name", tile.name);
-         jsonTile.put("x", tile.tileRect.x);
-         jsonTile.put("y", tile.tileRect.y);
-         jsonTile.put("width", tile.tileRect.width);
-         jsonTile.put("height", tile.tileRect.height);
+         jsonTile.put("name", entity.getName());
          
-         tiles.add(jsonTile);
+         Rectangle bounds = entity.getRect();
+         jsonTile.put("x", bounds.x);
+         jsonTile.put("y", bounds.y);
+         jsonTile.put("width", bounds.width);
+         jsonTile.put("height", bounds.height);
+         
+         entities.add(jsonTile);
       }
-      return tiles;
+      return entities;
    }
    
    @Override
