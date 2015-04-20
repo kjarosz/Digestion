@@ -3,6 +3,8 @@ package Core.LevelEditor.Models;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -10,23 +12,32 @@ public class LevelModel extends AbstractModel {
    private String    name;
    private Dimension size;
 
-   private LinkedList<Tile>          tiles;
    private LinkedList<Entity>        entities;
    private BufferedImage             background;
    
+   private PropertyChangeListener    entityListener;
+   
    public LevelModel() {
-      tiles = new LinkedList<>();
       entities = new LinkedList<>();
 
       reset();
+      
+      createListeners();
    }
    
    public void reset() {
       setName("New Level");
       setSize(new Dimension(1024, 768));
-      clearTiles();
       clearEntities();
-      
+   }
+   
+   private void createListeners() {
+      entityListener = new PropertyChangeListener() {
+         @Override
+         public void propertyChange(PropertyChangeEvent e) {
+            firePropertyChangeEvent("entities", e.getOldValue(), e.getNewValue());
+         }
+      };
    }
    
    /* ********************************************************************** */
@@ -50,54 +61,15 @@ public class LevelModel extends AbstractModel {
       this.size = size;
    }
 
-   public LinkedList<Tile> getTiles() {
-      return tiles;
-   }
-
-   public void addTiles(Tile tile) {
-      if(!tileCollides(tile)) {
-         firePropertyChangeEvent("tiles", null, tile);
-         tiles.add(tile);
-      }
-   }
-   
-   private boolean tileCollides(Tile atile) {
-      for(Tile tile: tiles) {
-         if(tile.tileRect.intersects(atile.tileRect)) {
-            return true;
-         }
-      }
-      return false;
-   }
-   
-   public void clearTiles() {
-      firePropertyChangeEvent("tiles", null, null);
-      tiles.clear();
-   }
-   
-   public void removeTile(Tile tile) {
-      firePropertyChangeEvent("tiles", tile, null);
-      tiles.remove(tile);
-   }
-   
-   public void removeTile(Point coords) {
-      Iterator<Tile> it = tiles.iterator();
-      while(it.hasNext()) {
-         Tile tile = it.next();
-         if(tile.tileRect.contains(coords)) {
-            firePropertyChangeEvent("tiles", tile, null);
-            it.remove();
-         }
-      }
-   }
-
    public LinkedList<Entity> getEntities() {
       return entities;
    }
 
-   public void addEntities(Entity entity) {
+   public Entity addEntity(Entity entity) {
       firePropertyChangeEvent("entities", null, entity);
+      entity.addPropertyChangeListener(entityListener);
       entities.add(entity);
+      return entity;
    }
    
    public void clearEntities() {
@@ -108,13 +80,14 @@ public class LevelModel extends AbstractModel {
    public void removeEntity(Entity entity) {
       firePropertyChangeEvent("entities", entity, null);
       entities.remove(entity);
+      entity.removePropertyChangeListener(entityListener);
    }
    
    public void removeEntity(Point coords) {
       Iterator<Entity> it = entities.iterator();
       while(it.hasNext()) {
          Entity entity = it.next();
-         if(entity.entityRect.contains(coords)) {
+         if(entity.getRect().contains(coords)) {
             firePropertyChangeEvent("entities", entity, null);
             it.remove();
          }
