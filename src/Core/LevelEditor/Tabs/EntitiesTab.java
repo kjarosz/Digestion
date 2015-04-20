@@ -21,7 +21,7 @@ import Entity.Systems.DrawingSystem;
 import Graphics.ScrollablePicture;
 import Level.EntityContainer;
 
-public class TilesTab extends JPanel {
+public class EntitiesTab extends JPanel {
    private String mEntityNames[];
    private EntityComponents mEntityComponents[];
    
@@ -29,7 +29,7 @@ public class TilesTab extends JPanel {
    private ScrollablePicture mPicture;
    private JComboBox<String> mObjectSelector;
 
-	public TilesTab(EditorSettings editorSettings) {
+	public EntitiesTab(EditorSettings editorSettings) {
       loadEntities();      
       createWidgets(editorSettings);
 	}

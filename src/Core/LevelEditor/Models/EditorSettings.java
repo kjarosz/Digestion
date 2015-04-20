@@ -3,7 +3,6 @@ package Core.LevelEditor.Models;
 
 public class EditorSettings extends AbstractModel {
    public static enum EditorMode {
-      TILING,
       OBJECTS
    }
    
@@ -13,7 +12,7 @@ public class EditorSettings extends AbstractModel {
    private String     selectedEntity;
    
    public EditorSettings() {
-      editorMode = EditorMode.TILING;
+      editorMode = EditorMode.OBJECTS;
    }
    
    public EditorMode getEditorMode() {

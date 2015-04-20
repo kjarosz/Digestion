@@ -6,18 +6,14 @@ import javax.swing.event.ChangeListener;
 
 import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.EditorSettings.EditorMode;
-import Core.LevelEditor.Tabs.EntityTab;
-import Core.LevelEditor.Tabs.TilesTab;
+import Core.LevelEditor.Tabs.EntitiesTab;
 
 public class SettingsPanel extends JTabbedPane {   
 	public SettingsPanel(EditorSettings editorSettings) {
-      TilesTab objectsTab = new TilesTab(editorSettings);
-      add(objectsTab, "Tiles");
+      EntitiesTab objectsTab = new EntitiesTab(editorSettings);
+      add(objectsTab, "Entities");
       
-      EntityTab entityTab = new EntityTab(editorSettings);
-      add(entityTab, "Entities");
-      
-      editorSettings.setEditorMode(EditorMode.TILING);
+      editorSettings.setEditorMode(EditorMode.OBJECTS);
       addChangeListener(createTabListener(editorSettings));
 	}
 	
@@ -28,13 +24,10 @@ public class SettingsPanel extends JTabbedPane {
 	      public void stateChanged(ChangeEvent e) {
 	         switch(me.getSelectedIndex())
 	         {
-	         case 0: // Tiles
-	            settings.setEditorMode(EditorMode.TILING);
-	            break;
-	         case 1: // Entities
+	         case 0: // Entities
 	            settings.setEditorMode(EditorMode.OBJECTS);
 	            break;
-	         case 2: // Pathfinding
+	         case 1: // Pathfinding
 	            
 	            break;
             default:

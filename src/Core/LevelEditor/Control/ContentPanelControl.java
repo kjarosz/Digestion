@@ -63,7 +63,7 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
    }
    
    private LevelModelCommand getCommand(int mouseButton) {
-      if(mEditorSettings.getEditorMode() == EditorMode.TILING) {
+      if(mEditorSettings.getEditorMode() == EditorMode.OBJECTS) {
          switch(mouseButton) 
          {
             case MouseEvent.BUTTON1: return mAddTileAction;
