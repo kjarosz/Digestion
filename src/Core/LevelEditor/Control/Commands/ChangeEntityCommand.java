@@ -18,6 +18,7 @@ public class ChangeEntityCommand extends LevelModelCommand {
    public ChangeEntityCommand(LevelModel level,
          EditorSettings editor, DrawerSettings drawer) {
       super(level, editor, drawer);
+      mStartPosition = new Point();
    }
    
    @Override
