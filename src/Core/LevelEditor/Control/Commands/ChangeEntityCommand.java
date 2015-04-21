@@ -31,16 +31,33 @@ public class ChangeEntityCommand extends LevelModelCommand {
    }
    
    private Rectangle getBounds(Point p1, Point p2) {
-      int xLeft = (p1.x < p2.x) ? p1.x : p2.x;
-      int xRight = (p1.x >= p2.x) ? p1.x : p2.x;
-      int yTop = (p1.y < p2.y) ? p1.y : p2.y;
-      int yBottom = (p1.y >= p2.y) ? p1.y : p2.y;
+      Point topLeft = getTopLeft(p1, p2);
+      Point bottomRight = getBottomRight(p1, p2);
+      return formBounds(topLeft, bottomRight);
+   }
+   
+   private Point getTopLeft(Point p1, Point p2) {
+      Point topLeft = new Point();
+      topLeft.x = (p1.x < p2.x) ? p1.x : p2.x;
+      topLeft.y = (p1.y < p2.y) ? p1.y : p2.y;
+      return topLeft;
+   }
+   
+   private Point getBottomRight(Point p1, Point p2) {
+      Point bottomRight = new Point();
+      bottomRight.x = (p1.x >= p2.x) ? p1.x : p2.x;
+      bottomRight.y = (p1.y >= p2.y) ? p1.y : p2.y;
+      return bottomRight;
+   }
+   
+   private Rectangle formBounds(Point topLeft, Point bottomRight) {
       Size gridSize = mDrawer.getGridSize();
-      
-      return new Rectangle(
-            xLeft, yTop,
-            xRight - xLeft + gridSize.width,
-            yBottom - yTop + gridSize.height);
+      Rectangle bounds = new Rectangle();
+      bounds.x = topLeft.x;
+      bounds.y = topLeft.y;
+      bounds.width = bottomRight.x - topLeft.x + gridSize.width;
+      bounds.height = bottomRight.y - topLeft.y + gridSize.height;
+      return bounds;
    }
    
    protected void setActiveEntity(Entity entity) {
