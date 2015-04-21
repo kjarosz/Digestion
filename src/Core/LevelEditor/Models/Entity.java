@@ -42,7 +42,6 @@ public class Entity extends AbstractModel {
          entityRect.y = rect.y;
          entityRect.width = rect.width;
          entityRect.height = rect.height;
-         
       }
    }
 }
