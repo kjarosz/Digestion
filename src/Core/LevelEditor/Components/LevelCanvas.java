@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -13,8 +14,8 @@ import javax.swing.JComponent;
 import Core.LevelEditor.Control.ContentPanelControl;
 import Core.LevelEditor.Models.DrawerSettings;
 import Core.LevelEditor.Models.EditorSettings;
+import Core.LevelEditor.Models.Entity;
 import Core.LevelEditor.Models.LevelModel;
-import Core.LevelEditor.Models.Tile;
 import Util.Size;
 
 public class LevelCanvas extends JComponent {
@@ -125,13 +126,42 @@ public class LevelCanvas extends JComponent {
    }
    
    private void drawItems(Graphics2D g2, Dimension size) {
-      for(Tile tile: mLevelModel.getTiles()) {
-         g2.drawImage(
-               tile.image, 
-               tile.tileRect.x, tile.tileRect.y, 
-               tile.tileRect.width, tile.tileRect.height, 
-               null);
+      for(Entity entity: mLevelModel.getEntities()) {
+         drawItem(g2, size, entity);
       }
+   }
+   
+   private void drawItem(Graphics2D g2, Dimension size, Entity entity) {
+      Rectangle bounds = entity.getRect();
+      BufferedImage image = entity.getImage();
+      int width = image.getWidth();
+      int height = image.getHeight();
+      for(int x = 0; x < bounds.width; x += width) {
+         for(int y = 0; y < bounds.height; y += height) {
+            Rectangle cell = getCellBounds(x, y, width, height, bounds);
+            
+            g2.drawImage(image, 
+                  cell.x, cell.y, // Destination
+                  cell.x + cell.width, cell.y + cell.height,
+                  0, 0, // Source
+                  cell.width, cell.height,
+                  null);
+         }
+      }
+   }
+   
+   private Rectangle getCellBounds(int x, int y, int imgWidth, int imgHeight,
+         Rectangle entityBounds) {
+      Rectangle cellBounds = new Rectangle();
+      cellBounds.x = x + entityBounds.x;
+      cellBounds.y = y + entityBounds.y;
+      cellBounds.width = getMaxDim(entityBounds.width, x, imgWidth);
+      cellBounds.height = getMaxDim(entityBounds.height, y, imgHeight);
+      return cellBounds;
+   }
+   
+   private int getMaxDim(int bound, int offset, int dimension) {
+      return (bound - offset > dimension) ? dimension : bound - offset;
    }
    
    private void drawPlatforms(Graphics2D g2, Dimension size) {

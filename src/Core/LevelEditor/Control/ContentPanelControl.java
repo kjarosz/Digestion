@@ -4,7 +4,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import Core.LevelEditor.Control.Commands.AddTile;
+import Core.LevelEditor.Control.Commands.AddEntity;
+import Core.LevelEditor.Control.Commands.ChangeEntityCommand;
 import Core.LevelEditor.Control.Commands.LevelModelCommand;
 import Core.LevelEditor.Control.Commands.RemoveTile;
 import Core.LevelEditor.Models.DrawerSettings;
@@ -17,8 +18,9 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
    private LevelModel mLevelModel;
    private DrawerSettings mDrawerSettings;
    
-   private LevelModelCommand mAddTileAction;
-   private LevelModelCommand mRemoveTileAction;
+   private LevelModelCommand mAddEntityAction;
+   private LevelModelCommand mChangeEntityAction;
+   private LevelModelCommand mRemoveEntityAction;
    
    private LevelModelCommand mCurrentCommand;
    
@@ -32,11 +34,16 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
    }
    
    private void makeCommands() {
-      mAddTileAction = new AddTile(
+      mChangeEntityAction = new ChangeEntityCommand(
             mLevelModel, mEditorSettings, mDrawerSettings
       );
       
-      mRemoveTileAction = new RemoveTile(
+      mAddEntityAction = new AddEntity(
+            (ChangeEntityCommand)mChangeEntityAction,
+            mLevelModel, mEditorSettings, mDrawerSettings
+      );
+      
+      mRemoveEntityAction = new RemoveTile(
             mLevelModel, mEditorSettings, mDrawerSettings
       );
    }
@@ -66,8 +73,8 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
       if(mEditorSettings.getEditorMode() == EditorMode.OBJECTS) {
          switch(mouseButton) 
          {
-            case MouseEvent.BUTTON1: return mAddTileAction;
-            case MouseEvent.BUTTON3: return mRemoveTileAction;
+            case MouseEvent.BUTTON1: return mAddEntityAction;
+            case MouseEvent.BUTTON3: return mRemoveEntityAction;
          }
       }
       return null;

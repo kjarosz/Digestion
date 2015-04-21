@@ -14,6 +14,11 @@ public class Entity extends AbstractModel {
       this.entityRect = new Rectangle(bounds);
    }
    
+   @Override
+   public Entity clone() {
+      return new Entity(name, image, entityRect);
+   }
+   
    /* Immutable */
    public String getName() {
       return name;

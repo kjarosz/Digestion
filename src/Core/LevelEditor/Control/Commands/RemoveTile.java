@@ -14,7 +14,7 @@ public class RemoveTile extends LevelModelCommand {
    
    @Override
    public void perform(MouseEvent event) {
-      mLevel.removeTile(event.getPoint());
+      mLevel.removeEntity(event.getPoint());
    }
 
 }
