@@ -7,7 +7,7 @@ import java.awt.event.MouseMotionListener;
 import Core.LevelEditor.Control.Commands.AddEntity;
 import Core.LevelEditor.Control.Commands.ChangeEntityCommand;
 import Core.LevelEditor.Control.Commands.LevelModelCommand;
-import Core.LevelEditor.Control.Commands.RemoveTile;
+import Core.LevelEditor.Control.Commands.RemoveEntity;
 import Core.LevelEditor.Models.DrawerSettings;
 import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.EditorSettings.EditorMode;
@@ -43,7 +43,7 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
             mLevelModel, mEditorSettings, mDrawerSettings
       );
       
-      mRemoveEntityAction = new RemoveTile(
+      mRemoveEntityAction = new RemoveEntity(
             mLevelModel, mEditorSettings, mDrawerSettings
       );
    }
