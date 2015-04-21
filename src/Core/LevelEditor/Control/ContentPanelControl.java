@@ -7,6 +7,7 @@ import java.awt.event.MouseMotionListener;
 import Core.LevelEditor.Control.Commands.AddEntity;
 import Core.LevelEditor.Control.Commands.ChangeEntityCommand;
 import Core.LevelEditor.Control.Commands.LevelModelCommand;
+import Core.LevelEditor.Control.Commands.NullCommand;
 import Core.LevelEditor.Control.Commands.RemoveEntity;
 import Core.LevelEditor.Models.DrawerSettings;
 import Core.LevelEditor.Models.EditorSettings;
@@ -21,8 +22,7 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
    private LevelModelCommand mAddEntityAction;
    private LevelModelCommand mChangeEntityAction;
    private LevelModelCommand mRemoveEntityAction;
-   
-   private LevelModelCommand mCurrentCommand;
+   private LevelModelCommand mNullCommand;
    
    public ContentPanelControl(EditorSettings editorSettings, 
          LevelModel levelModel, DrawerSettings drawerSettings) {
@@ -46,30 +46,17 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
       mRemoveEntityAction = new RemoveEntity(
             mLevelModel, mEditorSettings, mDrawerSettings
       );
+      
+      mNullCommand = new NullCommand();
    }
 
    @Override
    public void mousePressed(MouseEvent event) {
-      LevelModelCommand cmd = getCommand(event.getButton());
-      
-      if(cmd != null) {
-         mCurrentCommand = cmd;
-      }
-      
-      if(mCurrentCommand != null) {
-         mCurrentCommand.perform(event);
-      }
+      LevelModelCommand command = getPressCommand(event.getButton());
+      command.perform(event);
    }
    
-   @Override 
-   public void mouseReleased(MouseEvent event) {
-      LevelModelCommand cmd = getCommand(event.getButton());
-      if(cmd == mCurrentCommand) {
-         mCurrentCommand = null;
-      }
-   }
-   
-   private LevelModelCommand getCommand(int mouseButton) {
+   private LevelModelCommand getPressCommand(int mouseButton) {
       if(mEditorSettings.getEditorMode() == EditorMode.OBJECTS) {
          switch(mouseButton) 
          {
@@ -77,17 +64,30 @@ public class ContentPanelControl implements MouseListener, MouseMotionListener {
             case MouseEvent.BUTTON3: return mRemoveEntityAction;
          }
       }
-      return null;
+      return mNullCommand;
    }
 
    @Override
    public void mouseDragged(MouseEvent event) {
-      mousePressed(event);
+      LevelModelCommand command = getDragCommand(event.getButton());
+      command.perform(event);
+   }
+   
+   private LevelModelCommand getDragCommand(int mouseButton) {
+      if(mEditorSettings.getEditorMode() == EditorMode.OBJECTS) {
+         switch(mouseButton)
+         {
+            case MouseEvent.BUTTON1: return mChangeEntityAction;
+            case MouseEvent.BUTTON3: return mRemoveEntityAction;
+         }
+      }
+      return mNullCommand;
    }
 
    /* ********************************************************************** */
    /*                              UNUSED                                    */
    /* ********************************************************************** */
+   @Override public void mouseReleased(MouseEvent event) {}
    @Override public void mouseClicked(MouseEvent arg0) {}
    @Override public void mouseEntered(MouseEvent arg0) {}
    @Override public void mouseExited(MouseEvent arg0) {}
