@@ -98,7 +98,7 @@ public class EntitiesTab extends JPanel {
       objectSelectPanel.add(mObjectSelector);
 		add(objectSelectPanel);
 		
-		editorSettings.setSelectedTile(
+		editorSettings.setSelectedEntity(
 		      mEntityNames[0]
 		);
    }
@@ -131,7 +131,7 @@ public class EntitiesTab extends JPanel {
          public void actionPerformed(ActionEvent e) {
             int id = mObjectSelector.getSelectedIndex();
             String entityName = mEntityNames[id];
-            editorSettings.setSelectedTile(entityName);
+            editorSettings.setSelectedEntity(entityName);
             displaySelectedEntity();
          }
       };

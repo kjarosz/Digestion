@@ -8,7 +8,6 @@ public class EditorSettings extends AbstractModel {
    
    private EditorMode editorMode;
    
-   private String     selectedTile;
    private String     selectedEntity;
    
    public EditorSettings() {
@@ -23,17 +22,6 @@ public class EditorSettings extends AbstractModel {
       if(mode != editorMode) {
          firePropertyChangeEvent("editor_mode", editorMode, mode);
          editorMode = mode;
-      }
-   }
-   
-   public String getSelectedTile() {
-      return selectedTile;
-   }
-   
-   public void setSelectedTile(String tile) {
-      if(!tile.equals(selectedTile)) {
-         firePropertyChangeEvent("selected_tile", selectedTile, tile);
-         selectedTile = tile;
       }
    }
    
