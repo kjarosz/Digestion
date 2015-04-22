@@ -21,7 +21,7 @@ import Entity.Systems.DrawingSystem;
 import Graphics.ScrollablePicture;
 import Level.EntityContainer;
 
-public class EntitiesTab extends JPanel {
+public class ObjectsTab extends JPanel {
    private String mEntityNames[];
    private EntityComponents mEntityComponents[];
    
@@ -29,7 +29,7 @@ public class EntitiesTab extends JPanel {
    private ScrollablePicture mPicture;
    private JComboBox<String> mObjectSelector;
 
-	public EntitiesTab(EditorSettings editorSettings) {
+	public ObjectsTab(EditorSettings editorSettings) {
       loadEntities();      
       createWidgets(editorSettings);
 	}

@@ -3,6 +3,7 @@ package Core.LevelEditor.Models;
 
 public class EditorSettings extends AbstractModel {
    public static enum EditorMode {
+      ENTITY_EDITOR,
       OBJECTS
    }
    
