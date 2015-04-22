@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 
 import Core.LevelEditor.Components.EditorToolbar;
 import Core.LevelEditor.Models.EditorSettings;
+import Core.LevelEditor.Models.EntityModel;
 import Core.LevelEditor.Models.LevelModel;
 import Menu.MenuScreen;
 import Menu.MenuStack;
@@ -14,12 +15,14 @@ public class LevelEditor extends MenuScreen {
    private ContentPanel mContentPanel;
    
    private EditorSettings mSettings;
+   private EntityModel mEntityModel;
    private LevelModel mLevelModel;
    
    public LevelEditor(MenuStack stack) {
       mStack = stack;
       
       mSettings = new EditorSettings();
+      mEntityModel = new EntityModel();
       mLevelModel = new LevelModel();
       
       createWidgets();
@@ -41,7 +44,7 @@ public class LevelEditor extends MenuScreen {
    }
    
    private void createSettingsPanel() {
-      SettingsPanel settingsPanel = new SettingsPanel(mSettings);
+      SettingsPanel settingsPanel = new SettingsPanel(mEntityModel, mSettings);
       add(settingsPanel, BorderLayout.WEST);
    }
    
