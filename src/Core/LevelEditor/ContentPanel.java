@@ -11,11 +11,11 @@ import javax.swing.JScrollPane;
 import Core.LevelEditor.Components.DrawerToolbar;
 import Core.LevelEditor.Components.EntityComposer;
 import Core.LevelEditor.Components.LevelCanvas;
-import Core.LevelEditor.Models.DrawerSettings;
-import Core.LevelEditor.Models.EditorSettings;
-import Core.LevelEditor.Models.EditorSettings.EditorMode;
 import Core.LevelEditor.Models.EntityModelList;
 import Core.LevelEditor.Models.LevelModel;
+import Core.LevelEditor.Settings.DrawerSettings;
+import Core.LevelEditor.Settings.EditorSettings;
+import Core.LevelEditor.Settings.EditorSettings.EditorMode;
 
 public final class ContentPanel extends JPanel {
    private final static String ENTITY_EDITOR_CARD = "ENTITY EDITOR";

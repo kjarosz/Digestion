@@ -14,9 +14,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.EntityModel;
 import Core.LevelEditor.Models.EntityModelList;
+import Core.LevelEditor.Settings.EditorSettings;
 
 public class EntityTab extends JPanel {
    private EditorSettings mEditorSettings;

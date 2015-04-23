@@ -14,8 +14,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JToolBar;
 
-import Core.LevelEditor.Models.DrawerSettings;
 import Core.LevelEditor.Models.LevelModel;
+import Core.LevelEditor.Settings.DrawerSettings;
 import Util.Size;
 
 public class DrawerToolbar extends JToolBar {

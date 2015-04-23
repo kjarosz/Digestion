@@ -1,4 +1,7 @@
-package Core.LevelEditor.Models;
+package Core.LevelEditor.Settings;
+
+import Core.LevelEditor.Models.AbstractModel;
+import Core.LevelEditor.Models.EntityModel;
 
 
 public class EditorSettings extends AbstractModel {

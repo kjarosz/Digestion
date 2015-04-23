@@ -12,10 +12,10 @@ import java.beans.PropertyChangeListener;
 import javax.swing.JComponent;
 
 import Core.LevelEditor.Control.ContentPanelControl;
-import Core.LevelEditor.Models.DrawerSettings;
-import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.Entity;
 import Core.LevelEditor.Models.LevelModel;
+import Core.LevelEditor.Settings.DrawerSettings;
+import Core.LevelEditor.Settings.EditorSettings;
 import Util.Size;
 
 public class LevelCanvas extends JComponent {

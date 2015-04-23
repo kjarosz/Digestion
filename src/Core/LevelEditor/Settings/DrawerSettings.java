@@ -1,5 +1,6 @@
-package Core.LevelEditor.Models;
+package Core.LevelEditor.Settings;
 
+import Core.LevelEditor.Models.AbstractModel;
 import Util.Size;
 
 public class DrawerSettings extends AbstractModel {

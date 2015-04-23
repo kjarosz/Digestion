@@ -4,9 +4,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import Core.LevelEditor.Models.EditorSettings;
-import Core.LevelEditor.Models.EditorSettings.EditorMode;
 import Core.LevelEditor.Models.EntityModelList;
+import Core.LevelEditor.Settings.EditorSettings;
+import Core.LevelEditor.Settings.EditorSettings.EditorMode;
 import Core.LevelEditor.Tabs.EntityTab;
 import Core.LevelEditor.Tabs.ObjectsTab;
 

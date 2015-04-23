@@ -10,10 +10,10 @@ import javax.swing.JOptionPane;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
-import Core.LevelEditor.Models.DrawerSettings;
-import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.Entity;
 import Core.LevelEditor.Models.LevelModel;
+import Core.LevelEditor.Settings.DrawerSettings;
+import Core.LevelEditor.Settings.EditorSettings;
 import Entity.EntityComponents;
 import Entity.EntityFactory;
 import Level.EntityContainer;

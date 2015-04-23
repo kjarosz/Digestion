@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import Core.LevelEditor.Models.EditorSettings;
+import Core.LevelEditor.Settings.EditorSettings;
 
 public class ComponentList extends JPanel {
    private EditorSettings mEditorSettings;

@@ -2,8 +2,8 @@ package Core.LevelEditor.Components;
 
 import javax.swing.JSplitPane;
 
-import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.EntityModelList;
+import Core.LevelEditor.Settings.EditorSettings;
 
 public class EntityComposer extends JSplitPane {
    private EditorSettings mEditorSettings;
@@ -22,10 +22,15 @@ public class EntityComposer extends JSplitPane {
    
    private void createWidgets() {
       createComponentListPanel();
+      createComponentComposer();
    }
    
    private void createComponentListPanel() {
       ComponentList compList = new ComponentList(mEditorSettings);
       add(compList);
+   }
+   
+   private void createComponentComposer() {
+      
    }
 }
