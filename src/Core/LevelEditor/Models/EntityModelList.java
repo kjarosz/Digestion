@@ -26,13 +26,23 @@ public class EntityModelList implements ListModel<EntityModel> {
    }
    
    public void addEntityModel(EntityModel model) {
-      if(!mEntityCompositions.contains(model)) {
+      if(!mEntityCompositions.contains(model) 
+            && nameNotInUse(model.getName())) {
          mEntityCompositions.add(model);
          int index = mEntityCompositions.indexOf(model);
          fireIntervalAddedEvent(index);
       } else {
          throw new RuntimeException("Entity with this name already exists.");
       }
+   }
+   
+   private boolean nameNotInUse(String name) {
+      for(EntityModel model: mEntityCompositions) {
+         if(model.getName().equals(name)) {
+            return false;
+         }
+      }
+      return true;
    }
    
    public void removeEntityModel(EntityModel model) {
@@ -43,6 +53,10 @@ public class EntityModelList implements ListModel<EntityModel> {
       } else {
          throw new RuntimeException("This entity is not in the list.");
       }
+   }
+   
+   public void removeEntityModel(int index) {
+      mEntityCompositions.remove(index);
    }
    
    @Override
