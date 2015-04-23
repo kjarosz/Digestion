@@ -6,12 +6,12 @@ import javax.swing.event.ChangeListener;
 
 import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.EditorSettings.EditorMode;
-import Core.LevelEditor.Models.EntityModel;
+import Core.LevelEditor.Models.EntityModelList;
 import Core.LevelEditor.Tabs.EntityTab;
 import Core.LevelEditor.Tabs.ObjectsTab;
 
 public class SettingsPanel extends JTabbedPane {   
-	public SettingsPanel(EntityModel entityModel, EditorSettings editorSettings) {
+	public SettingsPanel(EntityModelList entityModel, EditorSettings editorSettings) {
 	   EntityTab entityTab = new EntityTab(entityModel);
 	   add(entityTab, "Entities");
 	   

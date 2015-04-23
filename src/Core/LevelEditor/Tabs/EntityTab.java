@@ -2,12 +2,12 @@ package Core.LevelEditor.Tabs;
 
 import javax.swing.JPanel;
 
-import Core.LevelEditor.Models.EntityModel;
+import Core.LevelEditor.Models.EntityModelList;
 
 public class EntityTab extends JPanel {
-   private EntityModel mEntityModel;
+   private EntityModelList mEntityModel;
    
-   public EntityTab(EntityModel entityModel) {
+   public EntityTab(EntityModelList entityModel) {
       mEntityModel = entityModel;
    }
    
