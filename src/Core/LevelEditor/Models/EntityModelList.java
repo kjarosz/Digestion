@@ -30,6 +30,8 @@ public class EntityModelList implements ListModel<EntityModel> {
          mEntityCompositions.add(model);
          int index = mEntityCompositions.indexOf(model);
          fireIntervalAddedEvent(index);
+      } else {
+         throw new RuntimeException("Entity with this name already exists.");
       }
    }
    
@@ -38,6 +40,8 @@ public class EntityModelList implements ListModel<EntityModel> {
          int index = mEntityCompositions.indexOf(model);
          mEntityCompositions.remove(model);
          fireIntervalRemovedEvent(index);
+      } else {
+         throw new RuntimeException("This entity is not in the list.");
       }
    }
    

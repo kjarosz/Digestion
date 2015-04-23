@@ -62,4 +62,9 @@ public class EntityModel extends AbstractModel implements PropertyChangeListener
    public void propertyChange(PropertyChangeEvent e) {
       firePropertyChangeEvent("components changed", e.getOldValue(), e.getNewValue());
    }
+   
+   @Override
+   public String toString() {
+      return mName;
+   }
 }
