@@ -2,6 +2,8 @@ package Core.LevelEditor;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JSplitPane;
+
 import Core.LevelEditor.Components.EditorToolbar;
 import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.EntityModelList;
@@ -15,14 +17,14 @@ public class LevelEditor extends MenuScreen {
    private ContentPanel mContentPanel;
    
    private EditorSettings mSettings;
-   private EntityModelList mEntityModel;
+   private EntityModelList mEntityModelList;
    private LevelModel mLevelModel;
    
    public LevelEditor(MenuStack stack) {
       mStack = stack;
       
       mSettings = new EditorSettings();
-      mEntityModel = new EntityModelList();
+      mEntityModelList = new EntityModelList();
       mLevelModel = new LevelModel();
       
       createWidgets();
@@ -34,8 +36,7 @@ public class LevelEditor extends MenuScreen {
    private void createWidgets() {
       setLayout(new BorderLayout());
       createToolBar();
-      createSettingsPanel();
-      createContentPanel();
+      createEditorPanel();
    }
    
    private void createToolBar() {
@@ -43,13 +44,20 @@ public class LevelEditor extends MenuScreen {
       add(toolbar, BorderLayout.NORTH);
    }
    
-   private void createSettingsPanel() {
-      SettingsPanel settingsPanel = new SettingsPanel(mEntityModel, mSettings);
-      add(settingsPanel, BorderLayout.WEST);
+   private void createEditorPanel() {
+      JSplitPane editorPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+      createSettingsPanel(editorPanel);
+      createContentPanel(editorPanel);
+      add(editorPanel, BorderLayout.CENTER);
    }
    
-   private void createContentPanel() {
-      mContentPanel = new ContentPanel(mSettings, mLevelModel);
-      add(mContentPanel, BorderLayout.CENTER);
+   private void createSettingsPanel(JSplitPane parent) {
+      SettingsPanel settingsPanel = new SettingsPanel(mEntityModelList, mSettings);
+      parent.add(settingsPanel);
+   }
+   
+   private void createContentPanel(JSplitPane parent) {
+      mContentPanel = new ContentPanel(mSettings, mEntityModelList, mLevelModel);
+      parent.add(mContentPanel);
    }
 }
