@@ -7,9 +7,10 @@ public class EditorSettings extends AbstractModel {
       OBJECTS
    }
    
-   private EditorMode editorMode;
+   private EditorMode  editorMode;
    
-   private String     selectedEntity;
+   private String      selectedEntity;
+   private EntityModel selectedEntityModel;
    
    public EditorSettings() {
       editorMode = EditorMode.ENTITY_EDITOR;
@@ -34,6 +35,17 @@ public class EditorSettings extends AbstractModel {
       if(!entity.equals(selectedEntity)) {
          firePropertyChangeEvent("selected_entity", selectedEntity, entity);
          selectedEntity = entity;
+      }
+   }
+   
+   public EntityModel getSelectedEntityModel() {
+      return selectedEntityModel;
+   }
+   
+   public void setSelectedEntityModel(EntityModel model) {
+      if(!selectedEntityModel.equals(model)) {
+         firePropertyChangeEvent("selected_entity_model", selectedEntityModel, model);
+         selectedEntityModel = model;
       }
    }
 }

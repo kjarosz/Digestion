@@ -11,14 +11,21 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.EntityModel;
 import Core.LevelEditor.Models.EntityModelList;
 
 public class EntityTab extends JPanel {
+   private EditorSettings mEditorSettings;
    private EntityModelList mEntityModelList;
    
-   public EntityTab(EntityModelList modelList) {
+   private JList<EntityModel> mModelList;
+   
+   public EntityTab(EditorSettings editorSettings, EntityModelList modelList) {
+      mEditorSettings = editorSettings;
       mEntityModelList = modelList;
       createWidgets();
    }
@@ -30,9 +37,10 @@ public class EntityTab extends JPanel {
    }
    
    private JScrollPane createList() {
-      JList<EntityModel> list = new JList<>(mEntityModelList);
-      list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      JScrollPane scroller = new JScrollPane(list);
+      mModelList = new JList<>(mEntityModelList);
+      mModelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      mModelList.addListSelectionListener(createSelectorListener());
+      JScrollPane scroller = new JScrollPane(mModelList);
       return scroller;
    }
    
@@ -61,6 +69,20 @@ public class EntityTab extends JPanel {
    /* ********************************************************************** */
    /*                                COMMANDS                                */
    /* ********************************************************************** */
+   private ListSelectionListener createSelectorListener() {
+      return new ListSelectionListener() {
+         @Override
+         public void valueChanged(ListSelectionEvent e) {
+            selectEntityModel();
+         }
+      };
+   }
+   
+   private void selectEntityModel() {
+      EntityModel selectedModel = mModelList.getSelectedValue();
+      mEditorSettings.setSelectedEntityModel(selectedModel);
+   }
+   
    private ActionListener createAddCommand() {
       return new ActionListener() {
          @Override
@@ -79,7 +101,6 @@ public class EntityTab extends JPanel {
          }
          added = addEntity(name);
       }
-      
    }
    
    private String askForName() {
