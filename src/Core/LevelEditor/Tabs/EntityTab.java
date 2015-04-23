@@ -16,6 +16,7 @@ import Core.LevelEditor.Models.EntityModel;
 import Core.LevelEditor.Models.EntityModelList;
 
 public class EntityTab extends JPanel {
+   private JList<EntityModel> mListing;
    private EntityModelList mEntityModelList;
    
    public EntityTab(EntityModelList modelList) {
@@ -30,9 +31,9 @@ public class EntityTab extends JPanel {
    }
    
    private JScrollPane createList() {
-      JList<EntityModel> list = new JList<>(mEntityModelList);
-      list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      JScrollPane scroller = new JScrollPane(list);
+      mListing = new JList<>(mEntityModelList);
+      mListing.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+      JScrollPane scroller = new JScrollPane(mListing);
       return scroller;
    }
    
@@ -117,12 +118,21 @@ public class EntityTab extends JPanel {
    }
    
    private ActionListener createRemoveCommand() {
+      JPanel me = this;
       return new ActionListener() {
          @Override
          public void actionPerformed(ActionEvent e) {
-            
+            int index = mListing.getSelectedIndex();
+            removeSelectedEntity(index);
+            me.repaint();
          }
       };
+   }
+   
+   private void removeSelectedEntity(int index) {
+       if(index >= 0) {
+          mEntityModelList.removeEntityModel(index);
+       }
    }
    
    private ActionListener createSaveCommand() {
