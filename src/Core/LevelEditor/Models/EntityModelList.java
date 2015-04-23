@@ -3,26 +3,44 @@ package Core.LevelEditor.Models;
 import java.util.LinkedList;
 
 import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 public class EntityModelList implements ListModel<EntityModel> {
 
-   private LinkedList<ListDataListener> mDataListener;
+   private LinkedList<ListDataListener> mDataListeners;
    
    private LinkedList<EntityModel> mEntityCompositions;
    
    public EntityModelList() {
-      mDataListener = new LinkedList<>();
+      mDataListeners = new LinkedList<>();
       mEntityCompositions = new LinkedList<>();
    }
    
    @Override
    public void addListDataListener(ListDataListener listener) {
-      if(!mDataListener.contains(listener)) {
-         mDataListener.add(listener);
+      if(!mDataListeners.contains(listener)) {
+         mDataListeners.add(listener);
       }
    }
-
+   
+   public void addEntityModel(EntityModel model) {
+      if(!mEntityCompositions.contains(model)) {
+         mEntityCompositions.add(model);
+         int index = mEntityCompositions.indexOf(model);
+         fireIntervalAddedEvent(index);
+      }
+   }
+   
+   public void removeEntityModel(EntityModel model) {
+      if(mEntityCompositions.contains(model)) {
+         int index = mEntityCompositions.indexOf(model);
+         mEntityCompositions.remove(model);
+         fireIntervalRemovedEvent(index);
+      }
+   }
+   
    @Override
    public EntityModel getElementAt(int index) {
       return mEntityCompositions.get(index);
@@ -30,15 +48,39 @@ public class EntityModelList implements ListModel<EntityModel> {
 
    @Override
    public int getSize() {
-      
-      return 0;
+      return mEntityCompositions.size();
    }
 
    @Override
    public void removeListDataListener(ListDataListener listener) {
-      if(mDataListener.contains(listener)) {
-         mDataListener.remove(listener);
+      if(mDataListeners.contains(listener)) {
+         mDataListeners.remove(listener);
       }
    }
    
+   private void fireIntervalAddedEvent(int index) {
+      ListDataEvent event = new ListDataEvent(this, 
+            ListDataEvent.INTERVAL_ADDED, index, index);
+      for(ListDataListener listener: mDataListeners) {
+         SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+               listener.intervalAdded(event);
+            }
+         });
+      }
+   }
+   
+   private void fireIntervalRemovedEvent(int index) {
+      ListDataEvent event = new ListDataEvent(this,
+            ListDataEvent.INTERVAL_REMOVED, index, index);
+      for(ListDataListener listener: mDataListeners) {
+         SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+               listener.intervalRemoved(event);
+            }
+         });
+      }
+   }
 }
