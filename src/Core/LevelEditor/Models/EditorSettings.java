@@ -12,7 +12,7 @@ public class EditorSettings extends AbstractModel {
    private String     selectedEntity;
    
    public EditorSettings() {
-      editorMode = EditorMode.OBJECTS;
+      editorMode = EditorMode.ENTITY_EDITOR;
    }
    
    public EditorMode getEditorMode() {
