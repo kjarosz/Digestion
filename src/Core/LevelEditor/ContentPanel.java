@@ -48,7 +48,7 @@ public final class ContentPanel extends JPanel {
    }
    
    private void createEntityEditor() {
-      EntityComposer entityComposer = new EntityComposer(mEntityModelList);
+      EntityComposer entityComposer = new EntityComposer(mEditorSettings, mEntityModelList);
       add(entityComposer, ENTITY_EDITOR_CARD);
    }
    
