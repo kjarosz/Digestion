@@ -36,6 +36,6 @@ public class EntityComposer extends JSplitPane {
    
    private void createComponentComposer() {
       ComponentComposer compComposer = new ComponentComposer(mComposerSettings);
-      add(compComposer):
+      add(compComposer);
    }
 }
