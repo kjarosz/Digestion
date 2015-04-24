@@ -2,9 +2,9 @@ package Core.LevelEditor.Control.Commands;
 
 import java.awt.event.MouseEvent;
 
-import Core.LevelEditor.Models.DrawerSettings;
-import Core.LevelEditor.Models.EditorSettings;
 import Core.LevelEditor.Models.LevelModel;
+import Core.LevelEditor.Settings.DrawerSettings;
+import Core.LevelEditor.Settings.EditorSettings;
 
 public class RemoveEntity extends LevelModelCommand {
 

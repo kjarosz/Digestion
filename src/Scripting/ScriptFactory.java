@@ -14,7 +14,7 @@ public class ScriptFactory {
    private HashMap<String, PyObject> mCompiledScripts;
 	
 	public ScriptFactory() {
-      mInterpreter = new PythonInterpreter();
+      mInterpreter = null;
       mCompiledScripts = new HashMap<>();
 	}
    
@@ -34,6 +34,9 @@ public class ScriptFactory {
    
    private void compileScript(File scriptFile, String className, Class<?> classType) {
       try {
+         if(mInterpreter == null) {
+            mInterpreter = new PythonInterpreter();
+         }
    		mInterpreter.execfile(scriptFile.getPath());
          PyObject code = mInterpreter.get(className);
          mCompiledScripts.put(className, code);

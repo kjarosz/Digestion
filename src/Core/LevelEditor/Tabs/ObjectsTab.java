@@ -14,7 +14,7 @@ import javax.swing.JScrollPane;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
 
-import Core.LevelEditor.Models.EditorSettings;
+import Core.LevelEditor.Settings.EditorSettings;
 import Entity.EntityComponents;
 import Entity.EntityFactory;
 import Entity.Systems.DrawingSystem;

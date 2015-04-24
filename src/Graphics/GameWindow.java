@@ -48,7 +48,7 @@ public class GameWindow {
    private void loadSettings() {
 		mFullscreenDevice = null;
 		mFullscreen = false;
-      setSize(800, 600);
+      setSize(1024, 768);
    }
    
    public void setTitle(String title) {

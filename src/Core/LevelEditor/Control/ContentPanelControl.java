@@ -9,10 +9,10 @@ import Core.LevelEditor.Control.Commands.ChangeEntityCommand;
 import Core.LevelEditor.Control.Commands.LevelModelCommand;
 import Core.LevelEditor.Control.Commands.NullCommand;
 import Core.LevelEditor.Control.Commands.RemoveEntity;
-import Core.LevelEditor.Models.DrawerSettings;
-import Core.LevelEditor.Models.EditorSettings;
-import Core.LevelEditor.Models.EditorSettings.EditorMode;
 import Core.LevelEditor.Models.LevelModel;
+import Core.LevelEditor.Settings.DrawerSettings;
+import Core.LevelEditor.Settings.EditorSettings;
+import Core.LevelEditor.Settings.EditorSettings.EditorMode;
 
 public class ContentPanelControl implements MouseListener, MouseMotionListener {
    private EditorSettings mEditorSettings;
