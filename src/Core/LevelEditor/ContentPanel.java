@@ -22,17 +22,14 @@ public final class ContentPanel extends JPanel {
    private final static String LEVEL_EDITOR_CARD = "LEVEL EDITOR";
    
    private EditorSettings  mEditorSettings;
-   private EntityModelList mEntityModelList;
    private LevelModel      mLevelModel;
    private DrawerSettings  mDrawerSettings;
    
 	// CONTENT PANEL
    private LevelCanvas mCanvas;
    
-	public ContentPanel(EditorSettings editorSettings, 
-	      EntityModelList entityModelList, LevelModel levelModel) {
+	public ContentPanel(EditorSettings editorSettings, LevelModel levelModel) {
 	   mEditorSettings = editorSettings;
-	   mEntityModelList = entityModelList;
       mLevelModel = levelModel;
       mDrawerSettings = new DrawerSettings();
       
@@ -48,7 +45,7 @@ public final class ContentPanel extends JPanel {
    }
    
    private void createEntityEditor() {
-      EntityComposer entityComposer = new EntityComposer(mEditorSettings, mEntityModelList);
+      EntityComposer entityComposer = new EntityComposer(mEditorSettings);
       add(entityComposer, ENTITY_EDITOR_CARD);
    }
    

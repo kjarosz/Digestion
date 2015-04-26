@@ -17,14 +17,12 @@ public class LevelEditor extends MenuScreen {
    private ContentPanel mContentPanel;
    
    private EditorSettings mSettings;
-   private EntityModelList mEntityModelList;
    private LevelModel mLevelModel;
    
    public LevelEditor(MenuStack stack) {
       mStack = stack;
       
       mSettings = new EditorSettings();
-      mEntityModelList = new EntityModelList();
       mLevelModel = new LevelModel();
       
       createWidgets();
@@ -52,12 +50,12 @@ public class LevelEditor extends MenuScreen {
    }
    
    private void createSettingsPanel(JSplitPane parent) {
-      SettingsPanel settingsPanel = new SettingsPanel(mEntityModelList, mSettings);
+      SettingsPanel settingsPanel = new SettingsPanel(mSettings);
       parent.add(settingsPanel);
    }
    
    private void createContentPanel(JSplitPane parent) {
-      mContentPanel = new ContentPanel(mSettings, mEntityModelList, mLevelModel);
+      mContentPanel = new ContentPanel(mSettings, mLevelModel);
       parent.add(mContentPanel);
    }
 }

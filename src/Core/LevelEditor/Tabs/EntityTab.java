@@ -24,9 +24,9 @@ public class EntityTab extends JPanel {
    
    private JList<EntityModel> mModelList;
    
-   public EntityTab(EditorSettings editorSettings, EntityModelList modelList) {
+   public EntityTab(EditorSettings editorSettings) {
       mEditorSettings = editorSettings;
-      mEntityModelList = modelList;
+      mEntityModelList = new EntityModelList();
       createWidgets();
    }
    

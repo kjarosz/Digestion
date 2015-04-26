@@ -11,8 +11,8 @@ import Core.LevelEditor.Tabs.EntityTab;
 import Core.LevelEditor.Tabs.ObjectsTab;
 
 public class SettingsPanel extends JTabbedPane {   
-	public SettingsPanel(EntityModelList entityModel, EditorSettings editorSettings) {
-	   EntityTab entityTab = new EntityTab(editorSettings, entityModel);
+	public SettingsPanel(EditorSettings editorSettings) {
+	   EntityTab entityTab = new EntityTab(editorSettings);
 	   add(entityTab, "Entities");
 	   
       ObjectsTab objectsTab = new ObjectsTab(editorSettings);
