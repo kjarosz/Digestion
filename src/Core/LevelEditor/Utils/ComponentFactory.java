@@ -10,10 +10,6 @@ public class ComponentFactory {
       "Position"
    };
    
-   public ComponentFactory() {
-      
-   }
-   
    public String[] getComponentList() {
       return COMPONENT_LIST;
    }
