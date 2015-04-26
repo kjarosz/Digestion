@@ -1,6 +1,8 @@
 package Core.LevelEditor.Components;
 
 import java.awt.BorderLayout;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -8,19 +10,24 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import Core.LevelEditor.Settings.EditorSettings;
+import Core.LevelEditor.Settings.EntityComposerSettings;
 
 public class ComponentList extends JPanel {
    private EditorSettings mEditorSettings;
+   private EntityComposerSettings mEntityComposerSettings;
    
    private JPanel mComponentList;
    
    
-   public ComponentList(EditorSettings editorSettings) {
+   public ComponentList(EditorSettings editorSettings, 
+         EntityComposerSettings entityComposerSettings) {
       mEditorSettings = editorSettings;
+      mEntityComposerSettings = entityComposerSettings;
       
       createWidgets();
       
-      
+      mEditorSettings.addPropertyChangeListener(
+            createEditorListener());
    }
    
    private void createWidgets() {
@@ -52,5 +59,21 @@ public class ComponentList extends JPanel {
    private void createRemoveButton(JPanel parent) {
       JButton removeButton = new JButton("Remove");
       parent.add(removeButton);
+   }
+   
+   private PropertyChangeListener createEditorListener() {
+      return new PropertyChangeListener() {
+         @Override
+         public void propertyChange(PropertyChangeEvent e) {
+            String property = e.getPropertyName();
+            if("selected_entity_model".equals(property)) {
+               displayEntityModel();
+            }
+         }
+      };
+   }
+   
+   private void displayEntityModel() {
+      
    }
 }
