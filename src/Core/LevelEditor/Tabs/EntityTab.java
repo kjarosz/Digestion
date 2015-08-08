@@ -112,7 +112,8 @@ public class EntityTab extends JPanel {
    
    private boolean addEntity(String name) {
       try {
-         tryAddingEntity(name);
+         EntityModel model = tryAddingEntity(name);
+         mEditorSettings.setSelectedEntityModel(model);
          return true;
       } catch(RuntimeException e) {
          JOptionPane.showMessageDialog(this, 
@@ -123,9 +124,10 @@ public class EntityTab extends JPanel {
       }
    }
    
-   private void tryAddingEntity(String name) {
+   private EntityModel tryAddingEntity(String name) {
       EntityModel model = new EntityModel(name);
       mEntityModelList.addEntityModel(model);
+      return model;
    }
    
    private ActionListener createDuplicateCommand() {
