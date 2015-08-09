@@ -26,7 +26,7 @@ public class EntityComposer extends JSplitPane {
    }
    
    private void createComponentListPanel() {
-      ComponentList compList = new ComponentList(mEditorSettings, mComposerSettings);
+      ComponentList compList = new ComponentList(mEditorSettings);
       add(compList);
    }
    
