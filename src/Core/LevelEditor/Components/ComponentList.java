@@ -18,21 +18,17 @@ import javax.swing.JScrollPane;
 import Core.LevelEditor.Models.ComponentModel;
 import Core.LevelEditor.Models.EntityModel;
 import Core.LevelEditor.Settings.EditorSettings;
-import Core.LevelEditor.Settings.EntityComposerSettings;
 import Core.LevelEditor.Utils.ComponentFactory;
 
 public class ComponentList extends JPanel {
    private EditorSettings mEditorSettings;
-   private EntityComposerSettings mEntityComposerSettings;
    
    private JPanel mComponentList;
    
    private ComponentFactory mComponentFactory;
    
-   public ComponentList(EditorSettings editorSettings, 
-         EntityComposerSettings entityComposerSettings) {
+   public ComponentList(EditorSettings editorSettings) {
       mEditorSettings = editorSettings;
-      mEntityComposerSettings = entityComposerSettings;
       
       mComponentFactory = new ComponentFactory();
       
@@ -65,7 +61,7 @@ public class ComponentList extends JPanel {
    
    private void createAddButton(JPanel parent) {
       JButton addButton = new JButton("Add");
-      addButton.addActionListener(createAddAction());
+      addButton.addActionListener((ActionEvent e) -> tryAddingComponent());
       parent.add(addButton);
    }
    
@@ -90,13 +86,14 @@ public class ComponentList extends JPanel {
       
    }
    
-   private ActionListener createAddAction() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            addComponent();
-         }
-      };
+   private void tryAddingComponent() {
+      try {
+         addComponent();
+      } catch(UnselectedEntityException ex) {
+         JOptionPane.showMessageDialog(null,
+               ex.getMessage(), "No entity selected.",
+               JOptionPane.ERROR_MESSAGE);
+      }
    }
    
    private void addComponent() {
@@ -128,6 +125,9 @@ public class ComponentList extends JPanel {
    
    private Object[] filterAvailableComponents() {
       EntityModel entityModel = mEditorSettings.getSelectedEntityModel();
+      if(entityModel == null) {
+         throw new UnselectedEntityException();
+      }
       List<ComponentModel> components = entityModel.getComponents();
       List<String> availableComponents = new LinkedList<>();
       NextComponent:
