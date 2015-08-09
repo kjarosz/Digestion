@@ -5,7 +5,6 @@ import java.awt.BorderLayout;
 import javax.swing.JSplitPane;
 
 import Core.LevelEditor.Components.EditorToolbar;
-import Core.LevelEditor.Models.EntityModelList;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.EditorSettings;
 import Menu.MenuScreen;

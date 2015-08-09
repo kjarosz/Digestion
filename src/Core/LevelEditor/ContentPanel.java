@@ -11,7 +11,6 @@ import javax.swing.JScrollPane;
 import Core.LevelEditor.Components.DrawerToolbar;
 import Core.LevelEditor.Components.EntityComposer;
 import Core.LevelEditor.Components.LevelCanvas;
-import Core.LevelEditor.Models.EntityModelList;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.DrawerSettings;
 import Core.LevelEditor.Settings.EditorSettings;
