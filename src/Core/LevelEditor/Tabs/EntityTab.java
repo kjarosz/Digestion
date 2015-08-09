@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import Core.LevelEditor.Models.EntityModel;
 import Core.LevelEditor.Models.EntityModelList;
@@ -39,7 +38,7 @@ public class EntityTab extends JPanel {
    private JScrollPane createList() {
       mModelList = new JList<>(mEntityModelList);
       mModelList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      mModelList.addListSelectionListener(createSelectorListener());
+      mModelList.addListSelectionListener((ListSelectionEvent e) -> selectEntityModel());
       JScrollPane scroller = new JScrollPane(mModelList);
       return scroller;
    }
@@ -53,11 +52,11 @@ public class EntityTab extends JPanel {
    }
    
    private void createAndAddButtons(JPanel panel) {
-      panel.add(createButton("Add",       createAddCommand()));
-      panel.add(createButton("Duplicate", createDuplicateCommand()));
-      panel.add(createButton("Remove",    createRemoveCommand()));
-      panel.add(createButton("Save",      createSaveCommand()));
-      panel.add(createButton("Load",      createLoadCommand()));
+      panel.add(createButton("Add",       (ActionEvent e) -> addEntityModel()));
+      panel.add(createButton("Duplicate", (ActionEvent e) -> duplicateEntityModel()));
+      panel.add(createButton("Remove",    (ActionEvent e) -> removeEntityModel()));
+      panel.add(createButton("Save",      (ActionEvent e) -> saveEntityModels()));
+      panel.add(createButton("Load",      (ActionEvent e) -> loadEntityModels()));
    }
    
    private JButton createButton(String name, ActionListener command) {
@@ -68,28 +67,10 @@ public class EntityTab extends JPanel {
    
    /* ********************************************************************** */
    /*                                COMMANDS                                */
-   /* ********************************************************************** */
-   private ListSelectionListener createSelectorListener() {
-      return new ListSelectionListener() {
-         @Override
-         public void valueChanged(ListSelectionEvent e) {
-            selectEntityModel();
-         }
-      };
-   }
-   
+   /* ********************************************************************** */   
    private void selectEntityModel() {
       EntityModel selectedModel = mModelList.getSelectedValue();
       mEditorSettings.setSelectedEntityModel(selectedModel);
-   }
-   
-   private ActionListener createAddCommand() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            addEntityModel();
-         }
-      };
    }
    
    private void addEntityModel() {
@@ -128,48 +109,24 @@ public class EntityTab extends JPanel {
       mEntityModelList.addEntityModel(model);
    }
    
-   private ActionListener createDuplicateCommand() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            
-         }
-      };
+   private void duplicateEntityModel() {
    }
    
-   private ActionListener createRemoveCommand() {
-      JPanel me = this;
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            int index = mModelList.getSelectedIndex();
-            removeSelectedEntity(index);
-            me.repaint();
-         }
-      };
+   private void removeEntityModel() {
+      int index = mModelList.getSelectedIndex();
+      if(index >= 0) {
+         mEntityModelList.removeEntityModel(index);
+         mModelList.clearSelection();
+      }
+      repaint();
    }
    
-   private void removeSelectedEntity(int index) {
-       if(index >= 0) {
-          mEntityModelList.removeEntityModel(index);
-       }
+   
+   private void saveEntityModels() {
+      
    }
    
-   private ActionListener createSaveCommand() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            
-         }
-      };
-   }
-   
-   private ActionListener createLoadCommand() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            
-         }
-      };
+   private void loadEntityModels() {
+      
    }
 }

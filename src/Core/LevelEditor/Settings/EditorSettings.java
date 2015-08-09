@@ -46,9 +46,7 @@ public class EditorSettings extends AbstractModel {
    }
    
    public void setSelectedEntityModel(EntityModel model) {
-      if(!model.equals(selectedEntityModel)) {
-         firePropertyChangeEvent("selected_entity_model", selectedEntityModel, model);
-         selectedEntityModel = model;
-      }
+      firePropertyChangeEvent("selected_entity_model", selectedEntityModel, model);
+      selectedEntityModel = model;
    }
 }
