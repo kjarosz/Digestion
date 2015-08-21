@@ -1,8 +1,13 @@
 package Core.Menu;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -14,6 +19,8 @@ import Menu.MenuScreen;
 import Menu.MenuStack;
 
 public class MainMenu extends MenuScreen implements ActionListener {
+   final private String MAIN_MENU_BACKGROUND = "resources/Images/Title.png";
+
    final private String ACTION_SINGLE_PLAYER = "Single Player";
    final private String ACTION_MULTI_PLAYER = "Multi Player";
    final private String ACTION_LEVEL_EDITOR = "Level Editor";
@@ -25,12 +32,27 @@ public class MainMenu extends MenuScreen implements ActionListener {
    
    private SinglePlayerMenu mSinglePlayerMenu;
    private CreditsMenu mCreditsMenu;
-      
+   
+   private BufferedImage mBackground;
+   
    public MainMenu(Game game, MenuStack stack) {
       mStack = stack;
       
+      loadBackground();
       createWidgets();
       createSubmenus(game);
+   }
+   
+   private void loadBackground() {
+      try {
+         File bckgrFile = new File(MAIN_MENU_BACKGROUND);
+         mBackground = ImageIO.read(bckgrFile);
+      } catch(IOException ex) {
+         JOptionPane.showMessageDialog(this, 
+               ex.getMessage(), 
+               "Error Loading Menu Background", 
+               JOptionPane.ERROR_MESSAGE);
+      }
    }
    
    private void createWidgets() {
@@ -83,5 +105,11 @@ public class MainMenu extends MenuScreen implements ActionListener {
    private void loadLevelEditor() {
       LevelEditor editor = new LevelEditor(mStack); 
       mStack.pushScreen(editor);
+   }
+  
+   @Override
+   public void paintComponent(Graphics g) {
+      super.paintComponent(g);
+      g.drawImage(mBackground, 0, 0, getWidth(), getHeight(), null);
    }
 }
