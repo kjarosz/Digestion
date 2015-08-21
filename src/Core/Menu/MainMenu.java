@@ -17,21 +17,19 @@ import Core.Game.Game;
 import Core.LevelEditor.LevelEditor;
 import Menu.MenuScreen;
 import Menu.MenuStack;
+import Menu.Widgets.Button;
 
-public class MainMenu extends MenuScreen implements ActionListener {
+public class MainMenu extends MenuScreen {
    final private String MAIN_MENU_BACKGROUND = "resources/Images/Title.png";
+   final private String SINGLE_PLAYER        = "resources/Images/single_player_button.png";
+   final private String LEVEL_EDITOR         = "resources/Images/level_editor_button.png";
+   final private String EXIT                 = "resources/Images/exit_button.png";
 
-   final private String ACTION_SINGLE_PLAYER = "Single Player";
-   final private String ACTION_MULTI_PLAYER = "Multi Player";
-   final private String ACTION_LEVEL_EDITOR = "Level Editor";
-   final private String ACTION_CREDITS = "Credits";
-   final private String ACTION_EXIT = "Exit";
-   final private Dimension BUTTON_SIZE = new Dimension(110, 25);
+   final private Dimension BUTTON_SIZE = new Dimension(400, 50);
    
    private MenuStack mStack;
    
    private SinglePlayerMenu mSinglePlayerMenu;
-   private CreditsMenu mCreditsMenu;
    
    private BufferedImage mBackground;
    
@@ -39,8 +37,8 @@ public class MainMenu extends MenuScreen implements ActionListener {
       mStack = stack;
       
       loadBackground();
-      createWidgets();
       createSubmenus(game);
+      createWidgets();
    }
    
    private void loadBackground() {
@@ -58,48 +56,26 @@ public class MainMenu extends MenuScreen implements ActionListener {
    private void createWidgets() {
       setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
       add(Box.createVerticalGlue());
-      addButton("Single Player", ACTION_SINGLE_PLAYER);
+      addButton(SINGLE_PLAYER,   e -> mStack.pushScreen(mSinglePlayerMenu));
       add(Box.createVerticalStrut(5));
-      addButton("Multi Player", ACTION_MULTI_PLAYER);
+      addButton(LEVEL_EDITOR,    e -> loadLevelEditor());
       add(Box.createVerticalStrut(5));
-      addButton("Level Editor", ACTION_LEVEL_EDITOR);
-      add(Box.createVerticalStrut(5));
-      addButton("Credits", ACTION_CREDITS);
-      add(Box.createVerticalStrut(5));
-      addButton("Exit", ACTION_EXIT);
+      addButton(EXIT,            e -> System.exit(0));
       add(Box.createVerticalGlue());
    }
    
-   private void addButton(String text, String actionCommand) {
-      JButton button = new JButton(text);
+   private void addButton(String text, ActionListener listener) {
+      Button button = new Button(text);
       button.setMinimumSize(BUTTON_SIZE);
+      button.setPreferredSize(BUTTON_SIZE);
       button.setMaximumSize(BUTTON_SIZE);
       button.setAlignmentX(JButton.CENTER_ALIGNMENT);
-      button.setActionCommand(actionCommand);
-      button.addActionListener(this);
+      button.addActionListener(listener);
       add(button);
    }
    
    private void createSubmenus(Game game) {
       mSinglePlayerMenu = new SinglePlayerMenu(game, mStack);
-      mCreditsMenu = new CreditsMenu(mStack);
-   }
-   
-   @Override
-   public void actionPerformed(java.awt.event.ActionEvent e) {
-      String action = e.getActionCommand();
-      
-      if(action.compareTo(ACTION_SINGLE_PLAYER) == 0) {
-         mStack.pushScreen(mSinglePlayerMenu);
-      } else if(action.compareTo(ACTION_MULTI_PLAYER) == 0) {
-         JOptionPane.showMessageDialog(this, "This functions is not implemented yet");
-      } else if(action.compareTo(ACTION_LEVEL_EDITOR) == 0) {
-         loadLevelEditor();
-      } else if(action.compareTo(ACTION_CREDITS) == 0) {
-         mStack.pushScreen(mCreditsMenu);
-      } else if(action.compareTo(ACTION_EXIT) == 0) {
-         System.exit(0);
-      }
    }
    
    private void loadLevelEditor() {
