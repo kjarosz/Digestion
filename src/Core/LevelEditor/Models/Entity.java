@@ -18,7 +18,9 @@ public class Entity extends AbstractModel {
    
    @Override
    public Entity clone() {
-      return new Entity(name, image, entityRect);
+      Entity entity = new Entity(name, image, entityRect);
+      entity.setResizeable(resizeable);
+      return entity;
    }
    
    public boolean isResizeable() {
