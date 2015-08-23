@@ -27,6 +27,7 @@ public class NormalBlockSpawner extends EntitySpawner {
       int mask = EntityContainer.ENTITY_NONE;
       mask |= makeCollidable(world, position, components);
       mask |= makeDrawable(components.drawable);
+      setEditorHints(components);
       return mask;
    }
    
@@ -61,5 +62,9 @@ public class NormalBlockSpawner extends EntitySpawner {
          drawable.image = DrawingSystem.getNullImage();
       }
       return EntityContainer.ENTITY_DRAWABLE;
+   }
+
+   private void setEditorHints(EntityComponents components) {
+      components.resizeable = true;
    }
 }

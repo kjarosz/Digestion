@@ -28,6 +28,7 @@ public class SpikeyBlockSpawner extends EntitySpawner {
       mask |= makeMovable(world, position, components);
       mask |= makeDrawable(components.drawable);
       mask |= makeTriggerable();
+      setEditorHints(components);
       return mask;
    }
    
@@ -67,5 +68,9 @@ public class SpikeyBlockSpawner extends EntitySpawner {
    
    private int makeTriggerable() {
       return EntityContainer.ENTITY_TRIGGERABLE;
+   }
+   
+   private void setEditorHints(EntityComponents components) {
+      components.resizeable = true;
    }
 }

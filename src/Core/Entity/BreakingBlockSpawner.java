@@ -26,6 +26,7 @@ public class BreakingBlockSpawner extends EntitySpawner {
       mask |= setCollidable(world, position, components);
       mask |= setDestructible(components.destructible);
       mask |= setDrawable(components.drawable);
+      setEditorHints(components);
       return mask;
    }
    
@@ -68,5 +69,9 @@ public class BreakingBlockSpawner extends EntitySpawner {
          drawable.image = DrawingSystem.getNullImage();
       }
       return EntityContainer.ENTITY_DRAWABLE;
+   }
+   
+   private void setEditorHints(EntityComponents components) {
+      components.resizeable = true;
    }
 }
