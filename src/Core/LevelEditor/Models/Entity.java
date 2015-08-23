@@ -21,6 +21,10 @@ public class Entity extends AbstractModel {
       return new Entity(name, image, entityRect);
    }
    
+   public boolean isResizeable() {
+      return resizeable;
+   }
+   
    public void setResizeable(boolean flag) {
       resizeable = flag;
    }
@@ -46,7 +50,7 @@ public class Entity extends AbstractModel {
                new Rectangle(rect));
          entityRect.x = rect.x;
          entityRect.y = rect.y;
-         if(!resizeable) {
+         if(resizeable) {
             entityRect.width = rect.width;
             entityRect.height = rect.height;
          }

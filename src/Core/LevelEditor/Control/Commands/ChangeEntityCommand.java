@@ -25,8 +25,12 @@ public class ChangeEntityCommand extends LevelModelCommand {
    @Override
    public void perform(MouseEvent event) {
       Point mouseCoords = snapToGrid(event.getPoint());
-      
-      Rectangle bounds = getBounds(mStartPosition, mouseCoords);
+      Rectangle bounds;
+      if(mActiveEntity.isResizeable()) {
+          bounds = getBounds(mStartPosition, mouseCoords);
+      } else {
+          bounds = new Rectangle(mouseCoords.x, mouseCoords.y, 0, 0);
+      }
       mActiveEntity.setRect(bounds);
    }
    
