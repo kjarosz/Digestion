@@ -1,23 +1,18 @@
 package Core.LevelEditor.Settings;
 
 import Core.LevelEditor.Models.AbstractModel;
-import Core.LevelEditor.Models.EntityModel;
 
 
 public class EditorSettings extends AbstractModel {
    public static enum EditorMode {
-      ENTITY_EDITOR,
       OBJECTS
    }
    
    private EditorMode  editorMode;
    
    private String      selectedEntity;
-   private EntityModel selectedEntityModel;
    
-   public EditorSettings() {
-      editorMode = EditorMode.ENTITY_EDITOR;
-   }
+   public EditorSettings() { }
    
    public EditorMode getEditorMode() {
       return editorMode;
@@ -39,14 +34,5 @@ public class EditorSettings extends AbstractModel {
          firePropertyChangeEvent("selected_entity", selectedEntity, entity);
          selectedEntity = entity;
       }
-   }
-   
-   public EntityModel getSelectedEntityModel() {
-      return selectedEntityModel;
-   }
-   
-   public void setSelectedEntityModel(EntityModel model) {
-      firePropertyChangeEvent("selected_entity_model", selectedEntityModel, model);
-      selectedEntityModel = model;
    }
 }

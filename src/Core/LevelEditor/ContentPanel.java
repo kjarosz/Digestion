@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import Core.LevelEditor.Components.DrawerToolbar;
-import Core.LevelEditor.Components.EntityComposer;
 import Core.LevelEditor.Components.LevelCanvas;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.DrawerSettings;
@@ -17,7 +16,6 @@ import Core.LevelEditor.Settings.EditorSettings;
 import Core.LevelEditor.Settings.EditorSettings.EditorMode;
 
 public final class ContentPanel extends JPanel {
-   private final static String ENTITY_EDITOR_CARD = "ENTITY EDITOR";
    private final static String LEVEL_EDITOR_CARD = "LEVEL EDITOR";
    
    private EditorSettings  mEditorSettings;
@@ -39,13 +37,7 @@ public final class ContentPanel extends JPanel {
    
    private void createWidgets() {
 		setLayout(new CardLayout());
-		createEntityEditor();
       createLevelEditor();
-   }
-   
-   private void createEntityEditor() {
-      EntityComposer entityComposer = new EntityComposer(mEditorSettings);
-      add(entityComposer, ENTITY_EDITOR_CARD);
    }
    
    private void createLevelEditor() {
@@ -82,9 +74,7 @@ public final class ContentPanel extends JPanel {
    }
    
    private void switchContext(EditorMode mode) {
-      if(mode.equals(EditorMode.ENTITY_EDITOR)) {
-         showCard(ENTITY_EDITOR_CARD);
-      } else if(mode.equals(EditorMode.OBJECTS)) {
+      if(mode.equals(EditorMode.OBJECTS)) {
          showCard(LEVEL_EDITOR_CARD);
       }
    }
