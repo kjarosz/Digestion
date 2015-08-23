@@ -47,7 +47,7 @@ public class AddEntity extends LevelModelCommand {
          
          if((mask & EntityContainer.ENTITY_DRAWABLE) != 0) {
             Rectangle size = new Rectangle(0, 0, grid.width, grid.height);
-            if(comps.resizeable) {
+            if(!comps.resizeable) {
                size.width = (int)UnitConverter.metersToPixels(comps.m_width);
                size.height = (int)UnitConverter.metersToPixels(comps.m_height);
             } 
