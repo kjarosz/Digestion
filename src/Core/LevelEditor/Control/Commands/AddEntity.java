@@ -41,8 +41,8 @@ public class AddEntity extends LevelModelCommand {
       Size grid = mDrawer.getGridSize();
       World world = new World(new Vec2(0.0f, 0.0f));
       Vec2 pos = new Vec2(0, 0);
-      EntityComponents comps = new EntityComponents();
       for(String name: factory.getEntityNames()) {
+         EntityComponents comps = new EntityComponents();
          int mask = factory.createEntity(world, name, pos, comps);
          
          if((mask & EntityContainer.ENTITY_DRAWABLE) != 0) {
