@@ -1,6 +1,5 @@
 package Core.LevelEditor.Components;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,23 +29,14 @@ public class EditorToolbar extends JToolBar {
       mStack = stack;
       
       mLevelModel = levelModel;
-      mLevelModel.addPropertyChangeListener(createLevelChangeTracker());
+      mLevelModel.addPropertyChangeListener(e -> mUnsaved = true);
       mLevelFile = null;
       
-      makeToolBarButton("New",     createNewLevelAction());
-      makeToolBarButton("Open",    createOpenLevelAction());
-      makeToolBarButton("Save",    createSaveLevelAction());
-      makeToolBarButton("Save As", createSaveAsAction());
-      makeToolBarButton("Quit",    createQuitAction());
-   }
-   
-   private PropertyChangeListener createLevelChangeTracker() {
-      return new PropertyChangeListener() {
-         @Override
-         public void propertyChange(PropertyChangeEvent e) {
-            mUnsaved = true;
-         }
-      };
+      makeToolBarButton("New",     e -> createNewLevel());
+      makeToolBarButton("Open",    e -> openLevel());
+      makeToolBarButton("Save",    e -> save());
+      makeToolBarButton("Save As", e -> saveAs());
+      makeToolBarButton("Quit",    e -> quit());
    }
    
    private void makeToolBarButton(String label, ActionListener listener) {
@@ -56,67 +46,24 @@ public class EditorToolbar extends JToolBar {
    }
    
    /* ********************************************************************** */
-   /*                                CONTROL                                 */
-   /* ********************************************************************** */   
-   private ActionListener createNewLevelAction() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            if(dealWithUnsaved()) {
-               mLevelModel.reset();
-               mUnsaved = false;
-               mLevelFile = null;
-            }
-         }
-      };
-   }
-   
-   private ActionListener createOpenLevelAction() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            if(dealWithUnsaved()) {
-               File levelFile = findLevelFile();
-               if(levelFile == null) return;
-               //openLevel(levelFile);
-            }
-         }
-      };
-   }
-   
-   private ActionListener createSaveLevelAction() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            save();
-         }
-      };
-   }
-   
-   private ActionListener createSaveAsAction() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            saveAs();
-         }
-      };
-   }
-   
-   private ActionListener createQuitAction() {
-      return new ActionListener() {
-         @Override
-         public void actionPerformed(ActionEvent e) {
-            if(dealWithUnsaved()) {
-               mStack.popScreen();
-            }
-         }
-      };
-      
-   }
-   
-   /* ********************************************************************** */
    /*                               UTILITIES                                */
    /* ********************************************************************** */
+   private void createNewLevel() {
+		if(dealWithUnsaved()) {
+			mLevelModel.reset();
+			mUnsaved = false;
+			mLevelFile = null;
+		} 
+   }
+
+   private void openLevel() {
+		if(dealWithUnsaved()) {
+			File levelFile = findLevelFile();
+			if(levelFile == null) return;
+			//openLevel(levelFile);
+		}
+   }
+   
    private void save() {
       if(mLevelFile == null) {
          saveAs();
@@ -153,6 +100,12 @@ public class EditorToolbar extends JToolBar {
       mLevelFile = chooseNewLevelFile();
       if(mLevelFile != null)
          save();
+   }
+   
+   private void quit() {
+		if(dealWithUnsaved()) {
+			mStack.popScreen();
+		}
    }
    
    private boolean dealWithUnsaved() {      
