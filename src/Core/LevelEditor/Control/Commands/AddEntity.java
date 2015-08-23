@@ -18,6 +18,7 @@ import Entity.EntityComponents;
 import Entity.EntityFactory;
 import Level.EntityContainer;
 import Util.Size;
+import Util.UnitConverter;
 
 public class AddEntity extends LevelModelCommand {
    private ChangeEntityCommand mChangeCommand;
@@ -45,10 +46,13 @@ public class AddEntity extends LevelModelCommand {
          int mask = factory.createEntity(world, name, pos, comps);
          
          if((mask & EntityContainer.ENTITY_DRAWABLE) != 0) {
-            Rectangle size = new Rectangle(0, 0, 
-                  grid.width, grid.height);
-            
+            Rectangle size = new Rectangle(0, 0, grid.width, grid.height);
+            if(comps.resizeable) {
+               size.width = (int)UnitConverter.metersToPixels(comps.m_width);
+               size.height = (int)UnitConverter.metersToPixels(comps.m_height);
+            } 
             Entity entity = new Entity(name, comps.drawable.image, size);
+            entity.setResizeable(comps.resizeable);
             mEntityCache.add(entity);
          }
       }

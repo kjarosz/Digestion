@@ -7,16 +7,22 @@ public class Entity extends AbstractModel {
    private String        name;
    private BufferedImage image;
    private Rectangle     entityRect;
+   private boolean       resizeable;
    
    public Entity(String name, BufferedImage image, Rectangle bounds) {
       this.name = name;
       this.image = image;
       this.entityRect = new Rectangle(bounds);
+      this.resizeable = false;
    }
    
    @Override
    public Entity clone() {
       return new Entity(name, image, entityRect);
+   }
+   
+   public void setResizeable(boolean flag) {
+      resizeable = flag;
    }
    
    /* Immutable */
@@ -40,8 +46,10 @@ public class Entity extends AbstractModel {
                new Rectangle(rect));
          entityRect.x = rect.x;
          entityRect.y = rect.y;
-         entityRect.width = rect.width;
-         entityRect.height = rect.height;
+         if(!resizeable) {
+            entityRect.width = rect.width;
+            entityRect.height = rect.height;
+         }
       }
    }
 }

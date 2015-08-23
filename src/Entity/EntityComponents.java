@@ -28,5 +28,10 @@ public class EntityComponents {
       drawable = new Drawable();
       controllable = new Controllable();
       spawner = new Spawner();
+      
+      resizeable = false;
    }
+   
+   // Level editor hints
+   public boolean resizeable;
 }
