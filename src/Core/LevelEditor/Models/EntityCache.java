@@ -15,6 +15,7 @@ public class EntityCache {
 	private HashMap<String, Entity> entityCache;
 
 	public EntityCache() {
+	   entityCache = new HashMap<>();
 		EntityFactory factory = EntityFactory.getInstance();
 
 		World world = new World(new Vec2(0.0f, 0.0f));
