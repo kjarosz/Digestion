@@ -2,7 +2,6 @@ package Core.LevelEditor.Components;
 
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.concurrent.ExecutionException;
 
@@ -14,6 +13,7 @@ import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import Core.LevelEditor.Models.LevelModel;
+import Core.LevelEditor.Utils.LevelModelReader;
 import Core.LevelEditor.Utils.LevelModelWriter;
 import Menu.MenuStack;
 
@@ -60,8 +60,28 @@ public class EditorToolbar extends JToolBar {
 		if(dealWithUnsaved()) {
 			File levelFile = findLevelFile();
 			if(levelFile == null) return;
-			//openLevel(levelFile);
+			LevelModelReader reader = new LevelModelReader(levelFile, mLevelModel);
+			reader.addPropertyChangeListener(e -> checkLoadingState(e));
+			reader.execute();
 		}
+   }
+   
+   private void checkLoadingState(PropertyChangeEvent e) {
+      if(isWorkerDone(e)) {
+         LevelModelReader reader = (LevelModelReader)e.getSource();
+         mLevelFile = reader.getLevelFile();
+      }
+   }
+   
+   private boolean isWorkerDone(PropertyChangeEvent e) {
+      String prop = e.getPropertyName();
+      if("state".equals(prop)) {
+         String state = e.getNewValue().toString();
+         if("DONE".equals(state)) {
+            return true;
+         }
+      }
+      return false;
    }
    
    private void save() {
@@ -69,31 +89,20 @@ public class EditorToolbar extends JToolBar {
          saveAs();
       } else {
          LevelModelWriter writer = new LevelModelWriter(mLevelFile, mLevelModel);
-         writer.addPropertyChangeListener(createWriterListener());
+         writer.addPropertyChangeListener(e -> checkSavingState(e));
          writer.execute();
       }
    }
    
-   private PropertyChangeListener createWriterListener() {
-      return new PropertyChangeListener() {
-         @Override
-         public void propertyChange(PropertyChangeEvent e) {
-            String prop = e.getPropertyName();
-            if(!"state".equals(prop)) {
-               return;
-            }
-            
-            String state = (String)e.getNewValue();
-            if("done".equals(state)) {
-               LevelModelWriter writer = (LevelModelWriter)e.getSource();
-               try {
-                  mLevelFile = writer.get();
-               } catch (InterruptedException | ExecutionException e1) {
-                  e1.printStackTrace();
-               }
-            }
+   private void checkSavingState(PropertyChangeEvent e) {
+      if(isWorkerDone(e)) {
+         LevelModelWriter writer = (LevelModelWriter)e.getSource();
+         try {
+            mLevelFile = writer.get();
+         } catch (InterruptedException | ExecutionException e1) {
+            e1.printStackTrace();
          }
-      };
+      }
    }
    
    private void saveAs() {
@@ -130,7 +139,7 @@ public class EditorToolbar extends JToolBar {
    
    private FileFilter getLevelFileFilter() {
       return new FileNameExtensionFilter(
-            "Level Script", ".json");
+            "Level Script", "json");
    }
    
    private JFileChooser getLevelFileChooser() {
