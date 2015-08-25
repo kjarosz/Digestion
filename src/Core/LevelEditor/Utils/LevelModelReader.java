@@ -26,17 +26,26 @@ public class LevelModelReader extends SwingWorker<LevelModel, String> {
    private File mFile;
    private LevelModel mLevelModel;
 
-   public LevelModelReader(File file) {
+   public LevelModelReader(File file, LevelModel levelModel) {
       mFile = file;
-      mLevelModel = new LevelModel();
+      mLevelModel = levelModel;
+   }
+   
+   public File getLevelFile() {
+      return mFile;
    }
 
    @Override
    protected LevelModel doInBackground() {
+      mLevelModel.reset();
       try {
          attemptRead();
          return mLevelModel;
       } catch(Exception ex) {
+         JOptionPane.showMessageDialog(null, 
+               "An uncaught error occured:\n" + ex.getMessage(),
+               "Error",
+               JOptionPane.ERROR_MESSAGE);
          return null;
       }
    }
@@ -68,8 +77,7 @@ public class LevelModelReader extends SwingWorker<LevelModel, String> {
       JSONObject level = (JSONObject)tokener.parse(input);
       mLevelModel.setName((String)level.get("name"));
       mLevelModel.setSize(new Dimension(
-            (int)level.get("width"),
-            (int)level.get("height")
+            getInt(level, "width"), getInt(level, "height")
          ));
       JSONArray tiles = (JSONArray)level.get("tiles");
       for(Entity entity: getEntities(tiles)) {
@@ -84,14 +92,18 @@ public class LevelModelReader extends SwingWorker<LevelModel, String> {
          String entityName = (String)entityDesc.get("name");
          Entity entity = cache.cloneEntity(entityName);
          Rectangle entityRect = new Rectangle();
-         entityRect.x = (int)entityDesc.get("x");
-         entityRect.y = (int)entityDesc.get("y");
-         entityRect.width = (int)entityDesc.get("width");
-         entityRect.height = (int)entityDesc.get("height");
+         entityRect.x = getInt(entityDesc, "x");
+         entityRect.y = getInt(entityDesc, "y");
+         entityRect.width = getInt(entityDesc, "width");
+         entityRect.height = getInt(entityDesc, "height");
          entity.setRect(entityRect);
          entities.add(entity);
       }
       return entities;
+   }
+   
+   private int getInt(JSONObject src, String id) {
+      return ((Number)src.get(id)).intValue();
    }
    
    private List<JSONObject> jsonify(JSONArray array) {
