@@ -25,7 +25,7 @@ public class MainMenu extends MenuScreen {
    final private String LEVEL_EDITOR         = "resources/Images/level_editor_button.png";
    final private String EXIT                 = "resources/Images/exit_button.png";
 
-   final private Dimension BUTTON_SIZE = new Dimension(400, 50);
+   final private Dimension BUTTON_SIZE = new Dimension(600, 75);
    
    private MenuStack mStack;
    
