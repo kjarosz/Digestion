@@ -3,59 +3,27 @@ package Core.LevelEditor.Control.Commands;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
-import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
-
 import Core.LevelEditor.Models.Entity;
+import Core.LevelEditor.Models.EntityCache;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.DrawerSettings;
 import Core.LevelEditor.Settings.EditorSettings;
-import Entity.EntityComponents;
-import Entity.EntityFactory;
-import Level.EntityContainer;
 import Util.Size;
-import Util.UnitConverter;
 
 public class AddEntity extends LevelModelCommand {
    private ChangeEntityCommand mChangeCommand;
    
-   private LinkedList<Entity> mEntityCache;
+   private EntityCache mEntityCache;
    
    public AddEntity(ChangeEntityCommand changeCommand, LevelModel level, 
          EditorSettings editor, DrawerSettings drawer) {
       super(level, editor, drawer);
       
       mChangeCommand = changeCommand;
-      
-      makeEntities();
-   }
-   
-   private void makeEntities() {
-      mEntityCache = new LinkedList<>();
-      EntityFactory factory = EntityFactory.getInstance();
-      
-      Size grid = mDrawer.getGridSize();
-      World world = new World(new Vec2(0.0f, 0.0f));
-      Vec2 pos = new Vec2(0, 0);
-      for(String name: factory.getEntityNames()) {
-         EntityComponents comps = new EntityComponents();
-         int mask = factory.createEntity(world, name, pos, comps);
-         
-         if((mask & EntityContainer.ENTITY_DRAWABLE) != 0) {
-            Rectangle size = new Rectangle(0, 0, grid.width, grid.height);
-            if(!comps.resizeable) {
-               size.width = (int)UnitConverter.metersToPixels(comps.m_width);
-               size.height = (int)UnitConverter.metersToPixels(comps.m_height);
-            } 
-            Entity entity = new Entity(name, comps.drawable.image, size);
-            entity.setResizeable(comps.resizeable);
-            mEntityCache.add(entity);
-         }
-      }
+      mEntityCache = new EntityCache();
    }
    
    public void perform(MouseEvent e) {
@@ -63,7 +31,7 @@ public class AddEntity extends LevelModelCommand {
          return;
       }
       
-      Entity entity = getSelectedEntity().clone();
+      Entity entity = getSelectedEntity();
       
       Point pos = snapToGrid(e.getPoint());
       Size gridSize = mDrawer.getGridSize();
@@ -91,7 +59,8 @@ public class AddEntity extends LevelModelCommand {
    
    private Entity getSelectedEntity() {
       try {
-         return tryGettingEntity();
+         String entityName = mEditor.getSelectedEntity();
+         return mEntityCache.cloneEntity(entityName);
       } catch(RuntimeException e) {
          JOptionPane.showMessageDialog(null, 
                e.getMessage(),
@@ -99,15 +68,5 @@ public class AddEntity extends LevelModelCommand {
                JOptionPane.ERROR_MESSAGE);
          throw e;
       }
-   }
-   
-   private Entity tryGettingEntity() {
-      String name = mEditor.getSelectedEntity();
-      for(Entity entity: mEntityCache) {
-         if(entity.getName().equals(name)) {
-            return entity;
-         }
-      }
-      throw new RuntimeException("No entity found.");
    }
 }
