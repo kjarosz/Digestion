@@ -30,26 +30,46 @@ public class LevelModelWriter extends SwingWorker<File, String> {
    
    @Override
    protected File doInBackground() {
-      validateExtension();
       try {
-         if(!mFile.exists()) {
-            mFile.createNewFile();
-         }
-         write();
-      } catch(IOException ex) {
-         JOptionPane.showMessageDialog(null,
-               "File could not be created.\n"+ex.getMessage(),
-               "Error Creating File",
-               JOptionPane.ERROR_MESSAGE);
-         mFile = null;
+         attemptWriting();
+         return mFile;
+      } catch(Exception ex) {
+         return null;
       }
-      return mFile;
+   }
+   
+   private void attemptWriting() throws Exception {
+      validateExtension();
+      readyFile();
+      write();
    }
    
    private void validateExtension() {
       String name = mFile.getName();
       if(!name.endsWith(".json")) {
          mFile = new File(mFile.getParent(), name + ".json");
+      }
+   }
+   
+   private void readyFile() throws IOException {
+      if(mFile.exists()) {
+         return;
+      }
+
+      try {
+         mFile.createNewFile();
+      } catch(IOException ex) {
+         JOptionPane.showMessageDialog(null,
+               "File could not be created.\n"+ex.getMessage(),
+               "Error Creating File",
+               JOptionPane.ERROR_MESSAGE);
+         throw ex;
+      }
+   }
+   
+   private void deleteCreatedFile() {
+      if(mFile.exists()) {
+         mFile.delete();
       }
    }
    
@@ -65,7 +85,7 @@ public class LevelModelWriter extends SwingWorker<File, String> {
                "Failed to write level.\n"+ex.getMessage(),
                "Error Writing File",
                JOptionPane.ERROR_MESSAGE);
-         mFile = null;
+         deleteCreatedFile();
       }
    }
    
