@@ -1,6 +1,6 @@
 package Core.Menu;
 
-import Level.LevelLoaderFactory;
+import Level.LevelFactory;
 import Level.LevelLoadingScript;
 import Menu.MenuScreen;
 import Menu.MenuStack;
@@ -16,14 +16,11 @@ public class LevelMenu extends MenuScreen implements ActionListener {
    
    private MenuStack mStack;
    
-   private LevelLoaderFactory mLevelScriptLoader;
-   
    private JList<String> mLevelList;
    private JScrollPane mListScroller;
    
    public LevelMenu(MenuStack stack) {
       mStack = stack;
-      mLevelScriptLoader = new LevelLoaderFactory();
       createWidgets();
    }
    
@@ -34,7 +31,7 @@ public class LevelMenu extends MenuScreen implements ActionListener {
    }
    
    private void createLevelList() {
-      mLevelList = new JList<>(mLevelScriptLoader.getLevelScripts());
+      mLevelList = new JList<>(LevelFactor.getLevelScripts());
       mLevelList.setSelectedIndex(0);
       mListScroller = new JScrollPane(mLevelList);
       add(mListScroller, BorderLayout.CENTER);
