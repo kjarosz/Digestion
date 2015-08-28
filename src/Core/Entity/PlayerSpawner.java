@@ -27,9 +27,6 @@ import Input.ControlFunction;
 import Level.EntityContainer;
 
 public class PlayerSpawner extends EntitySpawner {
-	private final float WIDTH = 0.5f;
-	private final float HEIGHT = 2.0f;
-	
 	private final float DENSITY = 5.0f;
 	private final float FRICTION = 2.0f;
 	
@@ -40,9 +37,9 @@ public class PlayerSpawner extends EntitySpawner {
    private final Vec2 UP_FORCE = new Vec2(0, -6.8f);
    
    @Override
-   public int spawn(World world, Vec2 position, EntityComponents components) {
+   public int spawn(World world, Vec2 position, Vec2 size, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
-      mask |= makeMovable(world, position, components);
+      mask |= makeMovable(world, position, size, components);
       mask |= makeDestructible(components.destructible);
       mask |= makeControllable(components.controllable);
       mask |= makeDrawable(components.drawable);
@@ -50,15 +47,15 @@ public class PlayerSpawner extends EntitySpawner {
       return   mask;
    }
    
-   private int makeMovable(World world, Vec2 position, EntityComponents components) {
+   private int makeMovable(World world, Vec2 position, Vec2 size, EntityComponents components) {
    	BodyDef def = new BodyDef();
    	def.type = BodyType.DYNAMIC;
    	def.fixedRotation = true;
    	def.position = new Vec2(position);
    	
    	components.body = world.createBody(def);
-   	components.m_width = WIDTH;
-   	components.m_height = HEIGHT;
+   	components.m_width = size.x;
+   	components.m_height = size.y;
    	
    	createInnerCircleFixture(components);
    	createOuterCircleFixture(components);

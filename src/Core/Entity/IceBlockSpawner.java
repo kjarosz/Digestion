@@ -19,25 +19,22 @@ import Entity.Systems.MotionSystem;
 import Level.EntityContainer;
 
 public class IceBlockSpawner extends EntitySpawner {
-	private static final float WIDTH = 1.0f;
-	private static final float HEIGHT = 1.0f;
-	
    @Override
-   public int spawn(World world, Vec2 position, EntityComponents components) {
+   public int spawn(World world, Vec2 position, Vec2 size, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
-      mask |= makeCollidable(world, position, components);
+      mask |= makeCollidable(world, position, size, components);
       mask |= makeDrawable(components.drawable);
       setEditorHints(components);
       return mask;
    }
    
-   private int makeCollidable(World world, Vec2 position, EntityComponents components) {
+   private int makeCollidable(World world, Vec2 position, Vec2 size, EntityComponents components) {
    	BodyDef def = new BodyDef();
    	def.position = new Vec2(position);
    	
    	components.body = world.createBody(def);
-   	components.m_width = WIDTH;
-   	components.m_height = HEIGHT;
+   	components.m_width = size.x;
+   	components.m_height = size.y;
    	
    	PolygonShape shape = new PolygonShape();
    	shape.setAsBox(components.m_width/2.0f, components.m_height/2.0f);

@@ -21,22 +21,22 @@ import Level.EntityContainer;
 
 public class BreakingBlockSpawner extends EntitySpawner {
    @Override
-   public int spawn(World world, Vec2 position, EntityComponents components) {
+   public int spawn(World world, Vec2 position, Vec2 size, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
-      mask |= setCollidable(world, position, components);
+      mask |= setCollidable(world, position, size, components);
       mask |= setDestructible(components.destructible);
       mask |= setDrawable(components.drawable);
       setEditorHints(components);
       return mask;
    }
    
-   private int setCollidable(World world, Vec2 position, EntityComponents components) {
+   private int setCollidable(World world, Vec2 position, Vec2 size, EntityComponents components) {
    	BodyDef bodyDef = new BodyDef();
    	bodyDef.position = new Vec2(position);
    	
    	components.body = world.createBody(bodyDef);
-   	components.m_width = 1.0f;
-   	components.m_height = 1.0f;
+   	components.m_width = size.x;
+   	components.m_height = size.y;
    	
    	PolygonShape shape = new PolygonShape();
    	shape.setAsBox(components.m_width/2.0f, components.m_height/2.0f);

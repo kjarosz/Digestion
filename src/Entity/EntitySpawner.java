@@ -15,7 +15,7 @@ public abstract class EntitySpawner {
 	 * to be later added to an EntityContainer. Its return value is the
 	 * mask that describes all the components that the entity comprises of.
 	 */
-   public abstract int spawn(World world, Vec2 position, EntityComponents components);
+   public abstract int spawn(World world, Vec2 position, Vec2 size, EntityComponents components);
 
    protected void constructKeyMapping(Controllable controllable, int keyCode, ControlFunction function) {
    	KeyMapping keyMapping = new KeyMapping();
