@@ -30,6 +30,7 @@ public abstract class LevelFactory {
       File levelScript = new File(LEVEL_DIRECTORY  
            + File.separator + scriptname 
            + File.separator + LEVEL_SCRIPTNAME);
-      
+      Level level = new Level();
+      return level;
    }
 }
