@@ -1,15 +1,16 @@
 package Core.Menu;
 
-import Level.LevelFactory;
-import Level.LevelLoadingScript;
-import Menu.MenuScreen;
-import Menu.MenuStack;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+
+import Level.LevelFactory;
+import Menu.MenuScreen;
+import Menu.MenuStack;
 
 public class LevelMenu extends MenuScreen implements ActionListener {
    private final String ACTION_BACK = "Back";
@@ -31,7 +32,7 @@ public class LevelMenu extends MenuScreen implements ActionListener {
    }
    
    private void createLevelList() {
-      mLevelList = new JList<>(LevelFactor.getLevelScripts());
+      mLevelList = new JList<>(LevelFactory.getLevelScripts());
       mLevelList.setSelectedIndex(0);
       mListScroller = new JScrollPane(mLevelList);
       add(mListScroller, BorderLayout.CENTER);
@@ -44,8 +45,8 @@ public class LevelMenu extends MenuScreen implements ActionListener {
       add(backButton, BorderLayout.SOUTH);
    }
 
-   protected LevelLoadingScript getSelectedLevel() {
-      return mLevelScriptLoader.loadLevelScript(mLevelList.getSelectedValue());
+   protected String getSelectedLevel() {
+      return mLevelList.getSelectedValue();
    }
    
    @Override

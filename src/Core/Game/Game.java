@@ -4,14 +4,7 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.SwingUtilities;
 
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
-import org.python.core.PyException;
-
 import Core.Menu.MainMenu;
-import Core.Menu.PauseMenu;
-import Entity.EntityComponents;
-import Entity.EntityFactory;
 import Entity.Systems.AnimationSystem;
 import Entity.Systems.ControlSystem;
 import Entity.Systems.DrawingSystem;
@@ -20,11 +13,9 @@ import Graphics.GameCanvas;
 import Graphics.GameViewport;
 import Graphics.GameWindow;
 import Input.KeyManager;
-import Level.EntityContainer;
 import Level.Level;
-import Util.ErrorLog;
+import Level.LevelFactory;
 import Util.GameTimer;
-import Util.UnitConverter;
 
 public class Game {
 	private GameWindow mWindow;
@@ -32,68 +23,65 @@ public class Game {
 	private MainMenu mMainMenu;
 	private GameCanvas mGameCanvas;
 
+	private boolean mPause;
 	private boolean mQuit;
 
-	private EntityFactory mEntityFactory;
 	private Level mLevel;
-	private World mBox2DWorld;
-	private EntityContainer mWorld;
 
 	public Game() {
 		mMainMenu = new MainMenu(this);
 		mGameCanvas = new GameCanvas();
+		SwingUtilities.invokeLater(
+		      () -> initWindow()
+		);
 	}
 
-	public void startLevel(LevelLoadingScript loadingScript) {
-		if(!loadLevel(loadingScript)) {
+	public void startLevel(String loadingScript) {
+	   mLevel = LevelFactory.loadLevel(loadingScript);
+		if(mLevel == null) {
 			return;
 		}
 
 		MotionSystem.resetTimer();
 
+		mPause = false;
 		mQuit = false;
 		mWindow.switchTo(mGameCanvas);
 		mWindow.update();
 		execute();
 	}
 
-	private boolean loadLevel(LevelScript loadingScript) {
-	}
-
 	public void pause() { 
-		mPaused = true;
-		PauseMenu pauseMenu = new PauseMenu(this, mMenuStack);
-		mMenuStack.pushScreen(pauseMenu);
-		mWindow.switchTo(mMenuStack);
+	   mPause = true;
+	   mMainMenu.showPauseMenu();
+	   switchToMainMenu();
 	}
 
 	public void resume() {
-		mPaused = false;
-		mWorld.resetTimers();
-		MotionSystem.resetTimer();
-		mWindow.switchTo(mGameCanvas);
+	   mPause = false;
+	   switchToLevel();
 	}
 
 	public void quitToMenu() {
 		mQuit = true;
 	}
 	
-	public void run() {
-		showWindow();
-		showTitleScreen();
+	private void initWindow() {
+	   mWindow = new GameWindow("Digestion");
+	   switchToMainMenu();
 	}
 	
-	private void showWindow() {
-		SwingUtilities.invokeLater(() -> mWindow = new GameWindow("Digestion"));
+	private void switchToMainMenu() {
+		mWindow.switchTo(mMainMenu.getStack());
+		mWindow.update();
 	}
 	
-	private void showTitleScreen() {
-		SwingUtilities.invokeLater(() -> mWindow.switchTo(mMainMenu));
+	private void switchToLevel() {
+	   mWindow.switchTo(mGameCanvas);
+	   mWindow.update();
 	}
 	
 	private void execute() {
-		mPaused = false;
-
 		setFocusObject();
 
 		GameTimer fpsUpdateTimer = new GameTimer();
@@ -102,16 +90,16 @@ public class Game {
 		int frameCounter = 0;
 		boolean escProcessed = false;
 		while(!mQuit) {
-			if(mPaused) {
+			if(mPause) {
 				if(KeyManager.isKeyPressed(KeyEvent.VK_ESCAPE) && !escProcessed) {
 					escProcessed = true;
 					resume();
 				}
 			} else {
-				ControlSystem.manipulate(mWorld);
-				MotionSystem.move(mBox2DWorld, mWorld);
-				AnimationSystem.animate(mWorld);
-				DrawingSystem.draw(mWorld, mGameCanvas);
+				ControlSystem.manipulate(mLevel);
+				MotionSystem.move(mLevel);
+				AnimationSystem.animate(mLevel);
+				DrawingSystem.draw(mLevel, mGameCanvas);
 
 				mWindow.update();
 
@@ -131,33 +119,17 @@ public class Game {
 				frameCounter = 0;
 			}
 		}
-		performCleanUp();
+		mLevel = null;
 
 		mWindow.setTitle("Digestion");
-
-		mWindow.switchTo(mMenuStack);
-	}
-
-	private void performCleanUp() {
-		mLevel = null;
-		mWorld = null;
-		mBox2DWorld = null;
+		switchToMainMenu();
 	}
 
 	private void setFocusObject() {
-		for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
-			int entityMask = mWorld.getEntityMask(i);
-			if((entityMask & EntityContainer.ENTITY_FOCUSABLE) != 0) {
-				EntityComponents components = mWorld.accessComponents(i);
-
-				Vec2 px_levelSize = UnitConverter.metersToPixels(mLevel.m_size);
-				GameViewport viewport = new GameViewport(px_levelSize, new Vec2(mWindow.getWidth(), mWindow.getHeight()));
-				viewport.setFocusObject(components);
-
-				mGameCanvas.setViewport(viewport);
-				break;
-			}
-		}
+	   GameViewport viewport = mLevel.getFocusViewport(mWindow.getSize());
+	   if(viewport != null) {
+	      mGameCanvas.setViewport(viewport);
+	   }
 	}
 
 	private void updateFPS(int frameCount, long timePassed) {

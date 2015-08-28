@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 
 import Core.Game.Game;
 import Core.LevelEditor.LevelEditor;
-import Graphics.GameWindow;
 import Menu.MenuScreen;
 import Menu.MenuStack;
 import Menu.Widgets.Button;
@@ -28,22 +27,24 @@ public class MainMenu extends MenuScreen {
 
 	final private Dimension BUTTON_SIZE = new Dimension(600, 75);
 
-	private GameWindow mWindow;
 	private MenuStack mStack;
 
 	private SinglePlayerMenu mSinglePlayerMenu;
+	private PauseMenu mPauseMenu;
 
 	private BufferedImage mBackground;
 
-	public MainMenu(GameWindow window, Game game) {
-		mWindow = window;
+	public MainMenu(Game game) {
 		mStack = new MenuStack();
-
 		loadBackground();
 		createSubmenus(game);
 		createWidgets();
 	}
 
+	public MenuStack getStack() {
+	   return mStack;
+	}
+	
 	private void loadBackground() {
 		try {
 			File bckgrFile = new File(MAIN_MENU_BACKGROUND);
@@ -79,6 +80,7 @@ public class MainMenu extends MenuScreen {
 
 	private void createSubmenus(Game game) {
 		mSinglePlayerMenu = new SinglePlayerMenu(game, mStack);
+		mPauseMenu = new PauseMenu(game, mStack);
 	}
 
 	private void loadLevelEditor() {
@@ -97,7 +99,7 @@ public class MainMenu extends MenuScreen {
 		mStack.pushScreen(this);
 	}
 	
-	public void display() {
-		mWindow.switchTo(mStack);
+	public void showPauseMenu() {
+	   mStack.pushScreen(mPauseMenu);
 	}
 }
