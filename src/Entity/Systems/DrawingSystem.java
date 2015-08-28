@@ -11,6 +11,7 @@ import org.jbox2d.common.Vec2;
 import Entity.EntityComponents;
 import Graphics.CanvasInterface;
 import Level.EntityContainer;
+import Level.Level;
 import Util.UnitConverter;
 
 public class DrawingSystem {
@@ -37,11 +38,12 @@ public class DrawingSystem {
       return gNullImage;
    }
    
-   public static void draw(EntityContainer world, CanvasInterface canvas) {
+   public static void draw(Level level, CanvasInterface canvas) {
+      EntityContainer entityContainer = level.entityContainer;
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
-         int entity = world.getEntityMask(i);
+         int entity = entityContainer.getEntityMask(i);
          if((entity & EntityContainer.ENTITY_DRAWABLE) != 0)
-            drawEntity(world.accessComponents(i), canvas);
+            drawEntity(entityContainer.accessComponents(i), canvas);
       }
    }
    

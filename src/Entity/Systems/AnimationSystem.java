@@ -2,13 +2,15 @@ package Entity.Systems;
 
 import Entity.EntityComponents;
 import Level.EntityContainer;
+import Level.Level;
 
 public class AnimationSystem {
-   public static void animate(EntityContainer world) {
+   public static void animate(Level level) {
+      EntityContainer entityContainer = level.entityContainer;
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
-         int entity = world.getEntityMask(i);
+         int entity = entityContainer.getEntityMask(i);
          if(entityIsAnimated(entity))
-            animateEntity(world.accessComponents(i));
+            animateEntity(entityContainer.accessComponents(i));
       }
    }
    private static boolean entityIsAnimated(int entity) {

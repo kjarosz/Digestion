@@ -4,6 +4,7 @@ import org.jbox2d.dynamics.World;
 
 import Entity.EntityComponents;
 import Level.EntityContainer;
+import Level.Level;
 
 public class MotionSystem {
 	// BitMasks for sensors
@@ -13,17 +14,18 @@ public class MotionSystem {
 	
 	private static long sLastTime = 0;
 	   
-   public static void move(World box2DWorld, EntityContainer world) {
-      
+   public static void move(Level level) {
+      World world = level.world;
+      EntityContainer entityContainer = level.entityContainer;
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
-         if((world.getEntityMask(i) & EntityContainer.ENTITY_MOVABLE) != EntityContainer.ENTITY_MOVABLE)
+         if((entityContainer.getEntityMask(i) & EntityContainer.ENTITY_MOVABLE) != EntityContainer.ENTITY_MOVABLE)
             continue;
          
-         EntityComponents components = world.accessComponents(i);
+         EntityComponents components = entityContainer.accessComponents(i);
          components.body.applyForceToCenter(components.movable.actingForces);
       }
       
-      box2DWorld.step((float)nanoToSeconds(getElapsedTime()), 6, 2);
+      world.step((float)nanoToSeconds(getElapsedTime()), 6, 2);
    }
    
    private static long getElapsedTime() {

@@ -1,17 +1,19 @@
 package Entity.Systems;
 
-import Entity.Components.Controllable;
 import Entity.EntityComponents;
+import Entity.Components.Controllable;
 import Input.KeyManager;
 import Input.KeyMapping;
 import Level.EntityContainer;
+import Level.Level;
 
 public class ControlSystem {
-   public static void manipulate(EntityContainer world) {
+   public static void manipulate(Level level) {
+      EntityContainer container = level.entityContainer;
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
-         int entity = world.getEntityMask(i);
+         int entity = container.getEntityMask(i);
          if(isControllable(entity)) {
-            manipulateEntity(world.accessComponents(i));
+            manipulateEntity(container.accessComponents(i));
          }
       }  
    }
