@@ -1,6 +1,7 @@
 package Graphics;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -99,12 +100,20 @@ public class GameWindow {
 	   return mHeight;
 	}
 	
+	public Dimension getSize() {
+	   return new Dimension(mWidth, mHeight);
+	}
+	
 	public void setSize(int width, int height) {
 		if(mFullscreen) {
          setFullscreenSize(width, height);
 		} else {
          setWindowedSize(width, height);
 		}
+	}
+	
+	public void setSize(Dimension size) {
+	   setSize(size.width, size.height);
 	}
    
    private void setFullscreenSize(int width, int height) {
