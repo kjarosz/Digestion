@@ -37,11 +37,13 @@ public class EntityFactory {
       return ENTITY_NAMES;
    }
    
-   public int createEntity(World world, String name, Vec2 position, EntityComponents components) {
+   public int createEntity(World world, String name, Vec2 position, 
+                           Vec2 size, EntityComponents components) 
+   {
       for(int i = 0; i < ENTITY_NAMES.length; i++) {
          if(name.equals(ENTITY_NAMES[i])) {
             components.name = name;
-            return ENTITY_SPAWNERS[i].spawn(world, position, components);
+            return ENTITY_SPAWNERS[i].spawn(world, position, size, components);
          }
       }
       return EntityContainer.ENTITY_NONE;

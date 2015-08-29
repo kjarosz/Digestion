@@ -68,7 +68,7 @@ public class PlayerSpawner extends EntitySpawner {
    
    private void createInnerCircleFixture(EntityComponents components) {
       CircleShape innerCircle = new CircleShape();
-      innerCircle.setRadius(WIDTH/2.0f);
+      innerCircle.setRadius(components.m_width/2.0f);
       
       FixtureDef innerCircleFixtureDef = new FixtureDef();
       innerCircleFixtureDef.shape = innerCircle;
@@ -84,8 +84,8 @@ public class PlayerSpawner extends EntitySpawner {
          float angle = (float)((2*Math.PI)/OUTER_CIRCLE_DIVISIONS)*i;
          float x, y;
          
-         x = (WIDTH/2.0f)*(float)Math.cos(angle);
-         y = (HEIGHT/2.0f)*(float)Math.sin(angle);
+         x = (components.m_width/2.0f)*(float)Math.cos(angle);
+         y = (components.m_height/2.0f)*(float)Math.sin(angle);
          vertices[i] = new Vec2(x, y);
       }
       vertices[OUTER_CIRCLE_DIVISIONS] = new Vec2(vertices[0]);
@@ -101,7 +101,7 @@ public class PlayerSpawner extends EntitySpawner {
    
    private GroundSensor createGroundSensor(EntityComponents components) {
       PolygonShape shape = new PolygonShape();
-      shape.setAsBox(WIDTH, 0.1f, new Vec2(0.0f, 1.0f), 0.0f);
+      shape.setAsBox(components.m_width, 0.1f, new Vec2(0.0f, 1.0f), 0.0f);
       
       return new GroundSensor(shape, components);
    }

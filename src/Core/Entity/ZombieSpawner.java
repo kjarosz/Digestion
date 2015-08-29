@@ -9,7 +9,7 @@ import Level.EntityContainer;
 
 public class ZombieSpawner extends EntitySpawner {
    @Override
-   public int spawn(World world, Vec2 position, EntityComponents components) {
+   public int spawn(World world, Vec2 position, Vec2 size, EntityComponents components) {
       int entityMask = EntityContainer.ENTITY_NONE;
       
       entityMask = makeSpawner();

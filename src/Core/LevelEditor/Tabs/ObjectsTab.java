@@ -50,7 +50,8 @@ public class ObjectsTab extends JPanel {
       mEntityComponents[index] = new EntityComponents();
       
       int mask = entityFactory.createEntity(world, name, 
-              new Vec2(0.0f, 0.0f), 
+              new Vec2(0.0f, 0.0f),
+              new Vec2(0.5f, 2.0f),
               mEntityComponents[index]);
       
       // We want to see the entity in the level editor so a null image 
