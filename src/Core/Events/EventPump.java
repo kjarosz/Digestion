@@ -2,6 +2,7 @@ package Core.Events;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.FocusEvent;
@@ -13,6 +14,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import javax.swing.SwingUtilities;
+
+import Core.Events.MouseEvent.MouseAction;
+import Core.Events.MouseEvent.MouseButton;
 import Core.Events.ScreenEvent.ScreenAction;
 
 public class EventPump implements KeyListener, MouseListener, MouseMotionListener, FocusListener, ComponentListener {
@@ -67,63 +72,68 @@ public class EventPump implements KeyListener, MouseListener, MouseMotionListene
    public void focusLost(FocusEvent event) {
       addScreenEvent(event, ScreenAction.FOCUS_LOST);
    }
+   
+   private void addMouseEvent(MouseEvent event, MouseAction action) {
+      MouseButton button = MouseButton.NONE;
+      if(SwingUtilities.isLeftMouseButton(event)) {
+         button = MouseButton.LEFT;
+      } else if (SwingUtilities.isMiddleMouseButton(event)) {
+         button = MouseButton.MIDDLE;
+      } else if(SwingUtilities.isRightMouseButton(event)) {
+         button = MouseButton.RIGHT;
+      }
+      Point position = event.getPoint();
+      mEventQueue.add(new Core.Events.MouseEvent(button, action, position));
+   }
 
    @Override
-   public void mouseDragged(MouseEvent arg0) {
+   public void mouseDragged(MouseEvent event) {
+      addMouseEvent(event, MouseAction.DRAG);
+   }
+
+   @Override
+   public void mouseMoved(MouseEvent event) {
+      addMouseEvent(event, MouseAction.MOVE);
+   }
+
+   @Override
+   public void mouseClicked(MouseEvent event) {
+      addMouseEvent(event, MouseAction.CLICKED);
+   }
+
+   @Override
+   public void mouseEntered(MouseEvent event) {
+      // Not sure if entered and dragged are useful
+      // for anything
+   }
+
+   @Override
+   public void mouseExited(MouseEvent event) { }
+
+   @Override
+   public void mousePressed(MouseEvent event) {
+      addMouseEvent(event, MouseAction.PRESSED);
+   }
+
+   @Override
+   public void mouseReleased(MouseEvent event) {
+      addMouseEvent(event, MouseAction.RELEASED);
+   }
+
+   @Override
+   public void keyPressed(KeyEvent event) {
       // TODO Auto-generated method stub
       
    }
 
    @Override
-   public void mouseMoved(MouseEvent arg0) {
+   public void keyReleased(KeyEvent event) {
       // TODO Auto-generated method stub
       
    }
 
    @Override
-   public void mouseClicked(MouseEvent arg0) {
-      // TODO Auto-generated method stub
-      
-   }
-
-   @Override
-   public void mouseEntered(MouseEvent arg0) {
-      // TODO Auto-generated method stub
-      
-   }
-
-   @Override
-   public void mouseExited(MouseEvent arg0) {
-      // TODO Auto-generated method stub
-      
-   }
-
-   @Override
-   public void mousePressed(MouseEvent arg0) {
-      // TODO Auto-generated method stub
-      
-   }
-
-   @Override
-   public void mouseReleased(MouseEvent arg0) {
-      // TODO Auto-generated method stub
-      
-   }
-
-   @Override
-   public void keyPressed(KeyEvent arg0) {
-      // TODO Auto-generated method stub
-      
-   }
-
-   @Override
-   public void keyReleased(KeyEvent arg0) {
-      // TODO Auto-generated method stub
-      
-   }
-
-   @Override
-   public void keyTyped(KeyEvent arg0) {
+   public void keyTyped(KeyEvent event) {
       // TODO Auto-generated method stub
       
    }
