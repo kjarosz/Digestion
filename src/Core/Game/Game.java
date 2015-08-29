@@ -45,7 +45,7 @@ public class Game extends Thread {
 	      mCurrentState.onSwitch();
 	   }
 	   GameState newState = mStates.get(mNextState);
-	   newState.beforeSwitch(mWindow.getSize());
+	   newState.beforeSwitch(mWindow.getCanvasSize());
 	   mCurrentState = newState;
 	   mNextState = null;
 	}

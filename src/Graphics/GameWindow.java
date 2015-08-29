@@ -87,15 +87,19 @@ public class GameWindow {
 	}
 	
 	public int getWidth() {
-	   return mWidth;
+	   return mWindow.getWidth();
 	}
 	
 	public int getHeight() {
-	   return mHeight;
+	   return mWindow.getHeight();
 	}
 	
 	public Dimension getSize() {
 	   return new Dimension(mWidth, mHeight);
+	}
+	
+	public Dimension getCanvasSize() {
+	   return mCanvas.getSize();
 	}
 	
 	public void setSize(int width, int height) {
