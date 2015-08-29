@@ -25,6 +25,8 @@ public class GameCanvas extends Canvas implements CanvasInterface {
 
       parent.add(this, 0);
       
+      setIgnoreRepaint(true);
+      
       createBufferStrategy(2);
       do {
          mStrategy = getBufferStrategy();
