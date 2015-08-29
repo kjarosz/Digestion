@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import Core.Events.Callback;
 import Core.Events.Event;
+import Core.Events.ScreenEvent;
 import Core.Game.Game;
 import Core.Game.GameState;
 import Graphics.CanvasInterface;
@@ -72,8 +73,12 @@ public class MainMenu implements GameState {
 	
    @Override
    public void beforeSwitch(Dimension screenSize) {
-      mScreenSize = screenSize;
-      mLayout.resizeParent(mScreenSize);
+      changeParentSize(screenSize);
+   }
+   
+   private void changeParentSize(Dimension parentSize) {
+      mScreenSize = parentSize;
+      mLayout.resizeParent(parentSize);
    }
 
    @Override
@@ -86,7 +91,12 @@ public class MainMenu implements GameState {
    }
    
    private void processEvent(Event event) {
-      
+      if(event instanceof ScreenEvent) {
+         ScreenEvent screen = (ScreenEvent)event;
+         if(screen.mAction == ScreenEvent.ScreenAction.RESIZED) {
+            changeParentSize(screen.mScreenSize);
+         }
+      }
    }
 
    @Override
