@@ -4,11 +4,11 @@ import java.awt.Point;
 
 public class MouseEvent extends Event {
    public static enum MouseButton {
-      LEFT, MIDDLE, RIGHT
+      NONE, LEFT, MIDDLE, RIGHT
    }
    
    public static enum MouseAction {
-      MOVE, DRAG, PRESSED, RELEASED
+      MOVE, DRAG, PRESSED, CLICKED, RELEASED
    }
    
    public MouseButton mButton;
