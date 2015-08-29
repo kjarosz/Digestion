@@ -20,7 +20,7 @@ public class SinglePlayerMenu extends MenuScreen {
 	}
 
 	private void createWidgets() {
-	   createButton(START_GAME, BUTTON_SIZE, () -> System.out.println("Action"));
+	   createButton(START_GAME, BUTTON_SIZE, () -> startNewGame());
 	   createButton(LEVEL_SELECT, BUTTON_SIZE, () -> mGame.switchToState("LEVEL SELECT"));
 	   createButton(BACK, BUTTON_SIZE, () -> mGame.switchToState("TITLE SCREEN"));
 	}
@@ -28,5 +28,9 @@ public class SinglePlayerMenu extends MenuScreen {
    @Override
    public String stateName() {
       return "SINGLE PLAYER SCREEN";
+   }
+   
+   private void startNewGame() {
+      mGame.switchToState("LOADING SCREEN");
    }
 }

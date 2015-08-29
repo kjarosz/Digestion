@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import Core.Events.EventPump;
 import Core.Menu.LevelMenu;
+import Core.Menu.LoadingScreen;
 import Core.Menu.MainMenu;
 import Core.Menu.SinglePlayerMenu;
 import Core.Messaging.Message;
@@ -37,6 +38,8 @@ public class Game extends Thread {
 	   addState(new MainMenu(this));
 	   addState(new SinglePlayerMenu(this));
 	   addState(new LevelMenu(this));
+	   addState(new LoadingScreen(this));
+	   addState(new LevelState(this));
 	}
 
 	private void addState(GameState state) {
