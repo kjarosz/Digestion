@@ -1,7 +1,7 @@
 package Menu.Widgets;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,37 +10,67 @@ import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-public class Button extends JButton {
+import Core.Events.Callback;
+import Core.Events.DummyCallback;
+import Core.Events.Event;
+import Core.Events.MouseEvent;
+import Graphics.CanvasInterface;
+
+public class Button extends JButton implements UIElement {
    private BufferedImage mImage;
+   private Rectangle mButton;
+   
+   private boolean mButtonActive;
+   private Callback mCallback;
    
    public Button(String imageFilename) {
       loadButtonImage(imageFilename);
-      setBorderPainted(false); 
-      setContentAreaFilled(false); 
-      setFocusPainted(false); 
-      setOpaque(false);
+      mButtonActive = false;
+      mCallback = new DummyCallback();
    }
-   
-   public void loadButtonImage(String imageFilename) {
+
+   private void loadButtonImage(String imageFilename) {
       try {
          mImage = ImageIO.read(new File(imageFilename));
       } catch (IOException ex) {
-         JOptionPane.showMessageDialog(this,
+         JOptionPane.showMessageDialog(null,
                ex.getMessage(), 
                "Error loading button image", 
                JOptionPane.ERROR_MESSAGE);
       }
    }
    
+   public void setActionCallback(Callback callback) {
+      mCallback = callback;
+   }
+   
    @Override
-   public void paintComponent(Graphics g) {
+   public void handleUIEvent(Event event) {
+      if(event instanceof MouseEvent) {
+         MouseEvent e = (MouseEvent)event;
+         if(e.mAction == MouseEvent.MouseAction.PRESSED 
+               && mButton.contains(e.mPosition)) {
+            mButtonActive = true;
+         } else if(e.mAction == MouseEvent.MouseAction.RELEASED
+               && mButtonActive) {
+           if(mButton.contains(e.mPosition)) {
+              mCallback.execute();
+           } else {
+              mButtonActive = false;
+           }
+         }
+      }
+   }
+   
+   @Override
+   public void draw(CanvasInterface canvas) {
       Dimension dims = calculateImageDimensions();
-      g.drawImage(mImage, 
-            getWidth()/2 - dims.width/2, 
+      canvas.drawImage(mImage, 
+            getX() + getWidth()/2 - dims.width/2, 
+            getY() + getHeight()/2 - dims.height/2, 
             0, 
             dims.width, 
-            dims.height, 
-            null);
+            dims.height);
    }
    
    private Dimension calculateImageDimensions() {
