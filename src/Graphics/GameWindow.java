@@ -29,7 +29,7 @@ public class GameWindow {
    
    private void setupWindow(String title) {
 		mWindow = new JFrame(title);
-      mWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+      mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mWindow.addWindowListener(new GameWindowListener());
 		mWindow.setVisible(true);
 		new KeyManager(mWindow.getRootPane());
