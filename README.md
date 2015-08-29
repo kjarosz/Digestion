@@ -7,7 +7,9 @@ A Thing Thing Arena styled 2D platformer when the player has to survive levels o
 
 Required libraries:
 
-**Jython** - Currently required but is likely to be soon removed as a dependency. It has been used for scripting levels and entities. Both of those things are likely to be switched to some kind of json format since it's easier to work with.
+**Jython** - Jar of the library can be downloaded here: http://mirrors.ibiblio.org/maven2/org/python/jython/2.7.0/
+
+Currently required but is likely to be soon removed as a dependency. It has been used for scripting levels and entities. Both of those things are likely to be switched to some kind of json format since it's easier to work with.
 
 **simplejson** - Jar of the library can be downloaded here: https://code.google.com/p/json-simple/downloads/detail?name=json-simple-1.1.1.jar&can=2&q=
 
