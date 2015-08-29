@@ -15,19 +15,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Utils.LevelModelReader;
 import Core.LevelEditor.Utils.LevelModelWriter;
-import Menu.MenuStack;
 
 public class EditorToolbar extends JToolBar {
-   private MenuStack mStack;
-   
    private LevelModel mLevelModel;
    private File mLevelFile;
    
    private boolean mUnsaved = false;
    
-   public EditorToolbar(MenuStack stack, LevelModel levelModel) {
-      mStack = stack;
-      
+   public EditorToolbar(LevelModel levelModel) {
       mLevelModel = levelModel;
       mLevelModel.addPropertyChangeListener(e -> mUnsaved = true);
       mLevelFile = null;
@@ -113,7 +108,7 @@ public class EditorToolbar extends JToolBar {
    
    private void quit() {
 		if(dealWithUnsaved()) {
-			mStack.popScreen();
+		   System.exit(0);
 		}
    }
    

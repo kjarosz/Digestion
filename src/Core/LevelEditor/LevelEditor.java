@@ -2,25 +2,20 @@ package Core.LevelEditor;
 
 import java.awt.BorderLayout;
 
+import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
 import Core.LevelEditor.Components.EditorToolbar;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.EditorSettings;
-import Menu.MenuScreen;
-import Menu.MenuStack;
 
-public class LevelEditor extends MenuScreen {   
-   private MenuStack mStack;
-   
+public class LevelEditor extends JPanel {   
    private ContentPanel mContentPanel;
    
    private EditorSettings mSettings;
    private LevelModel mLevelModel;
    
-   public LevelEditor(MenuStack stack) {
-      mStack = stack;
-      
+   public LevelEditor() {
       mSettings = new EditorSettings();
       mLevelModel = new LevelModel();
       
@@ -37,7 +32,7 @@ public class LevelEditor extends MenuScreen {
    }
    
    private void createToolBar() {
-      EditorToolbar toolbar = new EditorToolbar(mStack, mLevelModel);
+      EditorToolbar toolbar = new EditorToolbar(mLevelModel);
       add(toolbar, BorderLayout.NORTH);
    }
    
