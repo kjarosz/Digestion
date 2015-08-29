@@ -1,105 +1,96 @@
 package Core.Menu;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
 
+import Core.Events.Callback;
 import Core.Game.Game;
-import Core.LevelEditor.LevelEditor;
-import Menu.MenuScreen;
-import Menu.MenuStack;
+import Core.Game.GameState;
+import Graphics.CanvasInterface;
+import Menu.CenteredLayout;
 import Menu.Widgets.Button;
+import Menu.Widgets.UIElement;
 
-public class MainMenu extends MenuScreen {
-	final private String MAIN_MENU_BACKGROUND = "resources/Images/Title.png";
-	final private String SINGLE_PLAYER        = "resources/Images/single_player_button.png";
-	final private String LEVEL_EDITOR         = "resources/Images/level_editor_button.png";
-	final private String EXIT                 = "resources/Images/exit_button.png";
+public class MainMenu implements GameState {
+	private final String MAIN_MENU_BACKGROUND = "resources/Images/Title.png";
+	private final String SINGLE_PLAYER        = "resources/Images/single_player_button.png";
+	private final String LEVEL_EDITOR         = "resources/Images/level_editor_button.png";
+	private final String EXIT                 = "resources/Images/exit_button.png";
+	
+	private final Dimension BUTTON_SIZE = new Dimension(600, 50);
 
-	final private Dimension BUTTON_SIZE = new Dimension(600, 75);
-
-	private MenuStack mStack;
-
-	private SinglePlayerMenu mSinglePlayerMenu;
-	private PauseMenu mPauseMenu;
-
+	private Game mGame;
 	private BufferedImage mBackground;
+	
+	private CenteredLayout mLayout;
+	private LinkedList<UIElement> mElements; 
+	
+	private Dimension mScreenSize;
 
 	public MainMenu(Game game) {
-		mStack = new MenuStack();
+	   mGame = game;
 		loadBackground();
-		createSubmenus(game);
 		createWidgets();
 	}
 
-	public MenuStack getStack() {
-	   return mStack;
-	}
-	
 	private void loadBackground() {
 		try {
 			File bckgrFile = new File(MAIN_MENU_BACKGROUND);
 			mBackground = ImageIO.read(bckgrFile);
 		} catch(IOException ex) {
-			JOptionPane.showMessageDialog(this, 
-					ex.getMessage(), 
-					"Error Loading Menu Background", 
-					JOptionPane.ERROR_MESSAGE);
+		   // There's nothing we can really do about this.
+		   // And it's already going to be visible as it is.
 		}
 	}
-
+	
 	private void createWidgets() {
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		add(Box.createVerticalGlue());
-		addButton(SINGLE_PLAYER,   e -> mStack.pushScreen(mSinglePlayerMenu));
-		add(Box.createVerticalStrut(5));
-		addButton(LEVEL_EDITOR,    e -> loadLevelEditor());
-		add(Box.createVerticalStrut(5));
-		addButton(EXIT,            e -> System.exit(0));
-		add(Box.createVerticalGlue());
-	}
-
-	private void addButton(String text, ActionListener listener) {
-		Button button = new Button(text);
-		button.setMinimumSize(BUTTON_SIZE);
-		button.setPreferredSize(BUTTON_SIZE);
-		button.setMaximumSize(BUTTON_SIZE);
-		button.setAlignmentX(JButton.CENTER_ALIGNMENT);
-		button.addActionListener(listener);
-		add(button);
-	}
-
-	private void createSubmenus(Game game) {
-		mSinglePlayerMenu = new SinglePlayerMenu(game, mStack);
-		mPauseMenu = new PauseMenu(game, mStack);
-	}
-
-	private void loadLevelEditor() {
-		LevelEditor editor = new LevelEditor(mStack); 
-		mStack.pushScreen(editor);
-	}
-
-	@Override
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(mBackground, 0, 0, getWidth(), getHeight(), null);
+	   mLayout = new CenteredLayout(5);
+	   mElements = new LinkedList<>();
+	   createButton(SINGLE_PLAYER, () -> System.out.println("Single Player"));
+	   createButton(LEVEL_EDITOR, () -> System.out.println("Level Editor"));
+	   createButton(EXIT, () -> System.out.println("Exit"));
 	}
 	
-	public void resetToTitle() {
-		mStack.emptyStack();
-		mStack.pushScreen(this);
+	private void createButton(String buttonImage, Callback callback) {
+	   Button button = new Button(buttonImage);
+	   button.setPreferredSize(BUTTON_SIZE);
+	   button.setActionCallback(callback);
+	   mLayout.addComponent(button);
+	   mElements.add(button);
+	}
+
+	public String stateName() {
+	   return "TITLE SCREEN";
 	}
 	
-	public void showPauseMenu() {
-	   mStack.pushScreen(mPauseMenu);
-	}
+   @Override
+   public void beforeSwitch(Dimension screenSize) {
+      mScreenSize = screenSize;
+      mLayout.resizeParent(mScreenSize);
+   }
+
+   @Override
+   public void handleEvents() { }
+
+   @Override
+   public void update() {}
+
+   @Override
+   public void draw(CanvasInterface canvas) {
+      canvas.drawImage(mBackground, 0.0f, 0.0f, 0.0f, 
+            (float)mScreenSize.width, 
+            (float)mScreenSize.height);
+      
+      for(UIElement e: mElements) {
+         e.draw(canvas);
+      }
+   }
+
+   @Override
+   public void onSwitch() { }
 }

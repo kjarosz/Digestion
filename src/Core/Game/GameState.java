@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import Graphics.CanvasInterface;
 
 public interface GameState {
+   public String stateName(); 
+
    /* Called when state machine is switching to this state. */
    public void beforeSwitch(Dimension screenSize);
    

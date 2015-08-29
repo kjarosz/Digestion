@@ -1,7 +1,6 @@
 package Core.Events;
 
+@FunctionalInterface
 public interface Callback {
-   public default void execute() {
-      
-   }
+   public void execute();
 }

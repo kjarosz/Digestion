@@ -2,6 +2,7 @@ package Core.Game;
 
 import java.util.HashMap;
 
+import Core.Menu.MainMenu;
 import Graphics.CanvasInterface;
 import Graphics.GameWindow;
 
@@ -16,11 +17,16 @@ public class Game extends Thread {
 	public Game() {
 	   mWindow = new GameWindow("Digestion");
 	   setupGameStates();
-	   mNextState = "TITLE_STATE";
+	   mNextState = "TITLE SCREEN";
 	}
 
 	private void setupGameStates() {
 	   mStates = new HashMap<>();
+	   addState(new MainMenu(this));
+	}
+
+	private void addState(GameState state) {
+	   mStates.put(state.stateName(), state);
 	}
 	
 	public void switchToState(String state) {
@@ -37,13 +43,18 @@ public class Game extends Thread {
 		   
 		   CanvasInterface canvas = mWindow.getCanvas();
 		   mCurrentState.draw(canvas);
+		   mWindow.draw();
+		   
 		}
 	}
 	
 	private void switchToQueuedState() {
-	   mCurrentState.onSwitch();
+	   if(mCurrentState != null) {
+	      mCurrentState.onSwitch();
+	   }
 	   GameState newState = mStates.get(mNextState);
-	   newState.beforeSwitch();
+	   newState.beforeSwitch(mWindow.getSize());
 	   mCurrentState = newState;
+	   mNextState = null;
 	}
 }
