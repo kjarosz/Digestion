@@ -11,7 +11,7 @@ public class MainMenu extends MenuScreen {
 	private final String LEVEL_EDITOR         = "resources/Images/level_editor_button.png";
 	private final String EXIT                 = "resources/Images/exit_button.png";
 	
-	private final Dimension BUTTON_SIZE = new Dimension(600, 50);
+	private final Dimension BUTTON_SIZE = new Dimension(600, 75);
 
 	public MainMenu(Game game) {
 	   super(game);

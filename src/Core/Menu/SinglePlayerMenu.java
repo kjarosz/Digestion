@@ -11,7 +11,7 @@ public class SinglePlayerMenu extends MenuScreen {
    final private String LEVEL_SELECT               = "resources/Images/level_select_button.png";
    final private String BACK                       = "resources/Images/back_button.png";
 
-	final private Dimension BUTTON_SIZE = new Dimension(600, 50);
+	final private Dimension BUTTON_SIZE = new Dimension(600, 75);
 
 	public SinglePlayerMenu(Game game) {
 	   super(game);
