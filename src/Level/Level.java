@@ -17,9 +17,9 @@ public class Level {
 	public EntityContainer entityContainer;
 	public World world;
 
-	public Level() {
-		name = "";
-		m_size = new Vec2(25.0f, 18.75f);
+	public Level(String name, Vec2 levelSize) {
+		this.name = name;
+		m_size = levelSize;
 		m_gravity = new Vec2(0.0f, 9.81f);
 		
 		entityContainer = new EntityContainer();
