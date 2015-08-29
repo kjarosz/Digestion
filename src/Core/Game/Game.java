@@ -1,13 +1,17 @@
 package Core.Game;
 
 import java.util.HashMap;
+import java.util.Queue;
 
+import Core.Events.Event;
 import Core.Menu.MainMenu;
 import Graphics.CanvasInterface;
 import Graphics.GameWindow;
 
 public class Game extends Thread {
 	private GameWindow mWindow;
+	
+	private Queue<Event> mEventQueue;
 
 	private GameState mCurrentState;
 	private String mNextState;
@@ -33,21 +37,6 @@ public class Game extends Thread {
 	   mNextState = state;
 	}
 	
-	public void run() {
-		while(true) {
-		   if(mNextState != null) 
-		      switchToQueuedState();
-
-		   mCurrentState.handleEvents();
-		   mCurrentState.update();
-		   
-		   CanvasInterface canvas = mWindow.getCanvas();
-		   mCurrentState.draw(canvas);
-		   mWindow.draw();
-		   
-		}
-	}
-	
 	private void switchToQueuedState() {
 	   if(mCurrentState != null) {
 	      mCurrentState.onSwitch();
@@ -56,5 +45,28 @@ public class Game extends Thread {
 	   newState.beforeSwitch(mWindow.getSize());
 	   mCurrentState = newState;
 	   mNextState = null;
+	}
+	
+	@Override
+	public void run() {
+		while(true) {
+		   if(mNextState != null) 
+		      switchToQueuedState();
+
+		   handleEvents();
+		   mCurrentState.update();
+		   draw();
+		   
+		}
+	}
+
+	private void handleEvents() {
+	   mCurrentState.handleEvents(mEventQueue);
+	}
+	
+	private void draw() {
+	   CanvasInterface canvas = mWindow.getCanvas();
+	   mCurrentState.draw(canvas);
+	   mWindow.draw();
 	}
 }

@@ -5,10 +5,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import javax.imageio.ImageIO;
 
 import Core.Events.Callback;
+import Core.Events.Event;
 import Core.Game.Game;
 import Core.Game.GameState;
 import Graphics.CanvasInterface;
@@ -75,7 +77,17 @@ public class MainMenu implements GameState {
    }
 
    @Override
-   public void handleEvents() { }
+   public void handleEvents(Queue<Event> eventQueue) { 
+      while(!eventQueue.isEmpty()) {
+         Event event = eventQueue.poll();
+         processEvent(event);
+         mElements.forEach((e) -> e.handleUIEvent(event));
+      }
+   }
+   
+   private void processEvent(Event event) {
+      
+   }
 
    @Override
    public void update() {}
