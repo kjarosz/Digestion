@@ -15,6 +15,12 @@ public class MenuStack extends JPanel implements ComponentListener {
       setLayout(new BorderLayout());
    }
    
+   public void emptyStack() {
+	   while(!mScreenStack.isEmpty()) {
+		   popScreen();
+	   }
+   }
+   
    public void pushScreen(MenuScreen screen) {
       if(!mScreenStack.isEmpty()) 
          remove(mScreenStack.getLast());

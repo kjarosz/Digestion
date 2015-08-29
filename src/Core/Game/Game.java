@@ -1,7 +1,8 @@
 package Core.Game;
 
-import java.awt.Color;
 import java.awt.event.KeyEvent;
+
+import javax.swing.SwingUtilities;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.World;
@@ -21,8 +22,6 @@ import Graphics.GameWindow;
 import Input.KeyManager;
 import Level.EntityContainer;
 import Level.Level;
-import Level.LevelLoadingScript;
-import Menu.MenuStack;
 import Util.ErrorLog;
 import Util.GameTimer;
 import Util.UnitConverter;
@@ -30,10 +29,9 @@ import Util.UnitConverter;
 public class Game {
 	private GameWindow mWindow;
 
-	private MenuStack mMenuStack;
+	private MainMenu mMainMenu;
 	private GameCanvas mGameCanvas;
 
-	private boolean mPaused;
 	private boolean mQuit;
 
 	private EntityFactory mEntityFactory;
@@ -42,49 +40,24 @@ public class Game {
 	private EntityContainer mWorld;
 
 	public Game() {
-		mWindow = new GameWindow("Digestion");
+		mMainMenu = new MainMenu(this);
 		mGameCanvas = new GameCanvas();
-		mEntityFactory = EntityFactory.getInstance();
-		mPaused = true;
-		setupMenuStack();
-	}
-
-	private void setupMenuStack() {
-		mMenuStack = new MenuStack();
-		mWindow.switchTo(mMenuStack);
-		MainMenu mainMenu = new MainMenu(this, mMenuStack);
-		mainMenu.setBackground(Color.BLACK);
-		mMenuStack.pushScreen(mainMenu);
 	}
 
 	public void startLevel(LevelLoadingScript loadingScript) {
 		if(!loadLevel(loadingScript)) {
-			mMenuStack.popScreen();
 			return;
 		}
 
 		MotionSystem.resetTimer();
 
 		mQuit = false;
-		mMenuStack.popScreen(); // Get rid of loading screen.
 		mWindow.switchTo(mGameCanvas);
 		mWindow.update();
 		execute();
 	}
 
 	private boolean loadLevel(LevelScript loadingScript) {
-		try {
-			mLevel = new Level();
-			loadingScript.loadLevel(mLevel);
-			mWorld = new EntityContainer();
-			mBox2DWorld = new World(mLevel.m_gravity);
-			loadingScript.createEntities(mBox2DWorld, mEntityFactory, mWorld);
-		} catch(PyException ex) {
-			ErrorLog logger = ErrorLog.getInstance();
-			logger.writeError(ex.toString());
-			return false;
-		}
-		return true;
 	}
 
 	public void pause() { 
@@ -104,7 +77,20 @@ public class Game {
 	public void quitToMenu() {
 		mQuit = true;
 	}
-
+	
+	public void run() {
+		showWindow();
+		showTitleScreen();
+	}
+	
+	private void showWindow() {
+		SwingUtilities.invokeLater(() -> mWindow = new GameWindow("Digestion"));
+	}
+	
+	private void showTitleScreen() {
+		SwingUtilities.invokeLater(() -> mWindow.switchTo(mMainMenu));
+	}
+	
 	private void execute() {
 		mPaused = false;
 
