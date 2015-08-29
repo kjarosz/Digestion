@@ -39,6 +39,8 @@ public class GameWindow {
    }
    
    public void addEventPump(EventPump pump) {
+      mCanvas.addComponentListener(pump);
+      mCanvas.addFocusListener(pump);
       mCanvas.addKeyListener(pump);
       mCanvas.addMouseListener(pump);
       mCanvas.addMouseMotionListener(pump);
