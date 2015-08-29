@@ -7,8 +7,7 @@ import java.awt.Insets;
 
 import javax.swing.JFrame;
 
-import Core.Game.GameWindowListener;
-import Input.KeyManager;
+import Core.Events.EventPump;
 import Util.ErrorLog;
 
 public class GameWindow {
@@ -30,15 +29,19 @@ public class GameWindow {
    private void setupWindow(String title) {
 		mWindow = new JFrame(title);
       mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mWindow.addWindowListener(new GameWindowListener());
 		mWindow.setVisible(true);
-		new KeyManager(mWindow.getRootPane());
    }
    
    private void loadSettings() {
 		mFullscreenDevice = null;
 		mFullscreen = false;
       setSize(1024, 768);
+   }
+   
+   public void addEventPump(EventPump pump) {
+      mCanvas.addKeyListener(pump);
+      mCanvas.addMouseListener(pump);
+      mCanvas.addMouseMotionListener(pump);
    }
    
    public void setTitle(String title) {

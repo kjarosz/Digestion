@@ -1,9 +1,8 @@
 package Core.Game;
 
 import java.util.HashMap;
-import java.util.Queue;
 
-import Core.Events.Event;
+import Core.Events.EventPump;
 import Core.Menu.MainMenu;
 import Graphics.CanvasInterface;
 import Graphics.GameWindow;
@@ -11,7 +10,7 @@ import Graphics.GameWindow;
 public class Game extends Thread {
 	private GameWindow mWindow;
 	
-	private Queue<Event> mEventQueue;
+	private EventPump mEventPump;
 
 	private GameState mCurrentState;
 	private String mNextState;
@@ -19,7 +18,9 @@ public class Game extends Thread {
    private HashMap<String, GameState> mStates;
 	
 	public Game() {
+	   mEventPump = new EventPump();
 	   mWindow = new GameWindow("Digestion");
+	   mWindow.addEventPump(mEventPump);
 	   setupGameStates();
 	   mNextState = "TITLE SCREEN";
 	}
@@ -61,7 +62,7 @@ public class Game extends Thread {
 	}
 
 	private void handleEvents() {
-	   mCurrentState.handleEvents(mEventQueue);
+	   mCurrentState.handleEvents(mEventPump.getQueue());
 	}
 	
 	private void draw() {
