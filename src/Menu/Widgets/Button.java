@@ -18,7 +18,6 @@ import Graphics.CanvasInterface;
 
 public class Button extends JButton implements UIElement {
    private BufferedImage mImage;
-   private Rectangle mButton;
    
    private boolean mButtonActive;
    private Callback mCallback;
@@ -49,17 +48,22 @@ public class Button extends JButton implements UIElement {
       if(event instanceof MouseEvent) {
          MouseEvent e = (MouseEvent)event;
          if(e.mAction == MouseEvent.MouseAction.PRESSED 
-               && mButton.contains(e.mPosition)) {
+               && getRect().contains(e.mPosition)) {
             mButtonActive = true;
          } else if(e.mAction == MouseEvent.MouseAction.RELEASED
                && mButtonActive) {
-           if(mButton.contains(e.mPosition)) {
+           if(getRect().contains(e.mPosition)) {
               mCallback.execute();
            } else {
               mButtonActive = false;
            }
          }
       }
+   }
+   
+   private Rectangle getRect() {
+      return new Rectangle(getX(), getY(),
+            getWidth(), getHeight());
    }
    
    @Override
