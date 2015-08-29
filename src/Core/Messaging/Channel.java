@@ -32,7 +32,7 @@ public class Channel {
    }
    
    public void dispatchQueue() {
-      while(mMessageQueue.isEmpty()) {
+      while(!mMessageQueue.isEmpty()) {
          Message message = mMessageQueue.poll();
          for(Receiver receiver: mReceivers) {
             receiver.processMessage(message);
