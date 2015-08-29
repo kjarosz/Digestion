@@ -1,12 +1,9 @@
 package Graphics;
 
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Graphics;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Insets;
-import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 
@@ -15,12 +12,9 @@ import Input.KeyManager;
 import Util.ErrorLog;
 
 public class GameWindow {
-   private BufferStrategy mBackBuffer;
-   
 	private JFrame mWindow;
+	private GameCanvas mCanvas;
    
-   private Component mDisplayedItem;
-	
 	private GraphicsDevice mFullscreenDevice;
 	
 	private boolean mFullscreen;
@@ -29,21 +23,16 @@ public class GameWindow {
    
 	public GameWindow(String title) {
       setupWindow(title);
+      mCanvas = new GameCanvas(mWindow);
       loadSettings();
 	}
    
    private void setupWindow(String title) {
 		mWindow = new JFrame(title);
-      mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+      mWindow.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mWindow.addWindowListener(new GameWindowListener());
 		mWindow.setVisible(true);
 		new KeyManager(mWindow.getRootPane());
-      setupBackBuffer();
-   }
-   
-   private void setupBackBuffer() {
-      mWindow.createBufferStrategy(2);
-      mBackBuffer = mWindow.getBufferStrategy();
    }
    
    private void loadSettings() {
@@ -110,6 +99,7 @@ public class GameWindow {
 		} else {
          setWindowedSize(width, height);
 		}
+		mCanvas.setSize(width, height);
 	}
 	
 	public void setSize(Dimension size) {
@@ -131,18 +121,11 @@ public class GameWindow {
             height + insets.top + insets.bottom);
    }
    
-   public void switchTo(Component component) {
-      if(mDisplayedItem != null)
-         mWindow.remove(mDisplayedItem);
-      mWindow.add(component);
-      mDisplayedItem = component;
-      update();
+   public CanvasInterface getCanvas() {
+      return mCanvas;
    }
    
-   public void update() {
-      Graphics g = mBackBuffer.getDrawGraphics();
-      mWindow.paintAll(g);
-      g.dispose();
-      mBackBuffer.show();
+   public void draw() {
+      mCanvas.draw();
    }
 }
