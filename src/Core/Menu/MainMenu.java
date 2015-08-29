@@ -1,25 +1,11 @@
 package Core.Menu;
 
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
 
-import javax.imageio.ImageIO;
-
-import Core.Events.Callback;
-import Core.Events.Event;
-import Core.Events.ScreenEvent;
 import Core.Game.Game;
-import Core.Game.GameState;
-import Graphics.CanvasInterface;
-import Menu.CenteredLayout;
-import Menu.Widgets.Button;
-import Menu.Widgets.UIElement;
+import Menu.MenuScreen;
 
-public class MainMenu implements GameState {
+public class MainMenu extends MenuScreen {
 	private final String MAIN_MENU_BACKGROUND = "resources/Images/Title.png";
 	private final String SINGLE_PLAYER        = "resources/Images/single_player_button.png";
 	private final String LEVEL_EDITOR         = "resources/Images/level_editor_button.png";
@@ -27,92 +13,20 @@ public class MainMenu implements GameState {
 	
 	private final Dimension BUTTON_SIZE = new Dimension(600, 50);
 
-	private Game mGame;
-	private BufferedImage mBackground;
-	
-	private CenteredLayout mLayout;
-	private LinkedList<UIElement> mElements; 
-	
-	private Dimension mScreenSize;
-
 	public MainMenu(Game game) {
-	   mGame = game;
-		loadBackground();
+	   super(game);
+		loadBackground(MAIN_MENU_BACKGROUND);
 		createWidgets();
-	}
-
-	private void loadBackground() {
-		try {
-			File bckgrFile = new File(MAIN_MENU_BACKGROUND);
-			mBackground = ImageIO.read(bckgrFile);
-		} catch(IOException ex) {
-		   // There's nothing we can really do about this.
-		   // And it's already going to be visible as it is.
-		}
 	}
 	
 	private void createWidgets() {
-	   mLayout = new CenteredLayout(5);
-	   mElements = new LinkedList<>();
-	   createButton(SINGLE_PLAYER, () -> System.out.println("Single Player"));
-	   createButton(LEVEL_EDITOR, () -> System.out.println("Level Editor"));
-	   createButton(EXIT, () -> System.out.println("Exit"));
-	}
-	
-	private void createButton(String buttonImage, Callback callback) {
-	   Button button = new Button(buttonImage);
-	   button.setPreferredSize(BUTTON_SIZE);
-	   button.setActionCallback(callback);
-	   mLayout.addComponent(button);
-	   mElements.add(button);
+	   createButton(SINGLE_PLAYER, BUTTON_SIZE, () -> mGame.switchToState("SINGLE PLAYER SCREEN"));
+	   createButton(LEVEL_EDITOR, BUTTON_SIZE, () -> System.out.println("Level Editor"));
+	   createButton(EXIT, BUTTON_SIZE, () -> System.exit(0));
 	}
 
+	@Override
 	public String stateName() {
 	   return "TITLE SCREEN";
 	}
-	
-   @Override
-   public void beforeSwitch(Dimension screenSize) {
-      changeParentSize(screenSize);
-   }
-   
-   private void changeParentSize(Dimension parentSize) {
-      mScreenSize = parentSize;
-      mLayout.resizeParent(parentSize);
-   }
-
-   @Override
-   public void handleEvents(Queue<Event> eventQueue) { 
-      while(!eventQueue.isEmpty()) {
-         Event event = eventQueue.poll();
-         processEvent(event);
-         mElements.forEach((e) -> e.handleUIEvent(event));
-      }
-   }
-   
-   private void processEvent(Event event) {
-      if(event instanceof ScreenEvent) {
-         ScreenEvent screen = (ScreenEvent)event;
-         if(screen.mAction == ScreenEvent.ScreenAction.RESIZED) {
-            changeParentSize(screen.mScreenSize);
-         }
-      }
-   }
-
-   @Override
-   public void update() {}
-
-   @Override
-   public void draw(CanvasInterface canvas) {
-      canvas.drawImage(mBackground, 0.0f, 0.0f, 0.0f, 
-            (float)mScreenSize.width, 
-            (float)mScreenSize.height);
-      
-      for(UIElement e: mElements) {
-         e.draw(canvas);
-      }
-   }
-
-   @Override
-   public void onSwitch() { }
 }

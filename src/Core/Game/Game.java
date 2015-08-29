@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import Core.Events.EventPump;
 import Core.Menu.MainMenu;
+import Core.Menu.SinglePlayerMenu;
 import Graphics.CanvasInterface;
 import Graphics.GameWindow;
 
@@ -28,6 +29,7 @@ public class Game extends Thread {
 	private void setupGameStates() {
 	   mStates = new HashMap<>();
 	   addState(new MainMenu(this));
+	   addState(new SinglePlayerMenu(this));
 	}
 
 	private void addState(GameState state) {
