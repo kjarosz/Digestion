@@ -1,6 +1,8 @@
 package Menu.Widgets;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,9 +19,11 @@ import Core.Events.MouseEvent;
 import Graphics.CanvasInterface;
 
 public class Button extends JButton implements UIElement {
+   private BufferedImage mLighterImage;
    private BufferedImage mImage;
    
    private boolean mButtonActive;
+   private boolean mButtonHighlighted;
    private Callback mCallback;
    
    public Button(String imageFilename) {
@@ -30,6 +34,7 @@ public class Button extends JButton implements UIElement {
 
    private void loadButtonImage(String imageFilename) {
       try {
+         mLighterImage = null;
          mImage = ImageIO.read(new File(imageFilename));
       } catch (IOException ex) {
          JOptionPane.showMessageDialog(null,
@@ -47,18 +52,30 @@ public class Button extends JButton implements UIElement {
    public void handleUIEvent(Event event) {
       if(event instanceof MouseEvent) {
          MouseEvent e = (MouseEvent)event;
-         if(e.mAction == MouseEvent.MouseAction.PRESSED 
-               && getRect().contains(e.mPosition)) {
-            mButtonActive = true;
-         } else if(e.mAction == MouseEvent.MouseAction.RELEASED
-               && mButtonActive) {
-           if(getRect().contains(e.mPosition)) {
-              mCallback.execute();
-           } else {
-              mButtonActive = false;
-           }
-         }
+         processMousePress(e);
+         processMouseMotion(e);
       }
+   }
+   
+   private void processMousePress(MouseEvent e) {
+      if(e.mAction == MouseEvent.MouseAction.PRESSED 
+            && getRect().contains(e.mPosition)) {
+         mButtonActive = true;
+      } else if(e.mAction == MouseEvent.MouseAction.RELEASED
+            && mButtonActive) {
+         if(getRect().contains(e.mPosition)) {
+            mCallback.execute();
+         } 
+         mButtonActive = false;
+      }
+   }
+   
+   private void processMouseMotion(MouseEvent e) {
+      if(e.mAction == MouseEvent.MouseAction.MOVE ||
+            e.mAction == MouseEvent.MouseAction.DRAG) {
+         mButtonHighlighted = getRect().contains(e.mPosition); 
+      }
+      
    }
    
    private Rectangle getRect() {
@@ -68,10 +85,14 @@ public class Button extends JButton implements UIElement {
    
    @Override
    public void draw(CanvasInterface canvas) {
+      BufferedImage image = mImage;
       Dimension dims = calculateImageDimensions();
-      canvas.drawImage(mImage, 
+      int active_offset = 0;
+      if(mButtonActive) active_offset = 5;
+      if(mButtonHighlighted) image = getLighterImage();
+      canvas.drawImage(image, 
             getX() + getWidth()/2 - dims.width/2, 
-            getY() + getHeight()/2 - dims.height/2, 
+            getY() + getHeight()/2 - dims.height/2 + active_offset, 
             0, 
             dims.width, 
             dims.height);
@@ -92,5 +113,25 @@ public class Button extends JButton implements UIElement {
       scale.height = bounds.height;
       scale.width = (int)(img_dims.width*(double)bounds.height/(double)img_dims.height);
       return scale;
+   }
+   
+   private BufferedImage getLighterImage() {
+      if(mLighterImage == null) {
+         createLighterImage();
+      }
+      return mLighterImage;
+   }
+   
+   private void createLighterImage() {
+      mLighterImage = new BufferedImage(mImage.getWidth(), mImage.getHeight(), mImage.getType());
+      Graphics2D g = (Graphics2D)mLighterImage.getGraphics();
+      g.drawImage(mImage, 0, 0, null);
+      
+      g.setColor(Color.RED);
+      
+      int yOffset = mLighterImage.getHeight() - 2;
+      g.drawLine(0, yOffset, mLighterImage.getWidth(), yOffset);
+      
+      g.dispose();
    }
 }
