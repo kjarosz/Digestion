@@ -6,12 +6,16 @@ import Core.Events.EventPump;
 import Core.Menu.LevelMenu;
 import Core.Menu.MainMenu;
 import Core.Menu.SinglePlayerMenu;
+import Core.Messaging.Message;
+import Core.Messaging.MessageSystem;
+import Core.Messaging.Receiver;
 import Graphics.CanvasInterface;
 import Graphics.GameWindow;
 
 public class Game extends Thread {
 	private GameWindow mWindow;
 	
+	private MessageSystem mMessageSystem;
 	private EventPump mEventPump;
 
 	private GameState mCurrentState;
@@ -20,6 +24,7 @@ public class Game extends Thread {
    private HashMap<String, GameState> mStates;
 	
 	public Game() {
+	   mMessageSystem = new MessageSystem();
 	   setupGameStates();
 	   mEventPump = new EventPump();
 	   mWindow = new GameWindow("Digestion");
@@ -52,12 +57,21 @@ public class Game extends Thread {
 	   mNextState = null;
 	}
 	
+	public void registerReceiver(String channel, Receiver receiver) {
+	   mMessageSystem.registerReceiver(channel, receiver);
+	}
+	
+	public void publishMessage(String channel, Message message) {
+	   mMessageSystem.queueMessage(channel, message);
+	}
+	
 	@Override
 	public void run() {
 		while(true) {
 		   if(mNextState != null) 
 		      switchToQueuedState();
 
+		   mMessageSystem.dispatchMessages();
 		   handleEvents();
 		   mCurrentState.update();
 		   draw();
