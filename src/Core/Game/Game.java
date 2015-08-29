@@ -3,6 +3,7 @@ package Core.Game;
 import java.util.HashMap;
 
 import Core.Events.EventPump;
+import Core.Menu.LevelMenu;
 import Core.Menu.MainMenu;
 import Core.Menu.SinglePlayerMenu;
 import Graphics.CanvasInterface;
@@ -19,10 +20,10 @@ public class Game extends Thread {
    private HashMap<String, GameState> mStates;
 	
 	public Game() {
+	   setupGameStates();
 	   mEventPump = new EventPump();
 	   mWindow = new GameWindow("Digestion");
 	   mWindow.addEventPump(mEventPump);
-	   setupGameStates();
 	   mNextState = "TITLE SCREEN";
 	}
 
@@ -30,6 +31,7 @@ public class Game extends Thread {
 	   mStates = new HashMap<>();
 	   addState(new MainMenu(this));
 	   addState(new SinglePlayerMenu(this));
+	   addState(new LevelMenu(this));
 	}
 
 	private void addState(GameState state) {
@@ -59,7 +61,6 @@ public class Game extends Thread {
 		   handleEvents();
 		   mCurrentState.update();
 		   draw();
-		   
 		}
 	}
 

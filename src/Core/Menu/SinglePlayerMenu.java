@@ -8,6 +8,7 @@ import Menu.MenuScreen;
 public class SinglePlayerMenu extends MenuScreen {
    final private String SINGLE_PLAYER_BACKGROUND   = "resources/Images/Title.png";
    final private String START_GAME                 = "resources/Images/start_game_button.png";
+   final private String LEVEL_SELECT               = "resources/Images/level_select_button.png";
    final private String BACK                       = "resources/Images/back_button.png";
 
 	final private Dimension BUTTON_SIZE = new Dimension(600, 50);
@@ -20,6 +21,7 @@ public class SinglePlayerMenu extends MenuScreen {
 
 	private void createWidgets() {
 	   createButton(START_GAME, BUTTON_SIZE, () -> System.out.println("Action"));
+	   createButton(LEVEL_SELECT, BUTTON_SIZE, () -> mGame.switchToState("LEVEL SELECT"));
 	   createButton(BACK, BUTTON_SIZE, () -> mGame.switchToState("TITLE SCREEN"));
 	}
 
