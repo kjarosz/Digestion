@@ -1,41 +1,40 @@
 package Util;
 
 public class RKIntegrator {
-   public static Vector2D integrateVelocity(double maxVelocity, Vector2D velocity, Vector2D acceleration, double elapsedTime) {
-      Vector2D k[] = new Vector2D[4];
-      for(int i = 0; i < 4; i++)
-         k[i] = new Vector2D();
-      
-      calculateIntervals(k, maxVelocity, velocity, acceleration, elapsedTime);
+   public static Vector2D integrate(double maxVelocity, Vector2D velocity, Vector2D acceleration, double elapsedTime) {
+      Vector2D k[] = calculateIntervals(maxVelocity, velocity, acceleration, elapsedTime);
+
+      velocity.set(k[3]);
       
       Vector2D positionShift = new Vector2D(0.0, 0.0);
-      positionShift.add(k[0]);
-      positionShift.add(k[1].multiply(2));
-      positionShift.add(k[2].multiply(2));
-      positionShift.add(k[3]);
-      positionShift.multiply(elapsedTime);
-      positionShift.divide(6);
-      return positionShift;
+      return positionShift
+            .addLocal(k[0])
+            .addLocal(k[1].mul(2))
+            .addLocal(k[2].mul(2))
+            .addLocal(k[3])
+            .mulLocal(elapsedTime)
+            .divLocal(6);
    }
    
-   private static void calculateIntervals(Vector2D intervals[], double maxVelocity, Vector2D velocity, Vector2D acceleration, double elapsedTime) {
-      Vector2D accelCopy = new Vector2D(acceleration);
+   private static Vector2D[] calculateIntervals(double maxVelocity, 
+                 Vector2D velocity, Vector2D acceleration, double elapsedTime) {
+      Vector2D intervals[] = new Vector2D[4];
+
+      intervals[0] = new Vector2D(velocity);
       
-      intervals[0].set(velocity);
+      intervals[1] = new Vector2D(velocity);
+      intervals[1].addLocal(acceleration.mul(elapsedTime)
+                                        .mul(0.5));
       
-      intervals[1].set(velocity);
-      intervals[1].add(accelCopy.multiply(elapsedTime).multiply(0.5));
-      accelCopy.set(acceleration);
+      intervals[2] = new Vector2D(intervals[1]);
       
-      intervals[2].set(intervals[1]);
-      
-      intervals[3].set(velocity);
-      intervals[3].add(accelCopy.multiply(elapsedTime));
+      intervals[3] = new Vector2D(velocity);
+      intervals[3].addLocal(acceleration.mul(elapsedTime));
       
       for(int i = 0; i < 4; i++)
          clipVector(intervals[i], maxVelocity);
       
-      velocity.set(intervals[3]);
+      return intervals;
    }
    
    private static void clipVector(Vector2D vector, double maxVelocity) {
