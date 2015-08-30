@@ -21,7 +21,7 @@ public class MainMenu extends MenuScreen {
 	
 	private void createWidgets() {
 	   createButton(SINGLE_PLAYER, BUTTON_SIZE, () -> mGame.switchToState("SINGLE PLAYER SCREEN"));
-	   createButton(LEVEL_EDITOR, BUTTON_SIZE, () -> System.out.println("Level Editor"));
+	   createButton(LEVEL_EDITOR, BUTTON_SIZE, () -> mGame.switchToState("LEVEL EDITOR"));
 	   createButton(EXIT, BUTTON_SIZE, () -> System.exit(0));
 	}
 

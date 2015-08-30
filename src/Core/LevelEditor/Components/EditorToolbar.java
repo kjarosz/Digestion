@@ -12,17 +12,22 @@ import javax.swing.JToolBar;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import Core.Game.Game;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Utils.LevelModelReader;
 import Core.LevelEditor.Utils.LevelModelWriter;
 
 public class EditorToolbar extends JToolBar {
+   private Game mGame; 
+   
    private LevelModel mLevelModel;
    private File mLevelFile;
    
    private boolean mUnsaved = false;
    
-   public EditorToolbar(LevelModel levelModel) {
+   public EditorToolbar(Game game, LevelModel levelModel) {
+      mGame = game;
+      
       mLevelModel = levelModel;
       mLevelModel.addPropertyChangeListener(e -> mUnsaved = true);
       mLevelFile = null;
@@ -108,7 +113,7 @@ public class EditorToolbar extends JToolBar {
    
    private void quit() {
 		if(dealWithUnsaved()) {
-		   System.exit(0);
+		   mGame.switchToState("TITLE SCREEN");
 		}
    }
    

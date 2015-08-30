@@ -4,10 +4,7 @@ import java.awt.Canvas;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferStrategy;
-
-import javax.swing.JFrame;
 
 public class GameCanvas extends Canvas implements CanvasInterface {	
    private ImageQueue mImageQueue;
@@ -15,10 +12,10 @@ public class GameCanvas extends Canvas implements CanvasInterface {
    
    private Graphics2D mBuffer;
 
-   public GameCanvas(JFrame parent) {
+   public GameCanvas(GameWindow parent) {
       mImageQueue = new ImageQueue();
 
-      parent.add(this, 0);
+      parent.addCard(this, "GAME CANVAS");
       
       setIgnoreRepaint(true);
       

@@ -1,5 +1,8 @@
 package Graphics;
 
+import java.awt.CardLayout;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -22,7 +25,7 @@ public class GameWindow {
    
 	public GameWindow(String title) {
       setupWindow(title);
-      mCanvas = new GameCanvas(mWindow);
+      mCanvas = new GameCanvas(this);
       loadSettings();
 	}
    
@@ -30,6 +33,7 @@ public class GameWindow {
 		mWindow = new JFrame(title);
       mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mWindow.setVisible(true);
+		mWindow.getContentPane().setLayout(new CardLayout());
    }
    
    private void loadSettings() {
@@ -128,6 +132,16 @@ public class GameWindow {
       mHeight = height;
       mWindow.setSize(width + insets.left + insets.right, 
             height + insets.top + insets.bottom);
+   }
+   
+   public void addCard(Component component, String cardName) {
+      mWindow.getContentPane().add(component, cardName);
+   }
+   
+   public void switchCard(String cardName) {
+      Container container = mWindow.getContentPane();
+      CardLayout layout = (CardLayout)container.getLayout();
+      layout.show(container, cardName);
    }
    
    public CanvasInterface getCanvas() {

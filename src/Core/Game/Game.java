@@ -3,6 +3,7 @@ package Core.Game;
 import java.util.HashMap;
 
 import Core.Events.EventPump;
+import Core.LevelEditor.LevelEditor;
 import Core.Menu.LevelMenu;
 import Core.Menu.LoadingScreen;
 import Core.Menu.MainMenu;
@@ -27,11 +28,11 @@ public class Game extends Thread {
 	
 	public Game() {
 	   mMessageSystem = new MessageSystem();
-	   setupGameStates();
 	   mEventPump = new EventPump();
+	   setupGameStates();
 	   mWindow = new GameWindow("Digestion");
 	   mWindow.addEventPump(mEventPump);
-	   mNextState = "TITLE SCREEN";
+	   setupLevelEditor();
 	}
 
 	private void setupGameStates() {
@@ -42,6 +43,13 @@ public class Game extends Thread {
 	   addState(new LoadingScreen(this));
 	   addState(new LevelState(this));
 	   addState(new PauseMenu(this));
+	   switchToState("TITLE SCREEN");
+	}
+
+	private void setupLevelEditor() {
+	   LevelEditor levelEditor = new LevelEditor(this);
+	   addState(new LevelEditor(this));
+	   mWindow.addCard(levelEditor, "LEVEL EDITOR");
 	}
 
 	private void addState(GameState state) {
@@ -50,6 +58,10 @@ public class Game extends Thread {
 	
 	public void switchToState(String state) {
 	   mNextState = state;
+	}
+	
+	public void switchCard(String cardName) {
+	   mWindow.switchCard(cardName);
 	}
 	
 	private void switchToQueuedState() {

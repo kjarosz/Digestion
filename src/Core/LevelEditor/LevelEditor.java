@@ -1,21 +1,30 @@
 package Core.LevelEditor;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.util.Queue;
 
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
+import Core.Events.Event;
+import Core.Game.Game;
+import Core.Game.GameState;
 import Core.LevelEditor.Components.EditorToolbar;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.EditorSettings;
+import Graphics.CanvasInterface;
 
-public class LevelEditor extends JPanel {   
+public class LevelEditor extends JPanel implements GameState {   
+   private Game mGame;
+   
    private ContentPanel mContentPanel;
    
    private EditorSettings mSettings;
    private LevelModel mLevelModel;
    
-   public LevelEditor() {
+   public LevelEditor(Game game) {
+      mGame = game;
       mSettings = new EditorSettings();
       mLevelModel = new LevelModel();
       
@@ -32,7 +41,7 @@ public class LevelEditor extends JPanel {
    }
    
    private void createToolBar() {
-      EditorToolbar toolbar = new EditorToolbar(mLevelModel);
+      EditorToolbar toolbar = new EditorToolbar(mGame, mLevelModel);
       add(toolbar, BorderLayout.NORTH);
    }
    
@@ -51,5 +60,36 @@ public class LevelEditor extends JPanel {
    private void createContentPanel(JSplitPane parent) {
       mContentPanel = new ContentPanel(mSettings, mLevelModel);
       parent.add(mContentPanel);
+   }
+
+   @Override
+   public String stateName() {
+      return "LEVEL EDITOR";
+   }
+
+   @Override
+   public void beforeSwitch(Dimension screenSize) {
+      mGame.switchCard("LEVEL EDITOR");
+   }
+
+   @Override
+   public void handleEvents(Queue<Event> eventQueue) {
+      // Events are received from the GameCanvas which is not 
+      // visible when the level editor is being show.
+   }
+
+   @Override
+   public void update() {
+      // Literally nothing to do here. Leave this empty! 
+   }
+
+   @Override
+   public void draw(CanvasInterface canvas) {
+      // The canvas is not visible when this function is called!
+   }
+
+   @Override
+   public void onSwitch() { 
+      mGame.switchCard("GAME CANVAS");
    }
 }
