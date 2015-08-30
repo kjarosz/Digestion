@@ -6,6 +6,7 @@ import Core.Events.EventPump;
 import Core.Menu.LevelMenu;
 import Core.Menu.LoadingScreen;
 import Core.Menu.MainMenu;
+import Core.Menu.PauseMenu;
 import Core.Menu.SinglePlayerMenu;
 import Core.Messaging.Message;
 import Core.Messaging.MessageSystem;
@@ -40,6 +41,7 @@ public class Game extends Thread {
 	   addState(new LevelMenu(this));
 	   addState(new LoadingScreen(this));
 	   addState(new LevelState(this));
+	   addState(new PauseMenu(this));
 	}
 
 	private void addState(GameState state) {
