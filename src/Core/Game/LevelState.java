@@ -6,6 +6,8 @@ import java.util.Queue;
 import Core.Events.Event;
 import Core.Events.KeyEvent;
 import Core.Events.KeyEvent.KeyAction;
+import Core.Events.ScreenEvent;
+import Core.Events.ScreenEvent.ScreenAction;
 import Core.Messaging.Message;
 import Core.Messaging.Receiver;
 import Core.Messaging.Messages.LevelLoaderTracker;
@@ -24,7 +26,7 @@ public class LevelState implements GameState, Receiver {
    private Dimension mScreenSize;
 
    private Level mLevel;
-   
+
    private ControlSystem mControlSystem;
    private MotionSystem mMotionSystem;
    private DrawingSystem mDrawingSystem;
@@ -38,7 +40,7 @@ public class LevelState implements GameState, Receiver {
       mMotionSystem = new MotionSystem();
       mDrawingSystem = new DrawingSystem();
    }
-   
+
    @Override
    public String stateName() {
       return "LEVEL";
@@ -50,13 +52,14 @@ public class LevelState implements GameState, Receiver {
       focusOnObject();
       restartSystems();
    }
-   
+
    private void focusOnObject() {
       GameViewport viewport = mLevel.getFocusViewport(mScreenSize);
       mDrawingSystem.setViewport(viewport);
    }
-   
+
    private void restartSystems() {
+      mControlSystem.clearKeys();
       mMotionSystem.resetTimer();
    }
 
@@ -70,7 +73,7 @@ public class LevelState implements GameState, Receiver {
    private void loadLevel(StartLevelLoadMessage message) {
       new Thread(() -> loadFromScript(message.mLevelName)).start();
    }
-   
+
    private void loadFromScript(String levelName) {
       mLevel = LevelFactory.loadLevel(levelName);
       LevelLoaderTracker tracker;
@@ -103,20 +106,27 @@ public class LevelState implements GameState, Receiver {
          processEvent(event);
       }
    }
-   
+
    private void processEvent(Event event) {
       if(event instanceof KeyEvent) {
          processKeyEvent((KeyEvent)event);
+      } else if(event instanceof ScreenEvent) {
+         processScreenEvent((ScreenEvent)event);
       }
    }
-   
+
    private void processKeyEvent(KeyEvent event) {
       if(event.mKeyAction == KeyAction.PRESSED &&
             event.mKeyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
          mGame.switchToState("PAUSE MENU");
-         return;
+      } else {
+         mControlSystem.processKeyEvent(event);
       }
-      
-      mControlSystem.processKeyEvent(event);
+   }
+
+   private void processScreenEvent(ScreenEvent event) {
+      if(event.mAction == ScreenAction.FOCUS_LOST) {
+         mGame.switchToState("PAUSE MENU");
+      }
    }
 }
