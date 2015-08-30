@@ -1,15 +1,12 @@
 package Entity;
 
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
-
 import Core.Entity.BreakingBlockSpawner;
 import Core.Entity.IceBlockSpawner;
 import Core.Entity.NormalBlockSpawner;
 import Core.Entity.PlayerSpawner;
 import Core.Entity.SpikeyBlockSpawner;
-import Core.Entity.ZombieSpawner;
 import Level.EntityContainer;
+import Util.Vector2D;
 
 public class EntityFactory {
    private static EntityFactory sInstance;
@@ -25,25 +22,25 @@ public class EntityFactory {
    
    final private String ENTITY_NAMES[] = {
       "Breaking Block", "Ice Block", "Normal Block",
-      "Player", "Spikey Block", "Zombie" 
+      "Player", "Spikey Block"
    };
 
    final private EntitySpawner ENTITY_SPAWNERS[] = { 
       new BreakingBlockSpawner(), new IceBlockSpawner(), new NormalBlockSpawner(),
-      new PlayerSpawner(), new SpikeyBlockSpawner(), new ZombieSpawner()
+      new PlayerSpawner(), new SpikeyBlockSpawner()
    };
    
    public String[] getEntityNames() {
       return ENTITY_NAMES;
    }
    
-   public int createEntity(World world, String name, Vec2 position, 
-                           Vec2 size, EntityComponents components) 
+   public int createEntity(String name, Vector2D position, 
+                           Vector2D size, EntityComponents components) 
    {
       for(int i = 0; i < ENTITY_NAMES.length; i++) {
          if(name.equals(ENTITY_NAMES[i])) {
             components.name = name;
-            return ENTITY_SPAWNERS[i].spawn(world, position, size, components);
+            return ENTITY_SPAWNERS[i].spawn(position, size, components);
          }
       }
       return EntityContainer.ENTITY_NONE;

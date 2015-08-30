@@ -10,7 +10,6 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import org.jbox2d.common.Vec2;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,7 +17,7 @@ import org.json.simple.parser.ParseException;
 
 import Entity.EntityComponents;
 import Entity.EntityFactory;
-import Util.UnitConverter;
+import Util.Vector2D;
 
 
 public abstract class LevelFactory {
@@ -64,7 +63,7 @@ public abstract class LevelFactory {
       JSONParser parser = new JSONParser();
       JSONObject levelDescriptor = (JSONObject)parser.parse(reader);
       String levelName = (String)levelDescriptor.get("name");
-      Vec2 levelSize = getSize(levelDescriptor);
+      Vector2D levelSize = getSize(levelDescriptor);
       Level level = new Level(levelName, levelSize);
       loadLevelEntities(levelDescriptor, level);
       return level;
@@ -74,20 +73,19 @@ public abstract class LevelFactory {
       return ((Number)src.get(id)).floatValue();
    }
    
-   private static Vec2 getPosition(JSONObject descriptor) {
-      Vec2 position = new Vec2(
-            getFloat(descriptor, "x"),
-            getFloat(descriptor, "y")
-            );
-      return UnitConverter.pixelsToMeters(position);
+   private static Vector2D getVector(JSONObject source, String x, String y) {
+      return new Vector2D(
+            getFloat(source, x),
+            getFloat(source, y)
+         );
    }
    
-   private static Vec2 getSize(JSONObject descriptor) {
-      Vec2 size = new Vec2(
-            getFloat(descriptor, "width"), 
-            getFloat(descriptor, "height")
-         );
-      return UnitConverter.pixelsToMeters(size);
+   private static Vector2D getPosition(JSONObject descriptor) {
+      return getVector(descriptor, "x", "y");
+   }
+   
+   private static Vector2D getSize(JSONObject descriptor) {
+      return getVector(descriptor, "width", "height");
    }
    
    private static void loadLevelEntities(JSONObject descriptor, Level level) {
@@ -96,10 +94,9 @@ public abstract class LevelFactory {
       for(JSONObject entityDesc: jsonify((JSONArray)descriptor.get("tiles"))) {
          int entityID = container.createNewEntity();
          EntityComponents components = container.accessComponents(entityID);
-         Vec2 position = getPosition(entityDesc);
-         Vec2 size = getSize(entityDesc);
-         position.addLocal(size.mul(0.5f));
-         int mask = factory.createEntity(level.world, 
+         Vector2D position = getPosition(entityDesc);
+         Vector2D size = getSize(entityDesc);
+         int mask = factory.createEntity( 
                (String)entityDesc.get("name"),
                position,
                size,

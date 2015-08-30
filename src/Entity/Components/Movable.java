@@ -1,16 +1,13 @@
 package Entity.Components;
 
-import org.jbox2d.common.Vec2;
+import Util.Vector2D;
+
 
 public class Movable {
 	
-	public Vec2 actingForces;
-	public int groundContacts;
-	public boolean doubleJumpAvailable;
+	public Vector2D actingForces;
    
    public Movable() {
-   	actingForces = new Vec2(0.0f, 0.0f);
-   	groundContacts = 0;
-   	doubleJumpAvailable = false;
+   	actingForces = new Vector2D(0.0f, 0.0f);
    }
 }

@@ -2,28 +2,23 @@ package Level;
 
 import java.awt.Dimension;
 
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
-
 import Entity.EntityComponents;
 import Graphics.GameViewport;
-import Util.UnitConverter;
+import Util.Vector2D;
 
 public class Level {
 	public String name;
-	public Vec2 m_size;
-	public Vec2 m_gravity;
+	public Vector2D size;
+	public Vector2D gravity;
 	
 	public EntityContainer entityContainer;
-	public World world;
 
-	public Level(String name, Vec2 levelSize) {
+	public Level(String name, Vector2D levelSize) {
 		this.name = name;
-		m_size = levelSize;
-		m_gravity = new Vec2(0.0f, 9.81f);
+		size = levelSize;
+		gravity = new Vector2D(0.0f, 9.81f);
 		
 		entityContainer = new EntityContainer();
-		world = new World(m_gravity);
 	}
 	
 	public GameViewport getFocusViewport(Dimension windowSize) {
@@ -32,13 +27,12 @@ public class Level {
 			if((entityMask & EntityContainer.ENTITY_FOCUSABLE) != 0) {
 				EntityComponents components = entityContainer.accessComponents(i);
 
-				Vec2 px_levelSize = UnitConverter.metersToPixels(m_size);
-				GameViewport viewport = new GameViewport(px_levelSize, new Vec2(windowSize.width, windowSize.height));
+				GameViewport viewport = new GameViewport(size, new Vector2D(windowSize.width, windowSize.height));
 				viewport.setFocusObject(components);
 				return viewport;
 			}
 		}
-		Vec2 dummyVec = new Vec2();
+		Vector2D dummyVec = new Vector2D();
 		return new GameViewport(dummyVec, dummyVec);
 	}
 }

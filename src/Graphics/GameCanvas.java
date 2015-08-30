@@ -36,7 +36,7 @@ public class GameCanvas extends Canvas implements CanvasInterface {
    }
 
    @Override
-   public void drawImage(Image image, float x, float y, float z, float width, float height) {
+   public void drawImage(Image image, double x, double y, double z, double width, double height) {
       ImageItem imageItem = new ImageItem();
       imageItem.image = image;
       imageItem.x = x;

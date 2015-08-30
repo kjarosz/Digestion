@@ -3,14 +3,11 @@ package Graphics;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 
-import org.jbox2d.common.Vec2;
-
-import Util.UnitConverter;
-
 import Entity.EntityComponents;
+import Util.Vector2D;
 
 public class GameViewport {
-	private Vec2 mLevelSize;
+	private Vector2D mLevelSize;
 	
 	private EntityComponents mFocusObject;
 	
@@ -26,8 +23,8 @@ public class GameViewport {
 	 *                  This must be in the same units as the focus object.
 	 */
 	
-	public GameViewport(Vec2 levelSize, Vec2 screenSize) {
-		mLevelSize = new Vec2(levelSize);
+	public GameViewport(Vector2D levelSize, Vector2D screenSize) {
+		mLevelSize = new Vector2D(levelSize);
 
       mFocusObject = null;
 		
@@ -38,7 +35,7 @@ public class GameViewport {
 		mFocusObject = focusObject;
 	}
 			
-	public void setLevelSize(Vec2 levelSize) {
+	public void setLevelSize(Vector2D levelSize) {
 		if(levelSize.x <= 0 || levelSize.y <= 0)
 			return;
 		
@@ -78,8 +75,8 @@ public class GameViewport {
 		return translation;
 	}
 	
-	public Vec2 translate(Vec2 originalPosition) {
-	   Vec2 translation = new Vec2();
+	public Vector2D translate(Vector2D originalPosition) {
+	   Vector2D translation = new Vector2D();
 	   translation.x = originalPosition.x - (float)mLevelViewport.getX();
 	   translation.y = originalPosition.y - (float)mLevelViewport.getY();
 	   return translation;
@@ -89,16 +86,15 @@ public class GameViewport {
 		if(mFocusObject == null)
 			return;
 		
-		Vec2 m_position = mFocusObject.body.getPosition();
-		Vec2 px_position = UnitConverter.metersToPixels(m_position);
+		Vector2D position = mFocusObject.tangible.position;
 		
 		// Shifting the viewport to center on the object of focus
       Rectangle2D center = mLevelViewport.getBounds2D();
 		double centerWidth = center.getWidth();
 		double centerHeight = center.getHeight();
 		
-		double centerX = centerDimension(mLevelSize.x, centerWidth, px_position.x);
-		double centerY = centerDimension(mLevelSize.y, centerHeight, px_position.y);
+		double centerX = centerDimension(mLevelSize.x, centerWidth, position.x);
+		double centerY = centerDimension(mLevelSize.y, centerHeight, position.y);
 		
 		mLevelViewport.setRect(centerX, centerY, centerWidth, centerHeight);
 	}

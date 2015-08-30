@@ -1,9 +1,5 @@
 package Entity.Systems;
 
-import org.jbox2d.dynamics.World;
-
-import Entity.EntityComponents;
-import Level.EntityContainer;
 import Level.Level;
 import Util.GameTimer;
 
@@ -36,17 +32,7 @@ public class MotionSystem {
    public void move(Level level) {
       mTimer.updateFrame();
       while(mTimer.hasAccumulatedTime()) {
-         World world = level.world;
-         EntityContainer entityContainer = level.entityContainer;
-         for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
-            if((entityContainer.getEntityMask(i) & EntityContainer.ENTITY_MOVABLE) != EntityContainer.ENTITY_MOVABLE)
-               continue;
-
-            EntityComponents components = entityContainer.accessComponents(i);
-            components.body.applyForceToCenter(components.movable.actingForces);
-         }
-
-         world.step((float)mTimer.stepMillisTime(), 6, 2);
+         double ms_timestep = mTimer.stepMillisTime();
       }
    }
 }

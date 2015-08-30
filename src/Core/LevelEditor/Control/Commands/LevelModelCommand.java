@@ -1,9 +1,9 @@
 package Core.LevelEditor.Control.Commands;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 
-import Util.Size;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.DrawerSettings;
 import Core.LevelEditor.Settings.EditorSettings;
@@ -24,7 +24,7 @@ public abstract class LevelModelCommand {
    public abstract void perform(MouseEvent event);
    
    protected Point snapToGrid(Point coords) {
-      Size gridSize = mDrawer.getGridSize();
+      Dimension gridSize = mDrawer.getGridSize();
       Point snapped = new Point(coords);
       snapped.x = (int)(coords.x/(float)gridSize.width)*gridSize.width;
       snapped.y = (int)(coords.y/(float)gridSize.height)*gridSize.height;

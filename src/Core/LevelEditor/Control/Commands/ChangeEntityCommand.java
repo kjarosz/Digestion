@@ -1,5 +1,6 @@
 package Core.LevelEditor.Control.Commands;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -8,7 +9,6 @@ import Core.LevelEditor.Models.Entity;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.DrawerSettings;
 import Core.LevelEditor.Settings.EditorSettings;
-import Util.Size;
 
 public class ChangeEntityCommand extends LevelModelCommand {
 
@@ -55,7 +55,7 @@ public class ChangeEntityCommand extends LevelModelCommand {
    }
    
    private Rectangle formBounds(Point topLeft, Point bottomRight) {
-      Size gridSize = mDrawer.getGridSize();
+      Dimension gridSize = mDrawer.getGridSize();
       Rectangle bounds = new Rectangle();
       bounds.x = topLeft.x;
       bounds.y = topLeft.y;
