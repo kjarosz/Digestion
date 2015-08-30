@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 import org.jbox2d.common.Vec2;
 
 import Entity.EntityComponents;
+import Entity.Components.Drawable;
 import Graphics.CanvasInterface;
 import Graphics.GameViewport;
 import Level.EntityContainer;
@@ -75,14 +76,9 @@ public class DrawingSystem {
       if(entityIsInViewport(position, size)) {
          Vec2 screenCoords = translateToScreen(position);
          if(components.drawable.tiled) {
-            drawTiled(canvas, components.drawable.image, screenCoords, size);
+            drawTiled(canvas, components.drawable, screenCoords, size);
          } else {
-            canvas.drawImage(components.drawable.image, 
-                  screenCoords.x,
-                  screenCoords.y,
-                  0.0f,
-                  size.x,
-                  size.y);
+            drawImage(canvas, components.drawable, screenCoords, size);
          }
       }
    }
@@ -110,17 +106,32 @@ public class DrawingSystem {
       return mViewport.translate(position);
    }
    
-   private void drawTiled(CanvasInterface canvas, BufferedImage image,
+   private void drawTiled(CanvasInterface canvas, Drawable drawable,
          Vec2 position, Vec2 size) {
-      int imgWidth = image.getWidth();
-      int imgHeight = image.getHeight();
+      int imgWidth = drawable.image.getWidth();
+      int imgHeight = drawable.image.getHeight();
       for(int x = (int)position.x; x < position.x + size.x; x += imgWidth) {
          for(int y = (int)position.y; y < position.y + size.y; y += imgHeight) {
             int width = (int)min(imgWidth, (position.x + size.x) - x);
             int height = (int)min(imgWidth, (position.y + size.y) - y);
-            canvas.drawImage(image, x, y, 0, width, height);
+            drawImage(canvas, drawable, x, y, 0, width, height);
          }
       }
+   }
+   
+   private void drawImage(CanvasInterface canvas, Drawable drawable, Vec2 pos, Vec2 size) {
+      drawImage(canvas, drawable, pos.x, pos.y, 0, size.x, size.y);
+   }
+   
+   private void drawImage(CanvasInterface canvas, Drawable drawable, float x, float y, float z, float width, float height) {
+      int reflector = drawable.flipped ? -1 : 1;
+      int reflectionOffset = drawable.flipped ? 1 : 0;
+      canvas.drawImage(drawable.image,
+            x + reflectionOffset * width, 
+            y, 
+            z, 
+            reflector * width, 
+            height);
    }
 }
 
