@@ -98,6 +98,7 @@ public abstract class LevelFactory {
          EntityComponents components = container.accessComponents(entityID);
          Vec2 position = getPosition(entityDesc);
          Vec2 size = getSize(entityDesc);
+         position.addLocal(size.mul(0.5f));
          int mask = factory.createEntity(level.world, 
                (String)entityDesc.get("name"),
                position,
