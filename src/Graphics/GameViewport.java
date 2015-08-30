@@ -78,6 +78,13 @@ public class GameViewport {
 		return translation;
 	}
 	
+	public Vec2 translate(Vec2 originalPosition) {
+	   Vec2 translation = new Vec2();
+	   translation.x = originalPosition.x - (float)mLevelViewport.getX();
+	   translation.y = originalPosition.y - (float)mLevelViewport.getY();
+	   return translation;
+	}
+	
 	public void update() {
 		if(mFocusObject == null)
 			return;
