@@ -38,6 +38,7 @@ public class Level {
 				return viewport;
 			}
 		}
-		return null;
+		Vec2 dummyVec = new Vec2();
+		return new GameViewport(dummyVec, dummyVec);
 	}
 }
