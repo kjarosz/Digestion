@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.swing.SwingUtilities;
 
+import Core.Events.KeyEvent.KeyAction;
 import Core.Events.MouseEvent.MouseAction;
 import Core.Events.MouseEvent.MouseButton;
 import Core.Events.ScreenEvent.ScreenAction;
@@ -120,21 +121,22 @@ public class EventPump implements KeyListener, MouseListener, MouseMotionListene
       addMouseEvent(event, MouseAction.RELEASED);
    }
 
+   private void addKeyEvent(KeyEvent event, KeyAction action) {
+      mEventQueue.add(new Core.Events.KeyEvent(action, event.getKeyCode()));
+   }
+   
    @Override
    public void keyPressed(KeyEvent event) {
-      // TODO Auto-generated method stub
-      
+      addKeyEvent(event, KeyAction.PRESSED);
    }
 
    @Override
    public void keyReleased(KeyEvent event) {
-      // TODO Auto-generated method stub
-      
+      addKeyEvent(event, KeyAction.RELEASED);
    }
 
    @Override
    public void keyTyped(KeyEvent event) {
-      // TODO Auto-generated method stub
-      
+      addKeyEvent(event, KeyAction.TYPED);
    }
 }
