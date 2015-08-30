@@ -56,47 +56,20 @@ public class PlayerSpawner extends EntitySpawner {
    	components.body = world.createBody(def);
    	components.m_width = size.x;
    	components.m_height = size.y;
-   	
-   	createInnerCircleFixture(components);
-   	createOuterCircleFixture(components);
+
+   	PolygonShape shape = new PolygonShape();
+   	shape.setAsBox(components.m_width/2.0f, components.m_height/2.0f);
+
+   	FixtureDef fixtureDef = new FixtureDef();
+   	fixtureDef.shape = shape;
+   	fixtureDef.density = 0.0f;
+   	fixtureDef.filter.categoryBits |= MotionSystem.STAGE;
+   	components.body.createFixture(fixtureDef);
    	
    	GroundSensor sensor = createGroundSensor(components);
    	world.setContactListener(sensor);
    	
       return EntityContainer.ENTITY_COLLIDABLE | EntityContainer.ENTITY_MOVABLE;
-   }
-   
-   private void createInnerCircleFixture(EntityComponents components) {
-      CircleShape innerCircle = new CircleShape();
-      innerCircle.setRadius(components.m_width/2.0f);
-      
-      FixtureDef innerCircleFixtureDef = new FixtureDef();
-      innerCircleFixtureDef.shape = innerCircle;
-      innerCircleFixtureDef.density = DENSITY;
-      innerCircleFixtureDef.friction = FRICTION;
-      components.body.createFixture(innerCircleFixtureDef);
-   }
-   
-   private void createOuterCircleFixture(EntityComponents components) {
-      ChainShape outerCircle = new ChainShape();
-      Vec2 vertices[] = new Vec2[OUTER_CIRCLE_DIVISIONS + 1];
-      for(int i = 0; i < OUTER_CIRCLE_DIVISIONS; i++) {
-         float angle = (float)((2*Math.PI)/OUTER_CIRCLE_DIVISIONS)*i;
-         float x, y;
-         
-         x = (components.m_width/2.0f)*(float)Math.cos(angle);
-         y = (components.m_height/2.0f)*(float)Math.sin(angle);
-         vertices[i] = new Vec2(x, y);
-      }
-      vertices[OUTER_CIRCLE_DIVISIONS] = new Vec2(vertices[0]);
-      outerCircle.createChain(vertices, OUTER_CIRCLE_DIVISIONS);
-            
-      FixtureDef outerCircleFixtureDef = new FixtureDef();
-      outerCircleFixtureDef.shape = outerCircle;
-      outerCircleFixtureDef.density = DENSITY;
-      outerCircleFixtureDef.friction = FRICTION;
-      outerCircleFixtureDef.filter.categoryBits |= MotionSystem.AGENT;
-      components.body.createFixture(outerCircleFixtureDef);
    }
    
    private GroundSensor createGroundSensor(EntityComponents components) {
