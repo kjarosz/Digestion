@@ -5,6 +5,7 @@ import org.jbox2d.dynamics.World;
 import Entity.EntityComponents;
 import Level.EntityContainer;
 import Level.Level;
+import Util.GameTimer;
 
 public class MotionSystem {
 	// BitMasks for sensors
@@ -12,37 +13,40 @@ public class MotionSystem {
 	public final static long AGENT         = 2; // Does the fixture belong to a moving agent like a player or enemy.
 	public final static long GROUND_SENSOR = 4;
 	
-	private long mLastTime = 0;
+	public final static long NANO_TIMESTEP = (long)(1.0/60.0*1000000000);
+
+	private GameTimer mTimer;
 
 	public MotionSystem() {
-	   resetTimer();
+	   mTimer = new GameTimer(NANO_TIMESTEP);
+	}
+	
+	public void resetTimer() {
+	   mTimer.reset();
+	}
+	
+	public void pauseTimer() {
+	   mTimer.pause();
+	}
+	
+	public void startTimer() {
+	   mTimer.start();
 	}
 	   
    public void move(Level level) {
-      World world = level.world;
-      EntityContainer entityContainer = level.entityContainer;
-      for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
-         if((entityContainer.getEntityMask(i) & EntityContainer.ENTITY_MOVABLE) != EntityContainer.ENTITY_MOVABLE)
-            continue;
-         
-         EntityComponents components = entityContainer.accessComponents(i);
-         components.body.applyForceToCenter(components.movable.actingForces);
+      mTimer.updateFrame();
+      while(mTimer.hasAccumulatedTime()) {
+         World world = level.world;
+         EntityContainer entityContainer = level.entityContainer;
+         for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
+            if((entityContainer.getEntityMask(i) & EntityContainer.ENTITY_MOVABLE) != EntityContainer.ENTITY_MOVABLE)
+               continue;
+
+            EntityComponents components = entityContainer.accessComponents(i);
+            components.body.applyForceToCenter(components.movable.actingForces);
+         }
+
+         world.step((float)mTimer.stepMillisTime(), 6, 2);
       }
-      
-      world.step((float)nanoToSeconds(getElapsedTime()), 6, 2);
-   }
-   
-   private long getElapsedTime() {
-   	long elapsedTime = System.nanoTime() - mLastTime;
-   	mLastTime += elapsedTime;
-   	return elapsedTime;
-   }
-   
-   public void resetTimer() {
-   	mLastTime = System.nanoTime();
-   }
-   
-   private double nanoToSeconds(double nano) {
-   	return nano / 1000000000.0;
    }
 }
