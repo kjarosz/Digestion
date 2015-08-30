@@ -69,8 +69,4 @@ public class EntityContainer {
       
       return mEmptyComponent;
    }
-   
-   public void resetTimers() {
-      // TO-DO write code to take care of this
-   }
 }
