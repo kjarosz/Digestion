@@ -6,8 +6,6 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.jbox2d.collision.shapes.ChainShape;
-import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyDef;
@@ -27,11 +25,6 @@ import Input.ControlFunction;
 import Level.EntityContainer;
 
 public class PlayerSpawner extends EntitySpawner {
-	private final float DENSITY = 5.0f;
-	private final float FRICTION = 2.0f;
-	
-	private final int OUTER_CIRCLE_DIVISIONS = 36;
-	
    private final Vec2 LEFT_FORCE = new Vec2(-25f, 0);
    private final Vec2 RIGHT_FORCE = new Vec2(25f, 0);
    private final Vec2 UP_FORCE = new Vec2(0, -6.8f);
