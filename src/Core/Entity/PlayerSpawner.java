@@ -15,9 +15,9 @@ import Util.Vector2D;
 public class PlayerSpawner extends EntitySpawner {
    private final static String ENTITY_IMAGE = "Players" + File.separator + "Gordon" + File.separator + "standing.gif";
 
-   private final Vector2D LEFT_FORCE = new Vector2D(-25, 0);
-   private final Vector2D RIGHT_FORCE = new Vector2D(25, 0);
-   private final Vector2D UP_FORCE = new Vector2D(0, -6.8);
+   private final Vector2D LEFT_VELOCITY = new Vector2D(-250, 0);
+   private final Vector2D RIGHT_VELOCITY = new Vector2D(250, 0);
+   private final Vector2D UP_FORCE = new Vector2D(0, -500);
    
    @Override
    public int spawn(Vector2D position, Vector2D size, EntityComponents components) {
@@ -42,9 +42,9 @@ public class PlayerSpawner extends EntitySpawner {
    }
    
    private int makeControllable(Controllable controllable) {
-      constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_FORCE);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_VELOCITY);
       constructJumpKeyMapping(controllable, KeyEvent.VK_W, UP_FORCE);
-      constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_FORCE);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_VELOCITY);
       
       return EntityContainer.ENTITY_CONTROLLABLE;
    }
@@ -54,12 +54,12 @@ public class PlayerSpawner extends EntitySpawner {
    	constructKeyMapping(controllable, keyCode, new ControlFunction() {
          @Override
          public void keyPressed(EntityComponents components) {
-            components.movable.actingForces.addLocal(force);
+            components.movable.velocity.addLocal(force);
          }
          
          @Override
          public void keyReleased(EntityComponents components) {
-            components.movable.actingForces.subLocal(force);
+            components.movable.velocity.subLocal(force);
          }
    	});
    }
@@ -69,6 +69,7 @@ public class PlayerSpawner extends EntitySpawner {
    	constructKeyMapping(controllable, keyCode, new ControlFunction() {
    		@Override
    		public void keyPressed(EntityComponents components) {
+   		   
    		}
    		
    		@Override
