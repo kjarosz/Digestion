@@ -12,9 +12,13 @@ public class MotionSystem {
 	public final static long AGENT         = 2; // Does the fixture belong to a moving agent like a player or enemy.
 	public final static long GROUND_SENSOR = 4;
 	
-	private static long sLastTime = 0;
+	private long mLastTime = 0;
+
+	public MotionSystem() {
+	   resetTimer();
+	}
 	   
-   public static void move(Level level) {
+   public void move(Level level) {
       World world = level.world;
       EntityContainer entityContainer = level.entityContainer;
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
@@ -28,17 +32,17 @@ public class MotionSystem {
       world.step((float)nanoToSeconds(getElapsedTime()), 6, 2);
    }
    
-   private static long getElapsedTime() {
-   	long elapsedTime = System.nanoTime() - sLastTime;
-   	sLastTime += elapsedTime;
+   private long getElapsedTime() {
+   	long elapsedTime = System.nanoTime() - mLastTime;
+   	mLastTime += elapsedTime;
    	return elapsedTime;
    }
    
-   public static void resetTimer() {
-   	sLastTime = System.nanoTime();
+   public void resetTimer() {
+   	mLastTime = System.nanoTime();
    }
    
-   private static double nanoToSeconds(double nano) {
+   private double nanoToSeconds(double nano) {
    	return nano / 1000000000.0;
    }
 }

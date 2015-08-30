@@ -10,20 +10,28 @@ import Core.Messaging.Messages.LevelLoaderTracker;
 import Core.Messaging.Messages.LevelLoaderTracker.LoadingStatus;
 import Core.Messaging.Messages.StartLevelLoadMessage;
 import Entity.Systems.DrawingSystem;
+import Entity.Systems.MotionSystem;
 import Graphics.CanvasInterface;
+import Graphics.GameViewport;
 import Level.Level;
 import Level.LevelFactory;
 
 public class LevelState implements GameState, Receiver {
    private Game mGame;
+   private Dimension mScreenSize;
 
    private Level mLevel;
+   
+   private MotionSystem mMotionSystem;
+   private DrawingSystem mDrawingSystem;
 
    public LevelState(Game game) {
       mGame = game;
       mGame.registerReceiver("Level", this);
 
       mLevel = null;
+      mMotionSystem = new MotionSystem();
+      mDrawingSystem = new DrawingSystem();
    }
    
    @Override
@@ -33,7 +41,17 @@ public class LevelState implements GameState, Receiver {
 
    @Override
    public void beforeSwitch(Dimension screenSize) {
-      
+      mScreenSize = screenSize;
+      focusOnObject();
+      restartSystems();
+   }
+   
+   private void focusOnObject() {
+      GameViewport viewport = mLevel.getFocusViewport(mScreenSize);
+   }
+   
+   private void restartSystems() {
+      mMotionSystem.resetTimer();
    }
 
    @Override
@@ -64,12 +82,12 @@ public class LevelState implements GameState, Receiver {
 
    @Override
    public void update() {
-      
+      mMotionSystem.move(mLevel);
    }
 
    @Override
    public void draw(CanvasInterface canvas) {
-      DrawingSystem.draw(mLevel, canvas);
+      mDrawingSystem.draw(mLevel, canvas);
    }
 
    @Override

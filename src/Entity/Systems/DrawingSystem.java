@@ -1,5 +1,6 @@
 package Entity.Systems;
 
+import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,21 +11,22 @@ import org.jbox2d.common.Vec2;
 
 import Entity.EntityComponents;
 import Graphics.CanvasInterface;
+import Graphics.GameViewport;
 import Level.EntityContainer;
 import Level.Level;
 import Util.UnitConverter;
 
 public class DrawingSystem {
-	private static BufferedImage gNullImage;
+	private static BufferedImage sNullImage;
 	
 	private static boolean loadNullImage(String imagePath) {
 		if (imagePath.isEmpty())
 			return false;
 		
 		try {
-			gNullImage = ImageIO.read(new File(imagePath));
+			sNullImage = ImageIO.read(new File(imagePath));
 			
-         return gNullImage != null;
+         return sNullImage != null;
 		} catch (IOException ex) {
 			System.out.println(ex.getMessage());
 			return false;
@@ -32,13 +34,31 @@ public class DrawingSystem {
 	}
    
    public static BufferedImage getNullImage() {
-      if(gNullImage == null)
+      if(sNullImage == null) {
          loadNullImage("resources" + File.separator + "NullImage.png");
-         
-      return gNullImage;
+      }
+
+      return sNullImage;
    }
    
-   public static void draw(Level level, CanvasInterface canvas) {
+   private GameViewport mViewport;
+   
+	public DrawingSystem() {
+	   Vec2 dummyVec = new Vec2();
+	   mViewport = new GameViewport(dummyVec, dummyVec);
+	}
+	
+	public void setViewport(GameViewport viewport) {
+	   mViewport = viewport;
+	}
+	
+	public void setScreenSize(Dimension screenSize) {
+	   mViewport.setWindowSize(screenSize.width, screenSize.height);
+	}
+
+   public void draw(Level level, CanvasInterface canvas) {
+      mViewport.update();
+
       EntityContainer entityContainer = level.entityContainer;
       for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
          int entity = entityContainer.getEntityMask(i);
@@ -47,16 +67,43 @@ public class DrawingSystem {
       }
    }
    
-   private static void drawEntity(EntityComponents components, CanvasInterface canvas) {
+   private void drawEntity(EntityComponents components, CanvasInterface canvas) {
+      Vec2 position = getEntityPosition(components);
+      Vec2 size = getEntitySize(components);
+      if(entityIsInViewport(position, size)) {
+         Vec2 screenCoords = translateToScreen(position);
+         canvas.drawImage(components.drawable.image, 
+               screenCoords.x,
+               screenCoords.y,
+               0.0f,
+               size.x,
+               size.y);
+      }
+   }
+   
+   private Vec2 getEntityPosition(EntityComponents components) {
       Vec2 m_position = new Vec2(components.body.getPosition());
       m_position.x -= components.m_width/2.0f;
       m_position.y -= components.m_height/2.0f;
-      Vec2 px_position = UnitConverter.metersToPixels(m_position);
-      canvas.drawImage(components.drawable.image, 
-              px_position.x,
-              px_position.y,
-              0.0f,
-              Math.round(UnitConverter.metersToPixels(components.m_width)),
-              Math.round(UnitConverter.metersToPixels(components.m_height)));
+      return UnitConverter.metersToPixels(m_position);
+   }
+   
+   private Vec2 getEntitySize(EntityComponents components) {
+      Vec2 m_size = new Vec2(components.m_width, components.m_height);
+      return UnitConverter.metersToPixels(m_size);
+   }
+   
+   private boolean entityIsInViewport(Vec2 position, Vec2 size) {
+      if(mViewport != null && !mViewport.contains(position.x, position.y, size.x, size.y)) {
+         return false;
+      }
+      return true;
+   }
+   
+   private Vec2 translateToScreen(Vec2 position) {
+      if(mViewport != null) {
+         return mViewport.translate(position);
+      }
+      return position;
    }
 }
