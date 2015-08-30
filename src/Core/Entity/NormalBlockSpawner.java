@@ -19,9 +19,6 @@ import Entity.Systems.MotionSystem;
 import Level.EntityContainer;
 
 public class NormalBlockSpawner extends EntitySpawner {
-	private static final float WIDTH = 1.0f;
-	private static final float HEIGHT = 1.0f;
-	
    @Override
    public int spawn(World world, Vec2 position, Vec2 size, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
@@ -36,8 +33,8 @@ public class NormalBlockSpawner extends EntitySpawner {
    	def.position = new Vec2(position);
    	
    	components.body = world.createBody(def);
-   	components.m_width = WIDTH;
-   	components.m_height = HEIGHT;
+   	components.m_width = size.x;
+   	components.m_height = size.y;
    	
    	PolygonShape shape = new PolygonShape();
    	shape.setAsBox(components.m_width/2.0f, components.m_height/2.0f);
