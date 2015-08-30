@@ -48,6 +48,7 @@ public class LevelState implements GameState, Receiver {
    
    private void focusOnObject() {
       GameViewport viewport = mLevel.getFocusViewport(mScreenSize);
+      mDrawingSystem.setViewport(viewport);
    }
    
    private void restartSystems() {
