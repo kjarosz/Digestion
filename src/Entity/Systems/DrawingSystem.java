@@ -1,5 +1,7 @@
 package Entity.Systems;
 
+import static java.lang.Math.min;
+
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -72,12 +74,16 @@ public class DrawingSystem {
       Vec2 size = getEntitySize(components);
       if(entityIsInViewport(position, size)) {
          Vec2 screenCoords = translateToScreen(position);
-         canvas.drawImage(components.drawable.image, 
-               screenCoords.x,
-               screenCoords.y,
-               0.0f,
-               size.x,
-               size.y);
+         if(components.drawable.tiled) {
+            drawTiled(canvas, components.drawable.image, screenCoords, size);
+         } else {
+            canvas.drawImage(components.drawable.image, 
+                  screenCoords.x,
+                  screenCoords.y,
+                  0.0f,
+                  size.x,
+                  size.y);
+         }
       }
    }
    
@@ -103,4 +109,18 @@ public class DrawingSystem {
    private Vec2 translateToScreen(Vec2 position) {
       return mViewport.translate(position);
    }
+   
+   private void drawTiled(CanvasInterface canvas, BufferedImage image,
+         Vec2 position, Vec2 size) {
+      int imgWidth = image.getWidth();
+      int imgHeight = image.getHeight();
+      for(int x = (int)position.x; x < position.x + size.x; x += imgWidth) {
+         for(int y = (int)position.y; y < position.y + size.y; y += imgHeight) {
+            int width = (int)min(imgWidth, (position.x + size.x) - x);
+            int height = (int)min(imgWidth, (position.y + size.y) - y);
+            canvas.drawImage(image, x, y, 0, width, height);
+         }
+      }
+   }
 }
+

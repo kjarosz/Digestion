@@ -58,6 +58,7 @@ public class IceBlockSpawner extends EntitySpawner {
       } catch(IOException ex) {
          drawable.image = DrawingSystem.getNullImage();
       }
+      drawable.tiled = true;
       return EntityContainer.ENTITY_DRAWABLE;
    }
 
