@@ -10,7 +10,6 @@ ErrorLog.txt
 resources/Level*
 
 # Package Files #
-*.jar
 *.war
 *.ear
 /bin
