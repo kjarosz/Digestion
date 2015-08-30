@@ -94,16 +94,13 @@ public class DrawingSystem {
    }
    
    private boolean entityIsInViewport(Vec2 position, Vec2 size) {
-      if(mViewport != null && !mViewport.contains(position.x, position.y, size.x, size.y)) {
+      if(!mViewport.contains(position.x, position.y, size.x, size.y)) {
          return false;
       }
       return true;
    }
    
    private Vec2 translateToScreen(Vec2 position) {
-      if(mViewport != null) {
-         return mViewport.translate(position);
-      }
-      return position;
+      return mViewport.translate(position);
    }
 }
