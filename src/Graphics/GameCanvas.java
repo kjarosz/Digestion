@@ -10,17 +10,12 @@ import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
 
 public class GameCanvas extends Canvas implements CanvasInterface {	
-   private GameViewport mViewport;
-   private boolean mViewportEnabled;
-
    private ImageQueue mImageQueue;
    private BufferStrategy mStrategy;
    
    private Graphics2D mBuffer;
 
    public GameCanvas(JFrame parent) {
-      mViewport = null;
-      mViewportEnabled = false;
       mImageQueue = new ImageQueue();
 
       parent.add(this, 0);
@@ -31,11 +26,6 @@ public class GameCanvas extends Canvas implements CanvasInterface {
       do {
          mStrategy = getBufferStrategy();
       } while (mStrategy == null);
-   }
-
-   public void setViewport(GameViewport viewport) {
-      mViewport = viewport;
-      mViewportEnabled = true;
    }
 
    @Override
@@ -108,47 +98,13 @@ public class GameCanvas extends Canvas implements CanvasInterface {
 
    private void drawItems() { 
       mBuffer.clearRect(0, 0, getWidth(), getHeight());
-      if(!mViewportEnabled) {
-         drawWithoutViewport();
-      } else {
-         drawWithViewport();
-      }
-   }
-
-   private void drawWithoutViewport() {
-      ImageItem imageItem;
       while(mImageQueue.hasImages()) {
-         imageItem = mImageQueue.nextImage(mBuffer);
-         mBuffer.drawImage(imageItem.image, 
-               (int)(imageItem.x), 
-               (int)(imageItem.y), 
-               (int)(imageItem.width), 
-               (int)(imageItem.height), 
-               null);
-      }
-   }
-
-   private void drawWithViewport() {
-      mViewport.update();
-
-      while(mImageQueue.hasImages()) {
-         ImageItem imageItem = mImageQueue.nextImage(mBuffer);
-
-         Rectangle2D.Float objectRect = new Rectangle2D.Float();
-         objectRect.x = imageItem.x;
-         objectRect.y = imageItem.y;
-         objectRect.width = imageItem.width;
-         objectRect.height = imageItem.height;
-
-         if(!mViewport.contains(objectRect))
-            continue;
-
-         mViewport.translate(imageItem.x, imageItem.y, imageItem.width, imageItem.height, objectRect);
-         mBuffer.drawImage(imageItem.image,
-               (int)(objectRect.x),
-               (int)(objectRect.y),
-               (int)(objectRect.width),
-               (int)(objectRect.height),
+         ImageItem image = mImageQueue.nextImage(mBuffer);
+         mBuffer.drawImage(image.image, 
+               (int)(image.x), 
+               (int)(image.y), 
+               (int)(image.width), 
+               (int)(image.height), 
                null);
       }
    }
