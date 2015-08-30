@@ -11,7 +11,7 @@ public class GameTimer {
 	
 	public GameTimer(long fixedTimestep) {
 	   mTimestep = fixedTimestep;
-	   mPaused = false;
+	   pause();
 	   reset();
 	}
 
@@ -29,7 +29,9 @@ public class GameTimer {
 	
 	public void start() {
 	   if(mPaused) {
-	      mAccumulator += mPauseTime - mLastTime;
+	      if(mLastTime < mPauseTime) {
+	         mAccumulator += mPauseTime - mLastTime;
+	      }
 	      mLastTime = System.nanoTime();
 	      mPaused = false;
 	   } 
