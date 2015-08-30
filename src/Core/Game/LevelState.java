@@ -4,11 +4,14 @@ import java.awt.Dimension;
 import java.util.Queue;
 
 import Core.Events.Event;
+import Core.Events.KeyEvent;
+import Core.Events.KeyEvent.KeyAction;
 import Core.Messaging.Message;
 import Core.Messaging.Receiver;
 import Core.Messaging.Messages.LevelLoaderTracker;
 import Core.Messaging.Messages.LevelLoaderTracker.LoadingStatus;
 import Core.Messaging.Messages.StartLevelLoadMessage;
+import Entity.Systems.ControlSystem;
 import Entity.Systems.DrawingSystem;
 import Entity.Systems.MotionSystem;
 import Graphics.CanvasInterface;
@@ -22,6 +25,7 @@ public class LevelState implements GameState, Receiver {
 
    private Level mLevel;
    
+   private ControlSystem mControlSystem;
    private MotionSystem mMotionSystem;
    private DrawingSystem mDrawingSystem;
 
@@ -30,6 +34,7 @@ public class LevelState implements GameState, Receiver {
       mGame.registerReceiver("Level", this);
 
       mLevel = null;
+      mControlSystem = new ControlSystem();
       mMotionSystem = new MotionSystem();
       mDrawingSystem = new DrawingSystem();
    }
@@ -78,11 +83,8 @@ public class LevelState implements GameState, Receiver {
    }
 
    @Override
-   public void handleEvents(Queue<Event> eventQueue) {
-   }
-
-   @Override
    public void update() {
+      mControlSystem.manipulate(mLevel);
       mMotionSystem.move(mLevel);
    }
 
@@ -92,7 +94,29 @@ public class LevelState implements GameState, Receiver {
    }
 
    @Override
-   public void onSwitch() {
-   }
+   public void onSwitch() { }
 
+   @Override
+   public void handleEvents(Queue<Event> eventQueue) {
+      while(!eventQueue.isEmpty()) {
+         Event event = eventQueue.poll();
+         processEvent(event);
+      }
+   }
+   
+   private void processEvent(Event event) {
+      if(event instanceof KeyEvent) {
+         processKeyEvent((KeyEvent)event);
+      }
+   }
+   
+   private void processKeyEvent(KeyEvent event) {
+      if(event.mKeyAction == KeyAction.PRESSED &&
+            event.mKeyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
+         mGame.switchToState("PAUSE MENU");
+         return;
+      }
+      
+      mControlSystem.processKeyEvent(event);
+   }
 }
