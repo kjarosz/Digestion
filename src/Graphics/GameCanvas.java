@@ -107,6 +107,7 @@ public class GameCanvas extends Canvas implements CanvasInterface {
    }
 
    private void drawItems() { 
+      mBuffer.clearRect(0, 0, getWidth(), getHeight());
       if(!mViewportEnabled) {
          drawWithoutViewport();
       } else {
