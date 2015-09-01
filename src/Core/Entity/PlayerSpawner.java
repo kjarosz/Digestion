@@ -15,9 +15,9 @@ import Util.Vector2D;
 public class PlayerSpawner extends EntitySpawner {
    private final static String ENTITY_IMAGE = "Players" + File.separator + "Gordon" + File.separator + "standing.gif";
 
-   private final Vector2D LEFT_VELOCITY = new Vector2D(-250, 0);
-   private final Vector2D RIGHT_VELOCITY = new Vector2D(250, 0);
-   private final Vector2D UP_FORCE = new Vector2D(0, -500);
+   private final Vector2D LEFT_FORCE = new Vector2D(-5000, 0);
+   private final Vector2D RIGHT_FORCE = new Vector2D(5000, 0);
+   private final Vector2D UP_FORCE = new Vector2D(0, -340);
    
    @Override
    public int spawn(Vector2D position, Vector2D size, EntityComponents components) {
@@ -32,6 +32,7 @@ public class PlayerSpawner extends EntitySpawner {
    
    private int makeMovable(EntityComponents components, Vector2D position, Vector2D size) {
       makeAABB(components, position, size);
+      components.movable.terminalVelocity = 500;
       return EntityContainer.ENTITY_COLLIDABLE | EntityContainer.ENTITY_MOVABLE;
    }
    
@@ -42,9 +43,9 @@ public class PlayerSpawner extends EntitySpawner {
    }
    
    private int makeControllable(Controllable controllable) {
-      constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_VELOCITY);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_A, LEFT_FORCE);
       constructJumpKeyMapping(controllable, KeyEvent.VK_W, UP_FORCE);
-      constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_VELOCITY);
+      constructMovingKeyMapping(controllable, KeyEvent.VK_D, RIGHT_FORCE);
       
       return EntityContainer.ENTITY_CONTROLLABLE;
    }
@@ -54,12 +55,12 @@ public class PlayerSpawner extends EntitySpawner {
    	constructKeyMapping(controllable, keyCode, new ControlFunction() {
          @Override
          public void keyPressed(EntityComponents components) {
-            components.movable.velocity.addLocal(force);
+            components.movable.netForce.addLocal(force);
          }
          
          @Override
          public void keyReleased(EntityComponents components) {
-            components.movable.velocity.subLocal(force);
+            components.movable.netForce.subLocal(force);
          }
    	});
    }
@@ -69,7 +70,7 @@ public class PlayerSpawner extends EntitySpawner {
    	constructKeyMapping(controllable, keyCode, new ControlFunction() {
    		@Override
    		public void keyPressed(EntityComponents components) {
-   		   
+   		   components.movable.velocity.addLocal(UP_FORCE);
    		}
    		
    		@Override

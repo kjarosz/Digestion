@@ -26,7 +26,8 @@ public class SpikeyBlockSpawner extends EntitySpawner {
    
    private int makeMovable(EntityComponents components, Vector2D position, Vector2D size) {
       makeAABB(components, position, size);
-      return EntityContainer.ENTITY_COLLIDABLE | EntityContainer.ENTITY_MOVABLE;
+      components.movable.ignoreGravity = true;
+      return EntityContainer.ENTITY_MOVABLE;
    }
    
    private int makeDrawable(Drawable drawable) {

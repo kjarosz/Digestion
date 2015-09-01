@@ -1,6 +1,7 @@
 package Entity.Systems;
 
 import Entity.EntityComponents;
+import Entity.Components.Tangible;
 import Level.EntityContainer;
 import Level.Level;
 import Util.GameTimer;
@@ -17,8 +18,6 @@ public class MotionSystem {
 	public final static long NANO_TIMESTEP = (long)(1.0/60.0*1000000000);
 
 	private GameTimer mTimer;
-	
-	private Vector2D mGravity;
 
 	public MotionSystem() {
 	   mTimer = new GameTimer(NANO_TIMESTEP);
@@ -40,38 +39,109 @@ public class MotionSystem {
       return (mask & EntityContainer.ENTITY_MOVABLE) != 0;
    }
 
+   
+   
+   private Vector2D mGravity;
+   private EntityContainer mContainer;
+   private EntityComponents mEntity;
+   private EntityComponents mOtherEntity;
+   
    public void move(Level level) {
       mTimer.updateFrame();
       while(mTimer.hasAccumulatedTime()) {
          double ms_timestep = mTimer.stepMillisTime();
          
          mGravity = level.gravity;
+         mContainer = level.entityContainer;
          for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
             int entity = level.entityContainer.getEntityMask(i);
             if(isMovable(entity)) {
-               step(level.entityContainer, i, ms_timestep);
+               step(i, ms_timestep);
             }
          }
       }
    }
    
-   private void step(EntityContainer container, int eID, double dt) {
-      stepAlongAxis(container, eID, dt, (v) -> new Vector2D(v.x, 0.0));
-      stepAlongAxis(container, eID, dt, (v) -> new Vector2D(0.0, v.y));
+   private void step(int eID, double dt) {
+      mEntity = mContainer.accessComponents(eID);
+      stepAlongAxis(eID, dt, (v) -> new Vector2D(v.x, 0.0));
+      stepAlongAxis(eID, dt, (v) -> new Vector2D(0.0, v.y));
    }
    
-   private void stepAlongAxis(EntityContainer container, int eID, double dt, VectorTransform axisFilter) {
-      EntityComponents comps = container.accessComponents(eID);
-
-      Vector2D acceleration = new Vector2D(comps.movable.netForce);
-      acceleration.divLocal(comps.movable.mass).addLocal(mGravity);
+   private void stepAlongAxis(int eID, double dt, VectorTransform axisFilter) {
+      Vector2D acceleration = new Vector2D(mEntity.movable.netForce);
+      acceleration.divLocal(mEntity.movable.mass);
+      if(!mEntity.movable.ignoreGravity) {
+         acceleration.addLocal(mGravity);
+      }
       acceleration = axisFilter.filter(acceleration);
-      Vector2D shift = RKIntegrator.integrate(Double.MAX_VALUE, 
-            axisFilter.filter(comps.movable.velocity), 
+      Vector2D shift = RKIntegrator.integrate(mEntity.movable.terminalVelocity,
+            axisFilter.filter(mEntity.movable.velocity), 
             acceleration, 
             dt);
-      comps.movable.velocity.addLocal(acceleration.mul(dt));
-      comps.tangible.position.addLocal(shift);
+      mEntity.movable.velocity.addLocal(acceleration.mul(dt));
+      mEntity.tangible.position.addLocal(shift);
       
+      if(!shift.equals(Vector2D.ZERO_VECTOR)) {
+         resolveCollisions(eID, shift, axisFilter);
+      }
+   }
+   
+   private void resolveCollisions(int eID, Vector2D dx, VectorTransform axisFilter) {
+      boolean collisionFound;
+      do {
+         collisionFound = false;
+         for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
+            if(i == eID || !entityCollidable(i)) {
+               continue;
+            }
+
+            mOtherEntity = mContainer.accessComponents(i);
+            if(entitiesCollide()) {
+               collisionFound = true;
+               moveOutOfCollision(dx);
+               mEntity.movable.velocity.subLocal(axisFilter.filter(
+                     mEntity.movable.velocity));
+            }
+         }
+      } while(collisionFound);
+   }
+   
+   private boolean entityCollidable(int id) {
+      return (mContainer.getEntityMask(id) & EntityContainer.ENTITY_COLLIDABLE) != 0; 
+   }
+   
+   private boolean entitiesCollide() {
+      Tangible entBody = mEntity.tangible;
+      Tangible otherEntBody = mOtherEntity.tangible;
+      if(entBody.position.x >= otherEntBody.position.x + otherEntBody.size.x) 
+         return false;
+      
+      if(entBody.position.x + entBody.size.x <= otherEntBody.position.x)
+         return false;
+      
+      if(entBody.position.y >= otherEntBody.position.y + otherEntBody.size.y)
+         return false;
+      
+      if(entBody.position.y + entBody.size.y <= otherEntBody.position.y) 
+         return false;
+      
+      return true;
+   }
+   
+   private void moveOutOfCollision(Vector2D dx) {
+      Tangible body = mEntity.tangible;
+      Tangible oBody = mOtherEntity.tangible;
+      if(dx.x > 0) {
+         body.position.x = oBody.position.x - body.size.x;
+      } else if(dx.x < 0) {
+         body.position.x = oBody.position.x + oBody.size.x;
+      }
+      
+      if(dx.y > 0) {
+         body.position.y = oBody.position.y - body.size.y;
+      } else if(dx.y < 0) {
+         body.position.y = oBody.position.y + oBody.size.y;
+      }
    }
 }

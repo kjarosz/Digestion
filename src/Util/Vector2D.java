@@ -1,6 +1,8 @@
 package Util;
 
 public class Vector2D {
+   public static final Vector2D ZERO_VECTOR = new Vector2D();
+
 	public double x;
 	public double y;
 

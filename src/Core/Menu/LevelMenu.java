@@ -3,6 +3,7 @@ package Core.Menu;
 import java.awt.Dimension;
 
 import Core.Game.Game;
+import Core.Messaging.Messages.LevelSelector;
 import Menu.MenuScreen;
 
 public class LevelMenu extends MenuScreen {
@@ -20,8 +21,13 @@ public class LevelMenu extends MenuScreen {
    }
    
    private void createWidgets() {
-      createButton(TEST_LEVEL_BUTTON, BUTTON_SIZE, () -> System.out.println("Test level"));
+      createButton(TEST_LEVEL_BUTTON, BUTTON_SIZE, () -> selectTestLevel());
       createButton(BACK_BUTTON, BUTTON_SIZE, () -> mGame.switchToState("SINGLE PLAYER SCREEN"));
+   }
+   
+   public void selectTestLevel() {
+      LevelSelector selector = new LevelSelector("Level1.4");
+      mGame.publishMessage("Level Loader", selector);
    }
 
    @Override

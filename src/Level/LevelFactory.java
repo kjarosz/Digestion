@@ -94,6 +94,7 @@ public abstract class LevelFactory {
       for(JSONObject entityDesc: jsonify((JSONArray)descriptor.get("tiles"))) {
          int entityID = container.createNewEntity();
          EntityComponents components = container.accessComponents(entityID);
+         components.name = (String)entityDesc.get("name");
          Vector2D position = getPosition(entityDesc);
          Vector2D size = getSize(entityDesc);
          int mask = factory.createEntity( 
