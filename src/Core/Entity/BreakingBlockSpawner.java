@@ -26,8 +26,8 @@ public class BreakingBlockSpawner extends EntitySpawner {
    }
    
    private int setCollidable(Vector2D position, Vector2D size, EntityComponents components) {
-      components.tangible.position.set(position);
-      components.tangible.size.set(size);
+      components.body.position.set(position);
+      components.body.size.set(size);
       return EntityContainer.ENTITY_COLLIDABLE;
    }
    

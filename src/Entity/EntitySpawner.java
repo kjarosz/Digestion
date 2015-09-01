@@ -42,7 +42,7 @@ public abstract class EntitySpawner {
    }
    
    protected void makeAABB(EntityComponents components, Vector2D position, Vector2D size) {
-      components.tangible.position.set(position);
-      components.tangible.size.set(size);
+      components.body.position.set(position);
+      components.body.size.set(size);
    }
 }

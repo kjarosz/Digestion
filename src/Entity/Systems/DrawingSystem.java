@@ -69,8 +69,8 @@ public class DrawingSystem {
    }
    
    private void drawEntity(EntityComponents components, CanvasInterface canvas) {
-      Vector2D position = components.tangible.position;
-      Vector2D size = components.tangible.size;
+      Vector2D position = components.body.position;
+      Vector2D size = components.body.size;
       if(entityIsInViewport(position, size)) {
          Vector2D screenCoords = translateToScreen(position);
          if(components.drawable.tiled) {

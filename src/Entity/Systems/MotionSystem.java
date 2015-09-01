@@ -80,7 +80,7 @@ public class MotionSystem {
             acceleration, 
             dt);
       mEntity.movable.velocity.addLocal(acceleration.mul(dt));
-      mEntity.tangible.position.addLocal(shift);
+      mEntity.body.position.addLocal(shift);
       
       if(!shift.equals(Vector2D.ZERO_VECTOR)) {
          resolveCollisions(eID, shift, axisFilter);
@@ -112,8 +112,8 @@ public class MotionSystem {
    }
    
    private boolean entitiesCollide() {
-      Body entBody = mEntity.tangible;
-      Body otherEntBody = mOtherEntity.tangible;
+      Body entBody = mEntity.body;
+      Body otherEntBody = mOtherEntity.body;
       if(entBody.position.x >= otherEntBody.position.x + otherEntBody.size.x) 
          return false;
       
@@ -130,8 +130,8 @@ public class MotionSystem {
    }
    
    private void moveOutOfCollision(Vector2D dx) {
-      Body body = mEntity.tangible;
-      Body oBody = mOtherEntity.tangible;
+      Body body = mEntity.body;
+      Body oBody = mOtherEntity.body;
       if(dx.x > 0) {
          body.position.x = oBody.position.x - body.size.x;
       } else if(dx.x < 0) {

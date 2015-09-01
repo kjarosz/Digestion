@@ -10,7 +10,7 @@ import Entity.Components.Body;
 public class EntityComponents {
    public String name;
    
-   public Body tangible;
+   public Body body;
    public Movable movable;
    public Destructible destructible;
    public Drawable drawable;
@@ -18,7 +18,7 @@ public class EntityComponents {
    public Spawner spawner;
    
    public EntityComponents() {
-      tangible = new Body();
+      body = new Body();
       movable = new Movable();
       destructible = new Destructible();
       drawable = new Drawable();

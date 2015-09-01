@@ -23,8 +23,8 @@ public class EntityCache {
 
 			if((mask & EntityContainer.ENTITY_DRAWABLE) != 0) {
 				Rectangle size = new Rectangle(0, 0, 0, 0);
-				size.width = (int)comps.tangible.size.x;
-				size.height = (int)comps.tangible.size.y;
+				size.width = (int)comps.body.size.x;
+				size.height = (int)comps.body.size.y;
 				Entity entity = new Entity(entityName, 
 						comps.drawable.image,
 						size);

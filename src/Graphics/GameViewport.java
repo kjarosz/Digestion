@@ -86,7 +86,7 @@ public class GameViewport {
 		if(mFocusObject == null)
 			return;
 		
-		Vector2D position = mFocusObject.tangible.position;
+		Vector2D position = mFocusObject.body.position;
 		
 		// Shifting the viewport to center on the object of focus
       Rectangle2D center = mLevelViewport.getBounds2D();
