@@ -1,7 +1,7 @@
 package Entity.Systems;
 
 import Entity.EntityComponents;
-import Entity.Components.Tangible;
+import Entity.Components.Body;
 import Level.EntityContainer;
 import Level.Level;
 import Util.GameTimer;
@@ -112,8 +112,8 @@ public class MotionSystem {
    }
    
    private boolean entitiesCollide() {
-      Tangible entBody = mEntity.tangible;
-      Tangible otherEntBody = mOtherEntity.tangible;
+      Body entBody = mEntity.tangible;
+      Body otherEntBody = mOtherEntity.tangible;
       if(entBody.position.x >= otherEntBody.position.x + otherEntBody.size.x) 
          return false;
       
@@ -130,8 +130,8 @@ public class MotionSystem {
    }
    
    private void moveOutOfCollision(Vector2D dx) {
-      Tangible body = mEntity.tangible;
-      Tangible oBody = mOtherEntity.tangible;
+      Body body = mEntity.tangible;
+      Body oBody = mOtherEntity.tangible;
       if(dx.x > 0) {
          body.position.x = oBody.position.x - body.size.x;
       } else if(dx.x < 0) {

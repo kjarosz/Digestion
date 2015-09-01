@@ -5,12 +5,12 @@ import Entity.Components.Destructible;
 import Entity.Components.Drawable;
 import Entity.Components.Movable;
 import Entity.Components.Spawner;
-import Entity.Components.Tangible;
+import Entity.Components.Body;
 
 public class EntityComponents {
    public String name;
    
-   public Tangible tangible;
+   public Body tangible;
    public Movable movable;
    public Destructible destructible;
    public Drawable drawable;
@@ -18,7 +18,7 @@ public class EntityComponents {
    public Spawner spawner;
    
    public EntityComponents() {
-      tangible = new Tangible();
+      tangible = new Body();
       movable = new Movable();
       destructible = new Destructible();
       drawable = new Drawable();
