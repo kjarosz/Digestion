@@ -35,10 +35,6 @@ public class MotionSystem {
 	   mTimer.start();
 	}
 	   
-   private boolean isMovable(int mask) {
-      return (mask & EntityContainer.ENTITY_MOVABLE) != 0;
-   }
-
    
    
    private Vector2D mGravity;
@@ -46,6 +42,14 @@ public class MotionSystem {
    private EntityComponents mEntity;
    private EntityComponents mOtherEntity;
    
+   private boolean isMovable(int eID) {
+      return (mContainer.getEntityMask(eID) & EntityContainer.ENTITY_MOVABLE) != 0;
+   }
+
+   private boolean entityCollidable(int id) {
+      return (mContainer.getEntityMask(id) & EntityContainer.ENTITY_COLLIDABLE) != 0; 
+   }
+
    public void move(Level level) {
       mTimer.updateFrame();
       while(mTimer.hasAccumulatedTime()) {
@@ -54,8 +58,7 @@ public class MotionSystem {
          mGravity = level.gravity;
          mContainer = level.entityContainer;
          for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
-            int entity = level.entityContainer.getEntityMask(i);
-            if(isMovable(entity)) {
+            if(isMovable(i)) {
                step(i, ms_timestep);
             }
          }
@@ -82,7 +85,7 @@ public class MotionSystem {
       mEntity.movable.velocity.addLocal(acceleration.mul(dt));
       mEntity.body.position.addLocal(shift);
       
-      if(!shift.equals(Vector2D.ZERO_VECTOR)) {
+      if(!shift.equals(Vector2D.ZERO_VECTOR) && entityCollidable(eID)) {
          resolveCollisions(eID, shift, axisFilter);
       }
    }
@@ -105,10 +108,6 @@ public class MotionSystem {
             }
          }
       } while(collisionFound);
-   }
-   
-   private boolean entityCollidable(int id) {
-      return (mContainer.getEntityMask(id) & EntityContainer.ENTITY_COLLIDABLE) != 0; 
    }
    
    private boolean entitiesCollide() {
