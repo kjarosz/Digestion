@@ -12,11 +12,14 @@ import javax.swing.JFrame;
 
 import Core.Events.EventPump;
 import Util.ErrorLog;
+import Util.GameTimer;
 
 public class GameWindow {
 	private JFrame mWindow;
 	private GameCanvas mCanvas;
    
+	private String mTitleString;
+	
 	private GraphicsDevice mFullscreenDevice;
 	
 	private boolean mFullscreen;
@@ -24,6 +27,7 @@ public class GameWindow {
 	private int mHeight;
    
 	public GameWindow(String title) {
+	   mTitleString = title;
       setupWindow(title);
       mCanvas = new GameCanvas(this);
       loadSettings();
@@ -32,8 +36,9 @@ public class GameWindow {
    private void setupWindow(String title) {
 		mWindow = new JFrame(title);
       mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mWindow.setVisible(true);
 		mWindow.getContentPane().setLayout(new CardLayout());
+		switchToFullscreen();
+		mWindow.setVisible(true);
    }
    
    private void loadSettings() {
@@ -53,6 +58,19 @@ public class GameWindow {
    public void setTitle(String title) {
       mWindow.setTitle(title);
    }
+   
+   private static long sLastFPSMarker;
+   private static int sFPSCount;
+   public void updateFPS() {
+      long now = System.nanoTime();
+      double elapsedTime = GameTimer.nanoToSeconds(now - sLastFPSMarker);
+      if(elapsedTime > 5 /* seconds */) {
+         setTitle(mTitleString + " - " + Double.toString(1.0/(elapsedTime/sFPSCount)));
+         sLastFPSMarker = now;
+         sFPSCount = 0;
+      }
+      sFPSCount++;
+   }
 	
 	public void switchFullscreen() {
       mFullscreen = !mFullscreen;
@@ -65,18 +83,13 @@ public class GameWindow {
 	}
    
    private void switchToFullscreen() {
+      mWindow.setFocusTraversalKeysEnabled(false);
+      mWindow.setUndecorated(true);
+      mWindow.setResizable(false);
+      
       GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
-
-      mFullscreenDevice = env.getDefaultScreenDevice();
-      if(mFullscreenDevice.isFullScreenSupported()) {
-         mFullscreenDevice.setFullScreenWindow(mWindow);
-         mFullscreen = true;
-      }
-
-      if(!mFullscreen) {
-         ErrorLog errorLog = ErrorLog.getInstance();
-         errorLog.displayMessageDialog("It seems there are no screens that support fullscreen mode.\nRemaining in Windowed mode");
-      }
+      GraphicsDevice zeDevice = env.getDefaultScreenDevice();
+      zeDevice.setFullScreenWindow(mWindow);
    }
 	
    private void switchToWindow() {
