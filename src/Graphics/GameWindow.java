@@ -11,7 +11,6 @@ import java.awt.Insets;
 import javax.swing.JFrame;
 
 import Core.Events.EventPump;
-import Util.ErrorLog;
 import Util.GameTimer;
 
 public class GameWindow {
@@ -37,7 +36,6 @@ public class GameWindow {
 		mWindow = new JFrame(title);
       mWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mWindow.getContentPane().setLayout(new CardLayout());
-		switchToFullscreen();
 		mWindow.setVisible(true);
    }
    
