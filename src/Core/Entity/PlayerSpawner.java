@@ -6,7 +6,6 @@ import java.io.File;
 import Entity.EntityComponents;
 import Entity.EntitySpawner;
 import Entity.Components.Controllable;
-import Entity.Components.Destructible;
 import Entity.Components.Drawable;
 import Input.ControlFunction;
 import Level.EntityContainer;
@@ -23,7 +22,6 @@ public class PlayerSpawner extends EntitySpawner {
    public int spawn(Vector2D position, Vector2D size, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
       mask |= makeMovable(components, position, size);
-      mask |= makeDestructible(components.destructible);
       mask |= makeControllable(components.controllable);
       mask |= makeDrawable(components.drawable);
       mask |= EntityContainer.ENTITY_FOCUSABLE;
@@ -34,12 +32,6 @@ public class PlayerSpawner extends EntitySpawner {
       makeAABB(components, position, size);
       components.movable.terminalVelocity = 500;
       return EntityContainer.ENTITY_COLLIDABLE | EntityContainer.ENTITY_MOVABLE;
-   }
-   
-   private int makeDestructible(Destructible destructible) {
-      destructible.health = 100;
-      destructible.maxHealth = 100;
-      return EntityContainer.ENTITY_DESTRUCTIBLE;
    }
    
    private int makeControllable(Controllable controllable) {
