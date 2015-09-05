@@ -14,8 +14,8 @@ import Util.Vector2D;
 public class PlayerSpawner extends EntitySpawner {
    private final static String ENTITY_IMAGE = "Players" + File.separator + "Gordon" + File.separator + "standing.gif";
 
-   private final Vector2D LEFT_FORCE = new Vector2D(-5000, 0);
-   private final Vector2D RIGHT_FORCE = new Vector2D(5000, 0);
+   private final Vector2D LEFT_FORCE = new Vector2D(-500, 0);
+   private final Vector2D RIGHT_FORCE = new Vector2D(500, 0);
    private final Vector2D UP_FORCE = new Vector2D(0, -340);
    
    @Override
@@ -47,12 +47,12 @@ public class PlayerSpawner extends EntitySpawner {
    	constructKeyMapping(controllable, keyCode, new ControlFunction() {
          @Override
          public void keyPressed(EntityComponents components) {
-            components.movable.netForce.addLocal(force);
+            components.movable.velocity.addLocal(force);
          }
          
          @Override
          public void keyReleased(EntityComponents components) {
-            components.movable.netForce.subLocal(force);
+            components.movable.velocity.subLocal(force);
          }
    	});
    }

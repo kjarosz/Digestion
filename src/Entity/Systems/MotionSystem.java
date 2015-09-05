@@ -35,6 +35,9 @@ public class MotionSystem {
 	   mTimer.start();
 	}
 	   
+	
+	private final VectorTransform x_filter = (v) -> new Vector2D(v.x, 0.0);
+	private final VectorTransform y_filter = (v) -> new Vector2D(0.0, v.y);
    
    
    private Vector2D mGravity;
@@ -67,30 +70,42 @@ public class MotionSystem {
    
    private void step(int eID, double dt) {
       mEntity = mContainer.accessComponents(eID);
-      stepAlongAxis(eID, dt, (v) -> new Vector2D(v.x, 0.0));
-      stepAlongAxis(eID, dt, (v) -> new Vector2D(0.0, v.y));
+      stepAlongXAxis(eID, dt);
+      stepAlongYAxis(eID, dt);
    }
    
-   private void stepAlongAxis(int eID, double dt, VectorTransform axisFilter) {
+   private void stepAlongXAxis(int eID, double dt) {
+      Vector2D shift = RKIntegrator.integrate(mEntity.movable.terminalVelocity,
+            x_filter.filter(mEntity.movable.velocity),
+            Vector2D.ZERO_VECTOR,
+            dt);
+      mEntity.body.position.addLocal(shift);
+      
+      if(!shift.equals(Vector2D.ZERO_VECTOR) && entityCollidable(eID)) {
+         resolveCollisions(eID, shift, x_filter, false);
+      }
+   }
+   
+   private void stepAlongYAxis(int eID, double dt) {
       Vector2D acceleration = new Vector2D(mEntity.movable.netForce);
       acceleration.divLocal(mEntity.movable.mass);
       if(!mEntity.movable.ignoreGravity) {
          acceleration.addLocal(mGravity);
       }
-      acceleration = axisFilter.filter(acceleration);
+      acceleration = y_filter.filter(acceleration);
       Vector2D shift = RKIntegrator.integrate(mEntity.movable.terminalVelocity,
-            axisFilter.filter(mEntity.movable.velocity), 
+            y_filter.filter(mEntity.movable.velocity), 
             acceleration, 
             dt);
       mEntity.movable.velocity.addLocal(acceleration.mul(dt));
       mEntity.body.position.addLocal(shift);
       
       if(!shift.equals(Vector2D.ZERO_VECTOR) && entityCollidable(eID)) {
-         resolveCollisions(eID, shift, axisFilter);
+         resolveCollisions(eID, shift, y_filter, true);
       }
    }
    
-   private void resolveCollisions(int eID, Vector2D dx, VectorTransform axisFilter) {
+   private void resolveCollisions(int eID, Vector2D dx, VectorTransform axisFilter, boolean clearVelocity) {
       boolean collisionFound;
       do {
          collisionFound = false;
@@ -103,8 +118,10 @@ public class MotionSystem {
             if(entitiesCollide()) {
                collisionFound = true;
                moveOutOfCollision(dx);
-               mEntity.movable.velocity.subLocal(axisFilter.filter(
-                     mEntity.movable.velocity));
+               if(clearVelocity) {
+                  mEntity.movable.velocity.subLocal(
+                        axisFilter.filter(mEntity.movable.velocity));
+               }
             }
          }
       } while(collisionFound);
