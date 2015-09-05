@@ -20,3 +20,5 @@ resources/Level*
 /bin
 /lib
 /nbproject/private/
+/build/
+/dist/
