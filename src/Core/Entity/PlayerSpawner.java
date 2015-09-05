@@ -16,7 +16,7 @@ public class PlayerSpawner extends EntitySpawner {
 
    private final Vector2D LEFT_FORCE = new Vector2D(-500, 0);
    private final Vector2D RIGHT_FORCE = new Vector2D(500, 0);
-   private final Vector2D UP_FORCE = new Vector2D(0, -340);
+   private final Vector2D UP_FORCE = new Vector2D(0, -500);
    
    @Override
    public int spawn(Vector2D position, Vector2D size, EntityComponents components) {

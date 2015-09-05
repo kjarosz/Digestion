@@ -16,7 +16,7 @@ public class Level {
 	public Level(String name, Vector2D levelSize) {
 		this.name = name;
 		size = levelSize;
-		gravity = new Vector2D(0.0f, 500f);
+		gravity = new Vector2D(0.0f, 1350f);
 		
 		entityContainer = new EntityContainer();
 	}
