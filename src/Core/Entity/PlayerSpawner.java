@@ -62,7 +62,13 @@ public class PlayerSpawner extends EntitySpawner {
    	constructKeyMapping(controllable, keyCode, new ControlFunction() {
    		@Override
    		public void keyPressed(EntityComponents components) {
-   		   components.movable.velocity.addLocal(UP_FORCE);
+   		   if(components.movable.canJump) {
+   		      components.movable.velocity.addLocal(UP_FORCE);
+   		      components.movable.canJump = false;
+   		   } else if(components.movable.canDoubleJump) {
+   		      components.movable.velocity.addLocal(UP_FORCE);
+   		      components.movable.canDoubleJump = false;
+   		   }
    		}
    		
    		@Override
