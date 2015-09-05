@@ -10,11 +10,6 @@ import Util.Vector2D;
 import Util.VectorTransform;
 
 public class MotionSystem {
-	// BitMasks for sensors
-	public final static long STAGE         = 1; // Does fixture represent a part of the static stage.
-	public final static long AGENT         = 2; // Does the fixture belong to a moving agent like a player or enemy.
-	public final static long GROUND_SENSOR = 4;
-	
 	public final static long NANO_TIMESTEP = (long)(1.0/60.0*1000000000);
 
 	private GameTimer mTimer;
@@ -101,14 +96,18 @@ public class MotionSystem {
       mEntity.body.position.addLocal(shift);
       
       if(!shift.equals(Vector2D.ZERO_VECTOR) && entityCollidable(eID)) {
-         resolveCollisions(eID, shift, y_filter, true);
+         if(resolveCollisions(eID, shift, y_filter, true) && shift.y > 0.0) {
+            mEntity.movable.canJump = true;
+            mEntity.movable.canDoubleJump = true;
+         }
       }
    }
    
-   private void resolveCollisions(int eID, Vector2D dx, VectorTransform axisFilter, boolean clearVelocity) {
-      boolean collisionFound;
+   private boolean resolveCollisions(int eID, Vector2D dx, VectorTransform axisFilter, boolean clearVelocity) {
+      boolean collisionFound = false;
+      boolean cycleAgain;
       do {
-         collisionFound = false;
+         cycleAgain = false;
          for(int i = 0; i < EntityContainer.MAXIMUM_ENTITIES; i++) {
             if(i == eID || !entityCollidable(i)) {
                continue;
@@ -116,7 +115,7 @@ public class MotionSystem {
 
             mOtherEntity = mContainer.accessComponents(i);
             if(entitiesCollide()) {
-               collisionFound = true;
+               cycleAgain = collisionFound = true;
                moveOutOfCollision(dx);
                if(clearVelocity) {
                   mEntity.movable.velocity.subLocal(
@@ -124,7 +123,8 @@ public class MotionSystem {
                }
             }
          }
-      } while(collisionFound);
+      } while(cycleAgain);
+      return collisionFound;
    }
    
    private boolean entitiesCollide() {
