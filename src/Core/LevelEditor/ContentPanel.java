@@ -3,7 +3,6 @@ package Core.LevelEditor;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -32,7 +31,8 @@ public final class ContentPanel extends JPanel {
       
       createWidgets();
       
-      mEditorSettings.addPropertyChangeListener(createEditorSettingsListener());
+      mEditorSettings.addPropertyChangeListener(
+         (PropertyChangeEvent e) -> createEditorSettings(e));
 	}
    
    private void createWidgets() {
@@ -61,16 +61,11 @@ public final class ContentPanel extends JPanel {
       parent.add(toolbar, BorderLayout.SOUTH);
    }
    
-   private PropertyChangeListener createEditorSettingsListener() {
-      return new PropertyChangeListener() {
-         @Override
-         public void propertyChange(PropertyChangeEvent e) {
-            String property = e.getPropertyName();
-            if("editor_mode".equals(property)) {
-               switchContext((EditorMode)e.getNewValue());
-            }
-         }
-      };
+   private void createEditorSettings(PropertyChangeEvent e) {
+      String property = e.getPropertyName();
+      if("editor_mode".equals(property)) {
+         switchContext((EditorMode)e.getNewValue());
+      }
    }
    
    private void switchContext(EditorMode mode) {
