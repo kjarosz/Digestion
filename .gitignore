@@ -5,6 +5,11 @@
 .project
 .settings
 
+# Netbeans Project Files #
+build.xml
+manifest.mf
+nbproject/
+
 # Game Files #
 ErrorLog.txt
 resources/Level*
@@ -14,3 +19,4 @@ resources/Level*
 *.ear
 /bin
 /lib
+/nbproject/private/
