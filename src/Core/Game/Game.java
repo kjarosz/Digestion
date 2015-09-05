@@ -14,6 +14,7 @@ import Core.Messaging.MessageSystem;
 import Core.Messaging.Receiver;
 import Graphics.CanvasInterface;
 import Graphics.GameWindow;
+import Util.GameTimer;
 
 public class Game extends Thread {
    private GameWindow mWindow;
@@ -99,9 +100,14 @@ public class Game extends Thread {
       mCurrentState.handleEvents(mEventPump.getQueue());
    }
 
+   private double lastFrame = GameTimer.nanoToSeconds(System.nanoTime()) - 1/60.0;
    private void draw() {
-      CanvasInterface canvas = mWindow.getCanvas();
-      mCurrentState.draw(canvas);
-      mWindow.draw();
+      double now = GameTimer.nanoToSeconds(System.nanoTime());
+      if (now - lastFrame > 1/60.0) {
+         CanvasInterface canvas = mWindow.getCanvas();
+         mCurrentState.draw(canvas);
+         mWindow.draw();
+         lastFrame = now;
+      }
    }
 }
