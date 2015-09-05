@@ -1,28 +1,29 @@
 package Core.LevelEditor.Settings;
 
+import java.awt.Dimension;
+
 import Core.LevelEditor.Models.AbstractModel;
-import Util.Size;
 
 public class DrawerSettings extends AbstractModel {
-   private Size      gridSize;
+   private Dimension gridSize;
    private boolean   gridEnabled;
    private boolean   backgroundEnabled;
    private boolean   entitiesEnabled;
    private boolean   platformsEnabled;
    
    public DrawerSettings() {
-      gridSize = new Size(32, 32);
+      gridSize = new Dimension(32, 32);
       gridEnabled = true;
       backgroundEnabled = true;
       entitiesEnabled = true;
       platformsEnabled = true;
    }
    
-   public Size getGridSize() {
-      return new Size(gridSize);
+   public Dimension getGridSize() {
+      return new Dimension(gridSize);
    }
    
-   public void setGridSize(Size size) {
+   public void setGridSize(Dimension size) {
       if(size.width != gridSize.width || size.height != gridSize.height) {
          firePropertyChangeEvent("grid_size", gridSize, size);
          gridSize = size;

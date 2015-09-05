@@ -16,7 +16,6 @@ import javax.swing.JToolBar;
 
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.DrawerSettings;
-import Util.Size;
 
 public class DrawerToolbar extends JToolBar {
    private LevelModel mLevelModel;
@@ -72,7 +71,7 @@ public class DrawerToolbar extends JToolBar {
    
    private void createGridSizeFields() {
       add(new JLabel("GridSize:"));
-      Size gridSize = mDrawerSettings.getGridSize();
+      Dimension gridSize = mDrawerSettings.getGridSize();
       FocusListener gridSizeListener = createGridSizeListener();
       mGridWidth  = createTextField(gridSize.width + "", gridSizeListener);
       mGridHeight = createTextField(gridSize.height + "", gridSizeListener);
@@ -144,7 +143,7 @@ public class DrawerToolbar extends JToolBar {
    
    private void warnAboutSize() {
       JOptionPane.showMessageDialog(this,
-            "No dimension allowed to be less 256!",
+            "No dimension allowed to be less than 256!",
             "Level too small.",
             JOptionPane.OK_OPTION);
    }
@@ -169,7 +168,7 @@ public class DrawerToolbar extends JToolBar {
                   resetGridSize();
                }
                
-               mDrawerSettings.setGridSize(new Size(width, height));
+               mDrawerSettings.setGridSize(new Dimension(width, height));
             } catch(NumberFormatException ex) {
                resetGridSize();
             }
@@ -178,7 +177,7 @@ public class DrawerToolbar extends JToolBar {
    }
    
    private void resetGridSize() {
-      Size gridSize = mDrawerSettings.getGridSize();
+      Dimension gridSize = mDrawerSettings.getGridSize();
       mGridWidth.setText(gridSize.width + "");
       mGridHeight.setText(gridSize.height + "");
    }

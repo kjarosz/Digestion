@@ -9,6 +9,7 @@ import Core.Messaging.Message;
 import Core.Messaging.Receiver;
 import Core.Messaging.Messages.LevelLoaderTracker;
 import Core.Messaging.Messages.LevelLoaderTracker.LoadingStatus;
+import Core.Messaging.Messages.LevelSelector;
 import Core.Messaging.Messages.StartLevelLoadMessage;
 import Level.LevelFactory;
 import Menu.MenuScreen;
@@ -16,7 +17,7 @@ import Menu.MenuScreen;
 public class LoadingScreen extends MenuScreen implements Receiver {
    private final String LOADING_SCREEN = "resources/Images/loading_screen.png";
 
-   private final String mLevelName = "";
+   private String mLevelName = "";
    
    public LoadingScreen(Game game) {
       super(game);
@@ -56,6 +57,9 @@ public class LoadingScreen extends MenuScreen implements Receiver {
          } else {
             mGame.switchToState("TITLE SCREEN");
          }
+      } else if(message instanceof LevelSelector) {
+         LevelSelector selectorMsg = (LevelSelector)message;
+         mLevelName = selectorMsg.mSelectedName;
       }
    }
 }

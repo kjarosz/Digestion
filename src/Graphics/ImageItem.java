@@ -5,11 +5,11 @@ import java.util.Comparator;
 
 public class ImageItem implements Comparator<ImageItem> {
 	public Image image;
-	public float x;
-	public float y;
-	public float z;
-	public float width;
-	public float height;
+	public double x;
+	public double y;
+	public double z;
+	public double width;
+	public double height;
 	
 	ColorMode colorMode;
 

@@ -1,16 +1,25 @@
 package Entity.Components;
 
-import org.jbox2d.common.Vec2;
+import Util.Vector2D;
 
 public class Movable {
-	
-	public Vec2 actingForces;
-	public int groundContacts;
-	public boolean doubleJumpAvailable;
+	public Vector2D velocity;
+	public Vector2D netForce;
+	public double mass;
+	public boolean ignoreGravity;
+	public double terminalVelocity;
    
+	public boolean canJump;
+	public boolean canDoubleJump;
+	
    public Movable() {
-   	actingForces = new Vec2(0.0f, 0.0f);
-   	groundContacts = 0;
-   	doubleJumpAvailable = false;
+      velocity = new Vector2D(0.0, 0.0);
+      netForce = new Vector2D(0.0, 0.0);
+      mass = 1.0;
+      ignoreGravity = false;
+      terminalVelocity = Double.MAX_VALUE;
+      
+      canJump = false;
+      canDoubleJump = false;
    }
 }

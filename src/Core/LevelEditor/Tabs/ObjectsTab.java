@@ -11,15 +11,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.jbox2d.common.Vec2;
-import org.jbox2d.dynamics.World;
-
 import Core.LevelEditor.Settings.EditorSettings;
 import Entity.EntityComponents;
 import Entity.EntityFactory;
 import Entity.Systems.DrawingSystem;
 import Graphics.ScrollablePicture;
 import Level.EntityContainer;
+import Util.Vector2D;
 
 public class ObjectsTab extends JPanel {
    private String mEntityNames[];
@@ -39,19 +37,16 @@ public class ObjectsTab extends JPanel {
       mEntityNames = entityFactory.getEntityNames();
       mEntityComponents = new EntityComponents[mEntityNames.length];
       
-      // TODO Eliminate the need to instantiate a Box2D world for entities
-      // in the preview tab.
-      World world = new World(new Vec2(0.0f, 0.0f));
       for(int i = 0; i < mEntityNames.length; i++)
-         createEntity(world, i, mEntityNames[i], entityFactory);
+         createEntity(i, mEntityNames[i], entityFactory);
    }
    
-   private void createEntity(World world,int index, String name, EntityFactory entityFactory) {
+   private void createEntity(int index, String name, EntityFactory entityFactory) {
       mEntityComponents[index] = new EntityComponents();
       
-      int mask = entityFactory.createEntity(world, name, 
-              new Vec2(0.0f, 0.0f),
-              new Vec2(0.5f, 2.0f),
+      int mask = entityFactory.createEntity(name, 
+              new Vector2D(0.0f, 0.0f),
+              new Vector2D(0.5f, 2.0f),
               mEntityComponents[index]);
       
       // We want to see the entity in the level editor so a null image 

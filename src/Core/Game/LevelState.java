@@ -60,7 +60,7 @@ public class LevelState implements GameState, Receiver {
 
    private void restartSystems() {
       mControlSystem.clearKeys();
-      mMotionSystem.resetTimer();
+      mMotionSystem.startTimer();
    }
 
    @Override
@@ -76,6 +76,7 @@ public class LevelState implements GameState, Receiver {
 
    private void loadFromScript(String levelName) {
       mLevel = LevelFactory.loadLevel(levelName);
+      mMotionSystem.resetTimer();
       LevelLoaderTracker tracker;
       if(mLevel == null) {
          tracker = new LevelLoaderTracker(LoadingStatus.FAILED);
@@ -97,7 +98,9 @@ public class LevelState implements GameState, Receiver {
    }
 
    @Override
-   public void onSwitch() { }
+   public void onSwitch() {
+      mMotionSystem.pauseTimer();
+   }
 
    @Override
    public void handleEvents(Queue<Event> eventQueue) {

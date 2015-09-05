@@ -16,7 +16,6 @@ import Core.LevelEditor.Models.Entity;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.DrawerSettings;
 import Core.LevelEditor.Settings.EditorSettings;
-import Util.Size;
 
 public class LevelCanvas extends JComponent {
    private EditorSettings mEditorSettings;
@@ -114,7 +113,7 @@ public class LevelCanvas extends JComponent {
       Color oldColor = g2.getColor();
       g2.setColor(Color.black);
       
-      Size gridSize = mDrawerSettings.getGridSize();
+      Dimension gridSize = mDrawerSettings.getGridSize();
       for(int x = gridSize.width; x < size.width; x += gridSize.width) {
          g2.drawLine(x, 0, x, size.height);
          for(int y = gridSize.height; y < size.height; y += gridSize.height) {

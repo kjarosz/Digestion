@@ -1,5 +1,6 @@
 package Core.LevelEditor.Control.Commands;
 
+import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -11,7 +12,6 @@ import Core.LevelEditor.Models.EntityCache;
 import Core.LevelEditor.Models.LevelModel;
 import Core.LevelEditor.Settings.DrawerSettings;
 import Core.LevelEditor.Settings.EditorSettings;
-import Util.Size;
 
 public class AddEntity extends LevelModelCommand {
    private ChangeEntityCommand mChangeCommand;
@@ -34,7 +34,7 @@ public class AddEntity extends LevelModelCommand {
       Entity entity = getSelectedEntity();
       
       Point pos = snapToGrid(e.getPoint());
-      Size gridSize = mDrawer.getGridSize();
+      Dimension gridSize = mDrawer.getGridSize();
       Rectangle newEntityRect = new Rectangle();
       newEntityRect.x = pos.x;
       newEntityRect.y = pos.y;
