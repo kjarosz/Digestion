@@ -26,6 +26,7 @@ public class AddEntity extends LevelModelCommand {
       mEntityCache = new EntityCache();
    }
    
+   @Override
    public void perform(MouseEvent e) {
       if(levelHasEntity(e.getPoint())) {
          return;
@@ -49,12 +50,8 @@ public class AddEntity extends LevelModelCommand {
    }
    
    private boolean levelHasEntity(Point coords) {
-      for(Entity entity: mLevel.getEntities()) {
-         if(entity.getRect().contains(coords)) {
-            return true;
-         }
-      }
-      return false;
+      return mLevel.getEntities().stream()
+         .anyMatch((entity) -> (entity.getRect().contains(coords)));
    }
    
    private Entity getSelectedEntity() {
