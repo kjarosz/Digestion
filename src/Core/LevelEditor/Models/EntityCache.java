@@ -19,7 +19,7 @@ public class EntityCache {
 		for(String entityName: factory.getEntityNames()) {
 			EntityComponents comps = new EntityComponents();
 			int mask = factory.createEntity(entityName, position, 
-			      new Vector2D(0.5f, 2.0f), comps);
+			      Vector2D.ZERO_VECTOR, comps);
 
 			if((mask & EntityContainer.ENTITY_DRAWABLE) != 0) {
 				Rectangle size = new Rectangle(0, 0, 0, 0);

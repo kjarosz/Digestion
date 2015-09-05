@@ -13,6 +13,8 @@ import Util.Vector2D;
 
 public class PlayerSpawner extends EntitySpawner {
    private final static String ENTITY_IMAGE = "Players" + File.separator + "Gordon" + File.separator + "standing.gif";
+   
+   private final Vector2D PLAYER_SIZE = new Vector2D(32, 64);
 
    private final Vector2D LEFT_FORCE = new Vector2D(-500, 0);
    private final Vector2D RIGHT_FORCE = new Vector2D(500, 0);
@@ -21,7 +23,7 @@ public class PlayerSpawner extends EntitySpawner {
    @Override
    public int spawn(Vector2D position, Vector2D size, EntityComponents components) {
       int mask = EntityContainer.ENTITY_NONE;
-      mask |= makeMovable(components, position, size);
+      mask |= makeMovable(components, PLAYER_SIZE, size);
       mask |= makeControllable(components.controllable);
       mask |= makeDrawable(components.drawable);
       mask |= EntityContainer.ENTITY_FOCUSABLE;
