@@ -12,7 +12,6 @@ nbproject/
 
 # Game Files #
 ErrorLog.txt
-resources/Level*
 
 # Package Files #
 *.war
