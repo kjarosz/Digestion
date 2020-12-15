@@ -1,4 +1,7 @@
 *.class
+.gradle
+**/build/
+*.swp # Vim turds
 
 # Eclipse Files #
 .classpath

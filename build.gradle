@@ -1,0 +1,35 @@
+plugins {
+    id 'java-library'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = [ 'src/main' ]
+		}
+	}
+	test {
+		java {
+			srcDirs = [ 'src/test' ]
+		}
+	}
+}
+
+version = '1.2.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+	testImplementation 'junit:junit:4.13.1'
+	testImplementation 'org.mockito:mockito-all:1.10.19'
+	testImplementation 'org.assertj:assertj-core:3.11.1'
+    
+}
