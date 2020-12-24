@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.kjarosz.digestion.entity.components.Body;
+import com.kjarosz.digestion.util.Vector2D;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MotionSystemTest {
@@ -76,4 +77,41 @@ public class MotionSystemTest {
 
 		assertThat(result).isTrue();
 	}
+
+	@Test
+	public void moveOutOfCollision_BodyMovingLeftIsMovedRightOfCollidingBody() {
+		Vector2D motion = new Vector2D(-1.0, 0.0);
+
+		motionSystem.moveOutOfCollision(body1, body2, motion);
+
+		assertThat(body1.position.x).isBetween(1.99999, 2.000001);
+	}
+
+	@Test
+	public void moveOutOfCollision_BodyMovingRightIsMovedLeftOfCollidingBody() {
+		Vector2D motion = new Vector2D(1.0, 0.0);
+
+		motionSystem.moveOutOfCollision(body1, body2, motion);
+
+		assertThat(body1.position.x).isBetween(-0.000001, 0.000001);
+	}
+
+	@Test
+	public void moveOutOfCollision_BodyMovingUpIsMovedBelowCollidingBody() {
+		Vector2D motion = new Vector2D(0.0, -1.0);
+
+		motionSystem.moveOutOfCollision(body1, body2, motion);
+
+		assertThat(body1.position.y).isBetween(1.99999, 2.000001);
+	}
+
+	@Test
+	public void moveOutOfCollision_BodyMovingDownIsMovedAboveCollidingBody() {
+		Vector2D motion = new Vector2D(0.0, 1.0);
+
+		motionSystem.moveOutOfCollision(body1, body2, motion);
+
+		assertThat(body1.position.y).isBetween(-0.000001, 0.000001);
+	}
+
 }

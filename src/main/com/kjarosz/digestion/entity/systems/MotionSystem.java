@@ -136,19 +136,17 @@ public class MotionSystem {
 		return true;
 	}
 
-	private void moveOutOfCollision(Vector2D dx) {
-		Body body = mEntity.body;
-		Body oBody = mOtherEntity.body;
+	void moveOutOfCollision(Body body, Body collidingBody, Vector2D dx) {
 		if (dx.x > 0) {
-			body.position.x = oBody.position.x - body.size.x;
+			body.position.x = collidingBody.position.x - body.size.x;
 		} else if (dx.x < 0) {
-			body.position.x = oBody.position.x + oBody.size.x;
+			body.position.x = collidingBody.position.x + collidingBody.size.x;
 		}
 
 		if (dx.y > 0) {
-			body.position.y = oBody.position.y - body.size.y;
+			body.position.y = collidingBody.position.y - body.size.y;
 		} else if (dx.y < 0) {
-			body.position.y = oBody.position.y + oBody.size.y;
+			body.position.y = collidingBody.position.y + collidingBody.size.y;
 		}
 	}
 }
