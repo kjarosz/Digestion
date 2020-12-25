@@ -1,19 +1,25 @@
 package com.kjarosz.digestion.entity.systems;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.kjarosz.digestion.entity.components.Body;
+import com.kjarosz.digestion.level.EntityContainer;
 import com.kjarosz.digestion.util.Vector2D;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MotionSystemTest {
 
 	private MotionSystem motionSystem;
+
+	@Mock
+	private EntityContainer entityContainer;
 
 	private Body body1;
 	private Body body2;
@@ -33,6 +39,37 @@ public class MotionSystemTest {
 		body2.position.y = 1;
 		body2.size.x = 1;
 		body2.size.y = 1;
+	}
+
+	@Test
+	public void entityCollidable_NoEntityReturnsFalse() {
+		when(entityContainer.getEntityMask(0)).thenReturn(EntityContainer.ENTITY_NONE);
+
+		boolean result = motionSystem.entityCollidable(entityContainer, 0);
+
+		assertThat(result).isFalse();
+	}
+
+	@Test
+	public void entityCollidable_EntityWithCollidableMaskReturnsTrue() {
+		int entityMask = EntityContainer.ENTITY_ANIMATED | EntityContainer.ENTITY_COLLIDABLE;
+
+		when(entityContainer.getEntityMask(0)).thenReturn(entityMask);
+
+		boolean result = motionSystem.entityCollidable(entityContainer, 0);
+
+		assertThat(result).isTrue();
+	}
+
+	@Test
+	public void entityCollidable_EntityWithoutCollidableMaskReturnsFalse() {
+		int entityMask = EntityContainer.ENTITY_ANIMATED | EntityContainer.ENTITY_MOVABLE;
+
+		when(entityContainer.getEntityMask(0)).thenReturn(entityMask);
+
+		boolean result = motionSystem.entityCollidable(entityContainer, 0);
+
+		assertThat(result).isFalse();
 	}
 
 	@Test

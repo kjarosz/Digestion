@@ -42,8 +42,8 @@ public class MotionSystem {
 		return (mContainer.getEntityMask(eID) & EntityContainer.ENTITY_MOVABLE) != 0;
 	}
 
-	private boolean entityCollidable(int id) {
-		return (mContainer.getEntityMask(id) & EntityContainer.ENTITY_COLLIDABLE) != 0;
+	boolean entityCollidable(EntityContainer container, int entityId) {
+		return (container.getEntityMask(entityId) & EntityContainer.ENTITY_COLLIDABLE) != 0;
 	}
 
 	public void move(Level level) {
