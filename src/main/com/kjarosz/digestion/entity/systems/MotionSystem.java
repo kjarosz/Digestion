@@ -12,7 +12,7 @@ import com.kjarosz.digestion.util.VectorTransform;
 public class MotionSystem {
 	public final static long NANO_TIMESTEP = (long) (1.0 / 60.0 * 1000000000);
 
-	private GameTimer mTimer;
+	private final GameTimer mTimer;
 
 	public MotionSystem() {
 		mTimer = new GameTimer(NANO_TIMESTEP);
@@ -36,14 +36,13 @@ public class MotionSystem {
 	private Vector2D mGravity;
 	private EntityContainer mContainer;
 	private EntityComponents mEntity;
-	private EntityComponents mOtherEntity;
 
 	private boolean isMovable(int eID) {
 		return (mContainer.getEntityMask(eID) & EntityContainer.ENTITY_MOVABLE) != 0;
 	}
 
-	boolean entityCollidable(EntityContainer container, int entityId) {
-		return (container.getEntityMask(entityId) & EntityContainer.ENTITY_COLLIDABLE) != 0;
+	boolean entityCollidable(int entityId) {
+		return (mContainer.getEntityMask(entityId) & EntityContainer.ENTITY_COLLIDABLE) != 0;
 	}
 
 	public void move(Level level) {
@@ -107,10 +106,10 @@ public class MotionSystem {
 					continue;
 				}
 
-				mOtherEntity = mContainer.accessComponents(i);
-				if (entitiesCollide()) {
+				EntityComponents mOtherEntity = mContainer.accessComponents(i);
+				if (entitiesCollide(mEntity.body, mOtherEntity.body)) {
 					cycleAgain = collisionFound = true;
-					moveOutOfCollision(dx);
+					moveOutOfCollision(mEntity.body, mOtherEntity.body, dx);
 					if (clearVelocity) {
 						mEntity.movable.velocity.subLocal(axisFilter.filter(mEntity.movable.velocity));
 					}
@@ -130,10 +129,7 @@ public class MotionSystem {
 		if (body1.position.y >= body2.position.y + body2.size.y)
 			return false;
 
-		if (body1.position.y + body1.size.y <= body2.position.y)
-			return false;
-
-		return true;
+		return !(body1.position.y + body1.size.y <= body2.position.y);
 	}
 
 	void moveOutOfCollision(Body body, Body collidingBody, Vector2D dx) {
